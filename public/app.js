@@ -7,6 +7,9 @@ async function addTokenToMetaMask() {
   try {
     // Check if MetaMask is installed
     if (typeof window.ethereum !== 'undefined') {
+      // Request the user to connect their wallet
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+
       // 'wasAdded' is a boolean. Like any RPC method, an error can be thrown.
       const wasAdded = await window.ethereum.request({
         method: "wallet_watchAsset",
