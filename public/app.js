@@ -30,14 +30,18 @@ async function addTokenToMetaMask() {
 
       if (wasAdded) {
         console.log("Token was added successfully!");
+        alert("GCC token added to MetaMask successfully!");
       } else {
         console.log("Token addition was declined.");
+        alert("Token addition was declined.");
       }
     } else {
       console.log("MetaMask is not installed.");
+      alert("MetaMask is not installed. Please install MetaMask and try again.");
     }
   } catch (error) {
     console.error("An error occurred:", error);
+    alert("An error occurred. Please try again.");
   }
 }
 

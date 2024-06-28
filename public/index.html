@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Token to MetaMask</title>
+  <title>Add GCC Token to MetaMask</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,6 +13,10 @@
     h1 {
       color: #333;
     }
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
     button {
       padding: 10px 20px;
       font-size: 16px;
@@ -21,6 +25,7 @@
       color: white;
       border: none;
       border-radius: 5px;
+      margin-top: 20px;
     }
     button:hover {
       background-color: #0056b3;
@@ -29,15 +34,39 @@
       margin-top: 20px;
       font-size: 14px;
       color: #555;
+      text-align: left;
+    }
+    @media (max-width: 600px) {
+      body {
+        margin: 10px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      button {
+        width: 100%;
+        padding: 15px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Add Your GCC Token to MetaMask</h1>
-  <button id="addTokenButton">Add GCC Token</button>
-  <div id="instructions">
-    <p>Click the button above to add the GCC token to your MetaMask wallet.</p>
-    <p>You will be prompted to connect your MetaMask wallet and approve the addition of the token.</p>
+  <div class="container">
+    <h1>Welcome to Gold Condor Capital</h1>
+    <p>Your gateway to the GCC token</p>
+    <button id="addTokenButton">Add GCC Token to MetaMask</button>
+    <div id="instructions">
+      <p>Click the button above to add the GCC token to your MetaMask wallet.</p>
+      <p>You will be prompted to connect your MetaMask wallet and approve the addition of the token.</p>
+      <p><strong>Steps:</strong></p>
+      <ol>
+        <li>Ensure you have MetaMask installed on your browser or mobile device.</li>
+        <li>Click the button above.</li>
+        <li>Follow the prompts to connect your wallet and add the token.</li>
+        <li>Once added, you can start buying and trading GCC tokens.</li>
+      </ol>
+      <p>For more information about Gold Condor Capital, visit our <a href="https://goldcondorcapital.com" target="_blank">website</a>.</p>
+    </div>
   </div>
 
   <script src="app.js"></script>
