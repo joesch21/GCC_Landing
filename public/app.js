@@ -3,6 +3,9 @@ const tokenSymbol = "GCC";
 const tokenDecimals = 18;
 const tokenImage = "https://storage.top100token.com/images/fe7c179d-bfa8-4d49-a460-ca87ca248167.webp";
 
+// Detect if the device is mobile
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
 async function addTokenToMetaMask() {
   try {
     // Check if MetaMask is installed
@@ -35,6 +38,10 @@ async function addTokenToMetaMask() {
         console.log("Token addition was declined.");
         alert("Token addition was declined.");
       }
+    } else if (isMobile) {
+      // Handle mobile case
+      alert("MetaMask is not installed. Redirecting to MetaMask download page...");
+      window.location.href = "https://metamask.app.link/dapp/dapp-condor.vercel.app";
     } else {
       console.log("MetaMask is not installed.");
       alert("MetaMask is not installed. Please install MetaMask and try again.");
@@ -48,3 +55,13 @@ async function addTokenToMetaMask() {
 
 // Add event listener to the button
 document.getElementById('addTokenButton').addEventListener('click', addTokenToMetaMask);
+
+// Handle opening the website in MetaMask browser on mobile
+document.getElementById('openInMetaMask').addEventListener('click', function(event) {
+  event.preventDefault();
+  if (isMobile) {
+    window.location.href = "https://metamask.app.link/dapp/dapp-condor.vercel.app";
+  } else {
+    alert("This option is only available on mobile devices.");
+  }
+});
