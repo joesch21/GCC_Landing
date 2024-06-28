@@ -65,3 +65,17 @@ document.getElementById('openInMetaMask').addEventListener('click', function(eve
     alert("This option is only available on mobile devices.");
   }
 });
+
+// Function to fetch the current price of GCC and update the HTML
+async function fetchGccPrice() {
+  try {
+    const response = await fetch('https://api.example.com/gcc-price'); // Replace with actual API endpoint
+    const data = await response.json();
+    document.getElementById('gccPrice').textContent = `$${data.price.toFixed(2)}`;
+  } catch (error) {
+    console.error("An error occurred while fetching the GCC price:", error);
+  }
+}
+
+// Fetch the current price of GCC when the page loads
+window.addEventListener('load', fetchGccPrice);

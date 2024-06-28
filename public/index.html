@@ -3,19 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add GCC Token to MetaMask</title>
+  <title>Gold Condor Capital</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    header, footer {
+      background-color: #333;
+      color: white;
+      padding: 10px 0;
       text-align: center;
     }
-    h1 {
-      color: #333;
+    header h1, footer p {
+      margin: 0;
+    }
+    .navbar {
+      display: flex;
+      justify-content: center;
+      background-color: #444;
+    }
+    .navbar a {
+      color: white;
+      padding: 14px 20px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .navbar a:hover {
+      background-color: #555;
     }
     .container {
-      max-width: 600px;
+      max-width: 800px;
       margin: auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .container h2 {
+      color: #333;
+    }
+    .content {
+      text-align: left;
+      margin: 20px 0;
     }
     button {
       padding: 10px 20px;
@@ -26,6 +56,7 @@
       border: none;
       border-radius: 5px;
       margin-top: 20px;
+      transition: background-color 0.3s;
     }
     button:hover {
       background-color: #0056b3;
@@ -36,12 +67,46 @@
       color: #555;
       text-align: left;
     }
+    form {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    form button {
+      width: 100%;
+    }
+    .social-icons {
+      margin-top: 20px;
+    }
+    .social-icons a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #333;
+      font-size: 24px;
+    }
+    .token-info {
+      margin: 20px 0;
+      text-align: left;
+    }
+    .token-info img {
+      width: 100px;
+      height: 100px;
+    }
+    .token-info .price {
+      font-size: 24px;
+      color: #333;
+    }
     @media (max-width: 600px) {
-      body {
-        margin: 10px;
-      }
-      h1 {
-        font-size: 24px;
+      .navbar a {
+        padding: 10px;
       }
       button {
         width: 100%;
@@ -51,24 +116,63 @@
   </style>
 </head>
 <body>
+  <header>
+    <h1>Gold Condor Capital</h1>
+  </header>
+  <nav class="navbar">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#token">GCC Token</a>
+    <a href="#contact">Contact</a>
+  </nav>
   <div class="container">
-    <h1>Welcome to Gold Condor Capital</h1>
-    <p>Your gateway to the GCC token</p>
-    <button id="addTokenButton">Add GCC Token to MetaMask</button>
-    <div id="instructions">
-      <p>Click the button above to add the GCC token to your MetaMask wallet.</p>
-      <p>You will be prompted to connect your MetaMask wallet and approve the addition of the token.</p>
-      <p><strong>Steps:</strong></p>
-      <ol>
-        <li>Ensure you have MetaMask installed on your browser or mobile device. If not, <a href="https://metamask.io/download.html" target="_blank">download MetaMask</a>.</li>
-        <li>Open this website in the MetaMask mobile browser if you're using a mobile device. <a href="#" id="openInMetaMask" target="_blank">Open in MetaMask Browser</a></li>
-        <li>Click the button above.</li>
-        <li>Follow the prompts to connect your wallet and add the token.</li>
-        <li>Once added, you can start buying and trading GCC tokens.</li>
-      </ol>
-      <p>For more information about Gold Condor Capital, visit our <a href="https://goldcondorcapital.com" target="_blank">website</a>.</p>
+    <section id="home">
+      <h2>Welcome to Gold Condor Capital</h2>
+      <p>Your gateway to the GCC token</p>
+      <div class="token-info">
+        <img src="https://storage.top100token.com/images/fe7c179d-bfa8-4d49-a460-ca87ca248167.webp" alt="GCC Token Logo">
+        <p class="price">Current GCC Price: <span id="gccPrice">$0.00</span></p>
+      </div>
+      <button id="addTokenButton">Add GCC Token to MetaMask</button>
+      <div id="instructions">
+        <p>Click the button above to add the GCC token to your MetaMask wallet.</p>
+        <p>You will be prompted to connect your MetaMask wallet and approve the addition of the token.</p>
+        <p><strong>Steps:</strong></p>
+        <ol>
+          <li>Ensure you have MetaMask installed on your browser or mobile device. If not, <a href="https://metamask.io/download.html" target="_blank">download MetaMask</a>.</li>
+          <li>Open this website in the MetaMask mobile browser if you're using a mobile device. <a href="#" id="openInMetaMask" target="_blank">Open in MetaMask Browser</a></li>
+          <li>Click the button above.</li>
+          <li>Follow the prompts to connect your wallet and add the token.</li>
+          <li>Once added, you can start buying and trading GCC tokens.</li>
+        </ol>
+      </div>
+    </section>
+    <section id="about" class="content">
+      <h2>About Gold Condor Capital</h2>
+      <p>Gold Condor Capital is a leading financial services company providing innovative solutions in the cryptocurrency market. Our mission is to empower investors with the tools and knowledge they need to succeed in the fast-paced world of digital assets.</p>
+    </section>
+    <section id="token" class="content">
+      <h2>About GCC Token</h2>
+      <p>The GCC token is our native cryptocurrency, designed to facilitate seamless transactions within our ecosystem. By holding GCC tokens, investors can take advantage of exclusive benefits, including lower transaction fees, access to premium services, and more.</p>
+    </section>
+    <section id="contact" class="content">
+      <h2>Contact Us</h2>
+      <form>
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+    <div class="social-icons">
+      <a href="https://twitter.com" target="_blank">Twitter</a>
+      <a href="https://facebook.com" target="_blank">Facebook</a>
+      <a href="https://linkedin.com" target="_blank">LinkedIn</a>
     </div>
   </div>
+  <footer>
+    <p>&copy; 2024 Gold Condor Capital. All rights reserved.</p>
+  </footer>
 
   <script src="app.js"></script>
 </body>
