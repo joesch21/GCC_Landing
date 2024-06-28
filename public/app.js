@@ -38,6 +38,7 @@ async function addTokenToMetaMask() {
     } else {
       console.log("MetaMask is not installed.");
       alert("MetaMask is not installed. Please install MetaMask and try again.");
+      window.open('https://metamask.io/download.html', '_blank');
     }
   } catch (error) {
     console.error("An error occurred:", error);
