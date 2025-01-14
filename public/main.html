@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Gold Condor Capital</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js" defer></script>
+    <script src="app.js" defer></script> <!-- Linking the JS file -->
+</head>
+
+<body>
+  <header>
+    <img src="https://storage.top100token.com/images/fe7c179d-bfa8-4d49-a460-ca87ca248167.webp" alt="GCC Token Logo">
+    <h1>Gold Condor Capital</h1>
+    <!-- ✅ Added price and volume data in the header -->
+    <p>24h Volume: <strong id="volumeData">Loading...</strong></p>
+    <p>Current Price: <strong id="priceData">Loading...</strong></p>
+</header>
+
+
+    <div class="meta-header">
+        <p>Note: For MetaMask mobile<br><br>Copy/Paste this URL into your MetaMask Browser!<br><span id="siteUrl">https://dapp-condor.vercel.app/</span>
+            <button onclick="copyToClipboard()">📋 Copy</button>
+        </p>
+    </div>
+
+    <nav class="navbar">
+        <a href="#home">Home</a>
+        <a href="about.html">About</a>
+        <a href="https://GIMPS.XYZ">PROJECT GIMP</a>
+        <a href="https://gcc-staking.vercel.app/">STAKE YOUR NFT</a>
+        <a href="https://www.gimpnftgallery.com/">NFT MARKETPLACE</a>
+        <a href="mailto:GoldCondorCapital@hotmail.com">Contact</a>
+        <a href="Nft_voting_proposal.html">Community Proposals</a>
+    </nav>
+    
+    <div class="container">
+        <section id="home">
+            <h2>Welcome to Gold Condor Capital</h2>
+            <p>Your gateway to the GCC EcoSystem</p>
+            <div class="token-info">
+                <div class="button-group">
+                    <button id="importTokenButton">Import GCC Token to MetaMask Wallet</button>
+                    <button id="buyGccCoinBrainButton">Buy GCC with CoinBrain</button>
+                    <button id="buyGccPancakeSwapButton">Buy GCC with PancakeSwap</button>
+                    <button id="connectMetaMaskButton">SWAP/BUY GCC - MetaMask For DESKTOP Only!</button>
+                </div>
+            </div>
+            <div class="iframe-container">
+                <iframe width="350" height="500" frameborder="1" scrolling="no"
+                    src="https://coinbrain.com/coins/bnb-0x092ac429b9c3450c9909433eb0662c3b7c13cf9a/lite?theme=light&padding=16&currency=USD"></iframe>
+                <iframe width="350" height="500" frameBorder="1" scrolling="yes"
+                    src="https://coinbrain.com/embed/bnb-0x092ac429b9c3450c9909433eb0662c3b7c13cf9a?theme=dark&padding=20&chart=1&trades=1&simple=1"></iframe>
+                <iframe width="350" height="750" frameBorder="1" scrolling="yes"
+                    src="https://gcc24hrvolume.onrender.com/"></iframe>
+            </div>
+        </section>
+    </div>
+    <footer>
+        <div class="footer-copy">
+            <p>For MetaMask mobile browser, copy/paste this URL: <input id="copyUrlInputFooter"
+                    value="https://dapp-condor.vercel.app/" readonly>
+                <button onclick="copyToClipboardFooter()">📋 Copy</button>
+            </p>
+        </div>
+        <p>&copy; 2024 Gold Condor Capital. All rights reserved.</p>
+    </footer>
+
+    <div class="tutorial-button">
+        <button onclick="openTutorial()">How to use MetaMask Mobile Browser</button>
+    </div>
+</body>
+
+</html>

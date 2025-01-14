@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Gold Condor Capital with Draw</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Gold Condor Capital</h1>
+  </header>
+  <div class="meta-header">
+    <p>Note: For MetaMask mobile<br><br>Copy/Paste this URL into your MetaMask Browser!<br><span id="siteUrl">https://dapp-condor.vercel.app/</span>
+      <button onclick="copyToClipboard()">📋 Copy</button>
+    </p>
+  </div>
+  <nav class="navbar">
+    <a href="#home">Home</a>
+    <a href="about.html">About</a>
+    <a href="raffletimer.html">NFT DRAW</a>
+    <a href="https://gccnftpage.vercel.app/">New Release NFT</a>
+    <a href="https://marketplace-template-joesch21s-projects.vercel.app/collection/56/0xF09334a9027b263096b772b0F46D271E90b53F3E">NFT Trading Place</a>
+    <a href="mailto:GoldCondorCapital@hotmail.com">Contact</a>
+  </nav>
+  <div class="container">
+    <div class="draw-container">
+      <h1>WIN 1000 GCC - Lucky NFT DRAW</h1>
+      <h2>Draw on July 24, 2024, at 14:00 UTC</h2>
+      <p>Conditions: <b>Random NFT selected - if NFT not yet minted, draw prize rolls over to next week</b></p>
+      <div id="countdown">Loading countdown...</div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-copy">
+      <p>For MetaMask mobile browser, copy/paste this URL: <input id="copyUrlInputFooter" value="https://dapp-condor.vercel.app/" readonly>
+        <button onclick="copyToClipboardFooter()">📋 Copy</button>
+      </p>
+    </div>
+    <p>&copy; 2024 Gold Condor Capital. All rights reserved.</p>
+  </footer>
+
+  <div id="nftPopup" class="nft-popup">
+    <div class="nft-popup-content" id="popupContent">
+      <p id="popupCaption"></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const nftUrl = "https://gccnftpage.vercel.app/";
+      let web3;
+
+      if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        window.ethereum.enable().catch(err => {
+          console.error('User denied account access', err);
+        });
+      } else {
+        console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+      }
+
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        const iframeOverlay = document.querySelector('.iframe-overlay');
+        if (iframeOverlay) {
+          iframeOverlay.addEventListener('click', function () {
+            navigator.clipboard.writeText(nftUrl).then(() => {
+              alert('NFT URL copied to clipboard. NOW open MetaMask Browser and Paste URL.');
+            }).catch(err => {
+              console.error('Failed to copy text: ', err);
+            });
+          });
+        }
+      } else {
+        const iframeOverlay = document.querySelector('.iframe-overlay');
+        if (iframeOverlay) {
+          iframeOverlay.addEventListener('click', function () {
+            window.open(nftUrl, '_blank');
+          });
+        }
+      }
+
+      // Set the draw date and time to July 24, 2024, at 14:00 UTC
+      const targetDate = new Date(Date.UTC(2024, 6, 24, 14, 0, 0)).getTime();
+      const countdownElement = document.getElementById("countdown");
+      const popup = document.getElementById("nftPopup");
+      const popupCaption = document.getElementById("popupCaption");
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        if (distance < 0) {
+          clearInterval(timer);
+          selectRandomNFT();
+        } else {
+          countdownElement.innerHTML = `Time until draw: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+      }
+
+      function selectRandomNFT() {
+        fetch('/api/winning-nft')
+          .then(response => response.json())
+          .then(data => {
+            const winningNFT = data.winningNFT;
+            const utcTime = new Date().toUTCString();
+            popupCaption.innerHTML = `Congratulations! You've won NFT #${winningNFT}. The draw was at ${utcTime} UTC`;
+            popup.style.display = "block";
+          })
+          .catch(err => {
+            console.error('Error fetching winning NFT:', err);
+          });
+      }
+
+      const timer = setInterval(updateCountdown, 1000);
+      updateCountdown(); 
+    });
+
+    function copyToClipboard() {
+      const copyText = document.getElementById('siteUrl');
+      if (copyText) {
+        navigator.clipboard.writeText(copyText.textContent).then(() => {
+          alert('URL copied to clipboard');
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+      }
+    }
+
+    function copyToClipboardFooter() {
+      const copyText = document.getElementById('copyUrlInputFooter');
+      if (copyText) {
+        navigator.clipboard.writeText(copyText.value).then(() => {
+          alert('URL copied to clipboard');
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
