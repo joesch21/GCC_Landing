@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🗳 GCC Voting DApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="main-header">
+      <div class="header-top">
+        <h1>🗳 GCC NFT Voting</h1>
+      </div>
+    </header>
+
+    <div class="button-group">
+      <button onclick="connectWallet()" id="connectMetaMaskButton">🔌 Connect Wallet</button>
+    </div>
+    <p id="walletAddress">Wallet: Not Connected</p>
+
+    <div id="spinner" class="loader" style="display: none;">
+      <div class="spinner-icon"></div>
+      <p id="spinnerText">Loading... please wait. We are checking your credentials.</p>
+    </div>
+
+    <div id="checking" style="display:none;">
+      <p><span class="hourglass-spin">⏳</span> Checking your NFTs... please wait!</p>
+    </div>
+
+    <!-- SINGLE VOTE BUTTON & PANEL -->
+    <div id="votePanel" style="display:none;">
+      <p>You have <span id="voteCount">0</span> eligible NFT(s) (staked + unstaked)</p>
+      <label for="voteChoice">Vote:</label>
+      <select id="voteChoice">
+        <option value="true">✅ Yes</option>
+        <option value="false">❌ No</option>
+      </select>
+      <div class="button-group">
+        <button onclick="castVote()">🗳 Submit Vote</button>
+      </div>
+      <p id="result"></p>
+    </div>
+
+    <div id="resultsBox">
+      <h2>📊 Voting Results</h2>
+      <p id="proposalText">Proposal: ...</p>
+      <p id="yesVotes">✅ Yes: ...</p>
+      <p id="noVotes">❌ No: ...</p>
+      <p id="voteStatus">🔕 Status: ...</p>
+      <p id="voteResult">📈 Result: ...</p>
+      <div class="button-group">
+        <button onclick="refreshResults()">🔄 Refresh Results</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script>
+    // ---------------- CONSTANTS ----------------
+    const NFT_CONTRACT      = "0x4bA7161d0FAF245c0c8bA83890c121a3D9Fe3AC9";
+    const VOTING_CONTRACT   = "0x6dEBA15dA87771E5bbDBB76a9eefDC32C0BB7069";
+    const STAKING_CONTRACT  = "0x250965c2D14856CCe89406eF5F2f4f7e17453aB1";
+    const PROXY_CONTRACT    = "0x10f59895C9E31234196EaA16E7D261c1a5E8Da96";
+
+    // ---------------- ABIs ----------------
+    const nftABI = [
+      "function ownerOf(uint256 tokenId) view returns (address)",
+      "function totalSupply() view returns (uint256)"
+    ];
+    const votingABI = [
+      "function voteMany(uint256[] tokenIds, bool supportProposal)"
+    ];
+    const stakingABI = [
+      "function getStakeInfo(address) view returns (uint256[] _tokensStaked, uint256 _rewards)"
+    ];
+    const proxyABI = [
+      "function voteStaked(uint256[] tokenIds, bool support) external"
+    ];
+
+    // ---------------- GLOBALS ----------------
+    let provider, signer, walletAddress;
+    let nftContract, votingContract, proxyContract, stakingContract;
+
+    const readProvider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed1.binance.org/");
+    const readVotingContract = new ethers.Contract(VOTING_CONTRACT, [
+      "function proposal() view returns (string)",
+      "function yesVotes() view returns (uint256)",
+      "function noVotes() view returns (uint256)",
+      "function votingClosed() view returns (bool)",
+      "function result() view returns (string)"
+    ], readProvider);
+
+    // ---------------- CONNECTION ----------------
+    async function connectWallet() {
+      const btn = document.getElementById("connectMetaMaskButton");
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      if (!window.ethereum) {
+        isMobile
+          ? window.location.href = `https://metamask.app.link/dapp/www.gcc-bsc.online`
+          : alert("Install MetaMask from https://metamask.io");
+        return;
+      }
+
+      try {
+        btn.innerText = "🔌 Connecting...";
+        document.getElementById("spinner").style.display = "block";
+
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer   = provider.getSigner();
+        walletAddress = await signer.getAddress();
+
+        document.getElementById("walletAddress").innerText = "Wallet: " + walletAddress;
+        btn.innerText = "✅ Connected!";
+        document.getElementById("spinner").style.display = "none";
+
+        nftContract    = new ethers.Contract(NFT_CONTRACT, nftABI, provider);
+        votingContract = new ethers.Contract(VOTING_CONTRACT, votingABI, signer);
+        proxyContract  = new ethers.Contract(PROXY_CONTRACT, proxyABI, signer);
+        stakingContract= new ethers.Contract(STAKING_CONTRACT, stakingABI, provider);
+
+        await loadNFTs();
+        await refreshResults();
+      } catch (err) {
+        console.error(err);
+        btn.innerText = "🔌 Connect Wallet";
+        document.getElementById("spinner").style.display = "none";
+        alert("Connection failed.");
+      }
+    }
+
+    // ---------------- NFT DISCOVERY ----------------
+    async function loadNFTs() {
+      document.getElementById("checking").style.display = "block";
+
+      const unstaked = new Set();
+      const staked   = new Set();
+
+      try {
+        const total = (await nftContract.totalSupply()).toNumber();
+        const max   = Math.min(total, 1000);
+
+        // unstaked
+        for (let id = 0; id < max; id++) {
+          try {
+            const owner = await nftContract.ownerOf(id);
+            if (owner.toLowerCase() === walletAddress.toLowerCase()) {
+              unstaked.add(id);
+            }
+          } catch { /* probably staked */ }
+        }
+
+        // staked
+        const [stakedTokens] = await stakingContract.getStakeInfo(walletAddress);
+        stakedTokens.forEach(t => staked.add(t.toNumber()));
+      } catch (err) {
+        console.error("loadNFTs error:", err);
+      }
+
+      window.unstakedIds = Array.from(unstaked);
+      window.stakedIds   = Array.from(staked);
+
+      const eligible = window.unstakedIds.length + window.stakedIds.length;
+      document.getElementById("voteCount").innerText = eligible;
+      document.getElementById("votePanel").style.display = eligible > 0 ? "block" : "none";
+      document.getElementById("checking").style.display = "none";
+    }
+
+    // ---------------- ONE-BUTTON VOTE ----------------
+    async function castVote() {
+      const resultDiv = document.getElementById("result");
+      const support = document.getElementById("voteChoice").value === "true";
+
+      const unstakedIds = window.unstakedIds || [];
+      const stakedIds   = window.stakedIds   || [];
+
+      if (unstakedIds.length + stakedIds.length === 0) {
+        resultDiv.innerText = "❌ No NFTs to vote with.";
+        return;
+      }
+
+      try {
+        resultDiv.innerText = "⏳ Broadcasting transactions...";
+
+        // 1) vote with unstaked NFTs (direct)
+        if (unstakedIds.length) {
+          const tx1 = await votingContract.voteMany(unstakedIds, support);
+          await tx1.wait();
+        }
+
+        // 2) vote with staked NFTs (through proxy)
+        if (stakedIds.length) {
+          const tx2 = await proxyContract.voteStaked(stakedIds, support);
+          await tx2.wait();
+        }
+
+        resultDiv.innerText = "✅ All votes submitted!";
+        await loadNFTs();   // refresh counts
+        await refreshResults();
+      } catch (err) {
+        console.error(err);
+        resultDiv.innerText = "❌ " + (err.reason || err.message);
+      }
+    }
+
+    // ---------------- RESULTS ----------------
+    async function refreshResults() {
+      try {
+        const proposal = await readVotingContract.proposal();
+        const yes      = await readVotingContract.yesVotes();
+        const no       = await readVotingContract.noVotes();
+        const closed   = await readVotingContract.votingClosed();
+        const result   = await readVotingContract.result();
+
+        document.getElementById("proposalText").innerText = `Proposal: ${proposal}`;
+        document.getElementById("yesVotes").innerText      = `✅ Yes: ${yes}`;
+        document.getElementById("noVotes").innerText       = `❌ No: ${no}`;
+        document.getElementById("voteStatus").innerText    = closed ? "🔐 Voting is CLOSED" : "🔓 Voting is OPEN";
+        document.getElementById("voteResult").innerText    = `📈 ${closed ? "FINAL" : "LIVE"} Result: ${result}`;
+      } catch (err) {
+        console.error("refreshResults:", err);
+        document.getElementById("voteResult").innerText = "❌ Error fetching results.";
+      }
+    }
+
+    refreshResults();
+  </script>
+</body>
+</html>
+```

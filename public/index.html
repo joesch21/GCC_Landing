@@ -1,119 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gold Condor Capital Intro</title>
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: black;
-            color: gold;
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            overflow-y: auto; /* Enable vertical scrolling */
-            overflow-x: hidden; /* Disable horizontal scrolling */
-        }
-
-        .intro {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            animation: moveUp 20s linear forwards; /* Adjusted duration for slower scrolling */
-        }
-
-        @keyframes moveUp {
-            0% {
-                top: 100%;
-            }
-            50% {
-                top: 50%;
-                transform: translateY(-50%);
-            }
-            100% {
-                top: 50%;
-                transform: translateY(-50%);
-            }
-        }
-
-        img.logo {
-            width: 50%;
-            max-width: 150px; /* Adjust size to your preference */
-            height: auto; /* Ensure aspect ratio is maintained */
-            margin-bottom: 20px; /* Space between the logo and the headline */
-        }
-
-        h1 {
-            font-size: 2em;
-            margin: 0 auto;
-        }
-
-        p {
-            font-size: 0.9em; /* Slightly smaller text */
-            max-width: 90%;
-            text-align: justify;
-            margin: 20px auto;
-            line-height: 1.5;
-        }
-
-        .link-box {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            margin-top: 20px;
-            border: 1px solid gold;
-            width: 80%;
-            max-width: 300px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-            font-size: 1em;
-        }
-
-        .link-box:hover {
-            background-color: gold;
-            color: black;
-        }
-
-        @media (min-width: 768px) {
-            h1 {
-                font-size: 2.5em;
-            }
-
-            p {
-                font-size: 1em; /* Slightly larger text for larger screens */
-                max-width: 600px;
-            }
-
-            .link-box {
-                font-size: 1.2em;
-                max-width: 400px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+  <title>Gold Condor Capital</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="app.js" defer></script>
 </head>
 <body>
-    <div class="intro">
-        <img src="no mask.png" alt="Gold Condor Logo" class="logo">
-        <h1>GOLD CONDOR CAPITAL</h1>
-        <p>
-            A long time ago in the cryptoverse, turmoil reigned. Dominated by manipulative whales and dark trading practices, a beacon of hope emerged—Gold Condor Capital. With the visionary trader at the helm, this unique digital commodity fund, underpinned by locked token liquidity until 2030, was created to combat market manipulation and ensure long-term value growth.
-        </p>
-        <p>
-            The power of GCC lies in its robust tokenomics. Each transaction enriches its holders through reflection fees, while a burn fee ensures ever-growing scarcity. A designated tax fee funds continuous development, sustaining the project's forward momentum.
-        </p>
-        <p>
-            Governed by a smart contract, the GCC token executes with precision. Ownership is secured, transactions are seamless, and the promise of increased value is underpinned by reduced supply and rising demand. With AI and human expertise at its core, Gold Condor Capital is poised to redefine stability and integrity in the crypto universe, promising a new era for its faithful.
-        </p>
-        <div class="link-box" onclick="location.href='https://loginflow2-ten.vercel.app/';">
-            I am new to crypto and need a wallet to get started
-        </div>
-        <div class="link-box" onclick="location.href='main.html';">
-            Seasoned Crypto Jedi with MetaMask Wallet ready to battle
-        </div>
+  <header class="main-header">
+    <div class="header-top">
+      <img src="https://storage.top100token.com/images/fe7c179d-bfa8-4d49-a460-ca87ca248167.webp" alt="GCC Logo" class="logo"/>
+      <h1>Gold Condor Capital</h1>
     </div>
+    <nav class="quick-nav">
+      <button onclick="location.href='about.html'">About</button>
+      <button onclick="location.href='https://thirdweb.com/binance/0x4bA7161d0FAF245c0c8bA83890c121a3D9Fe3AC9'">Ock's Gimps</button>
+      <button onclick="location.href='https://gcc-nft-marketplace.onrender.com'">Ock's NFT</button>
+      <button onclick="location.href='https://nft-staking-3esn.onrender.com/'">STAKE Rewards</button>
+      <button onclick="location.href='Nft_voting_proposal.html'">Proposals</button>
+      <button onclick="location.href='voting.html'">Vote!</button>
+       
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="intro">
+      <p>Welcome to Gold Condor Capital. A movement of resilience in the cryptoverse. Join us:</p>
+
+      <div class="button-group">
+        <button id="connectMetaMaskButton">🦊 Connect MetaMask Wallet</button>
+        <button id="importTokenButton">Add GCC to MetaMask</button>
+        <a href="https://pancakeswap.finance/swap?outputCurrency=0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer">
+          <button class="external-link-button">Buy GCC on PancakeSwap</button>
+        </a>
+        <a href="https://www.ape.bond/swap" target="_blank" rel="noopener noreferrer">
+          <button class="external-link-button">Swap on Ape.bond</button>
+        </a>
+        <button id="copyGccAddressBtn" class="external-link-button">📋 Copy GCC Token Address</button>
+      </div>
+
+      <p>Once connected, explore GCC’s live stats below:</p>
+    </div>
+
+    <h2>GCC Live Stats</h2>
+    <div class="token-stats">
+      <p><strong>Price:</strong> <span id="priceData"><div class="loader"></div></span></p>
+      <p><strong>24h Volume:</strong> <span id="volumeData"><div class="loader"></div></span></p>
+    </div>
+
+    <section class="charts">
+      <h2>Full GCC Chart</h2>
+      <a href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener noreferrer">
+        <button class="external-link-button">View Full Chart on Dexscreener</button>
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Gold Condor Capital. All rights reserved.</p>
+  </footer>
 </body>
 </html>
