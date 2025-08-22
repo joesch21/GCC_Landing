@@ -29,26 +29,45 @@ body {
 /* === Headers === */
 .main-header {
   background: transparent;
-  color: #00ff99;
-  text-shadow: 0 0 5px #00ffcc;
-  border-bottom: 1px solid #00ffcc;
+  color: #FFD700; /* Use gold for general text if needed */
+  text-shadow: 0 0 8px #222, 0 0 18px #FFD700; /* Strong gold halo, dark contrast */
+  border-bottom: 1px solid #FFD700;
   text-align: center;
-  padding: 10px 15px;
+  padding: 18px 15px 10px 15px;
 }
+
+/* Flexbox for logo + title */
 .header-top {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 18px;
+  margin-bottom: 10px;
 }
-.header-top h1, h1, h2 {
-  font-size: 1.5em;
+
+.header-top h1 {
+  font-size: 2.2em;
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #00ffcc;
+  letter-spacing: 2px;
+  color: #FFD700; /* Main gold */
+  text-shadow:
+    2px 2px 4px #111,      /* dark outline for separation */
+    0 0 24px #FFD700,      /* strong gold glow */
+    0 0 40px #fffbe8;      /* soft white/gold outer glow */
+  font-weight: 800;
+  transition: color 0.3s, text-shadow 0.3s;
 }
+
+/* For h2, use a softer gold or white */
+.header-top h2,
+h2 {
+  font-size: 1.3em;
+  color: #fffbe8;
+  text-shadow: 0 0 6px #FFD700;
+}
+
 
 /* === Logo === */
 .logo {
@@ -201,6 +220,18 @@ footer {
   display: inline-block;
   animation: spin 2s linear infinite;
 }
+.freaky-btn {
+  background: #22225f;
+  color: #fff832;
+  border: 1px solid #ffeb3b;
+  font-weight: bold;
+  text-shadow: 0 0 8px #fff832;
+  animation: freakyPulse 1.2s infinite alternate;
+}
+@keyframes freakyPulse {
+  0% { box-shadow: 0 0 10px #fff832, 0 0 5px #22225f; }
+  100% { box-shadow: 0 0 25px #fff832, 0 0 10px #22225f; }
+}
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -216,3 +247,4 @@ footer {
     padding: 8px 14px;
   }
 }
+

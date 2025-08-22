@@ -21,6 +21,9 @@
       <button onclick="location.href='https://nft-staking-3esn.onrender.com/'">STAKE Rewards</button>
       <button onclick="location.href='Nft_voting_proposal.html'">Proposals</button>
       <button onclick="location.href='voting.html'">Vote!</button>
+      <button onclick="window.open('https://freaky-friday-frontend.onrender.com/', '_blank')" class="freaky-btn">Freaky Friday</button>
+      <button onclick="window.open('https://freaks2-frontend.onrender.com/', '_blank')" class="freaky-btn">Freaks 2 !!! (NEW!)</button>
+
        
     </nav>
   </header>
@@ -30,16 +33,39 @@
       <p>Welcome to Gold Condor Capital. A movement of resilience in the cryptoverse. Join us:</p>
 
       <div class="button-group">
-        <button id="connectMetaMaskButton">🦊 Connect MetaMask Wallet</button>
-        <button id="importTokenButton">Add GCC to MetaMask</button>
-        <a href="https://pancakeswap.finance/swap?outputCurrency=0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer">
-          <button class="external-link-button">Buy GCC on PancakeSwap</button>
-        </a>
-        <a href="https://www.ape.bond/swap" target="_blank" rel="noopener noreferrer">
-          <button class="external-link-button">Swap on Ape.bond</button>
-        </a>
-        <button id="copyGccAddressBtn" class="external-link-button">📋 Copy GCC Token Address</button>
-      </div>
+  <!-- MetaMask actions -->
+  <button id="connectMetaMaskButton" style="background:#ff9100;color:#222;font-weight:bold;">🦊 Hit me first! <p></p>Connect MetaMask Wallet</button>
+  <button id="importTokenButton" style="background:#ff9100;color:#222;">Add GCC Token Icon <p></p>to MetaMask</button>
+
+  <!-- PancakeSwap group -->
+  <a href="https://pancakeswap.finance/swap?outputCurrency=0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer">
+    <button class="external-link-button" style="background:#16a34a;color:#fff;font-weight:bold;">
+      🥞 Buy GCC (PancakeSwap)
+    </button>
+  </a>
+  <a href="https://gcc-bnblp.onrender.com/" target="_blank" rel="noopener noreferrer">
+    <button class="external-link-button" style="background:#FFD600;color:#222;font-weight:bold;">
+      💎 Stake LP (PancakeSwap)
+    </button>
+  </a>
+
+  <!-- Ape/ApeBond group -->
+  <a href="https://www.ape.bond/swap" target="_blank" rel="noopener noreferrer">
+    <button class="external-link-button" style="background:#113c70;color:#45e3ff;font-weight:bold;">
+      🦍 Swap on Ape.bond
+    </button>
+  </a>
+  <a href="https://bnb-gcc-apelp.onrender.com/" target="_blank" rel="noopener noreferrer">
+    <button class="external-link-button" style="background:#06b6d4;color:#fff;font-weight:bold;">
+      🍌 Stake LP (ApeBond)
+    </button>
+  </a>
+
+  <!-- Utility -->
+  <button id="copyGccAddressBtn" class="external-link-button" style="background:#222;color:#00ffcc;">📋 Copy GCC Token Address</button>
+</div>
+
+
 
       <p>Once connected, explore GCC’s live stats below:</p>
     </div>
