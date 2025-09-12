@@ -41,6 +41,23 @@ body{
   100%{transform:translateY(0)}
 }
 
+.ape-bond {
+  margin: 2rem 0;
+}
+
+.ape-bond__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* space between buttons */
+}
+
+.ape-bond__links .btn {
+  flex: 1 1 auto;
+  text-align: center;
+  min-width: 160px;
+}
+
+
 /* ======================
    Navigation
    ====================== */
@@ -240,6 +257,13 @@ body{
   .grid{grid-template-columns:1fr 1fr}
   .hero__stats{grid-template-columns:1fr 1fr}
   .banner{flex-direction:column; align-items:flex-start}
+}
+/* Mobile: stack buttons nicely */
+@media (max-width: 600px) {
+  .ape-bond__links {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 @media (max-width:480px){
   .grid{grid-template-columns:1fr}
