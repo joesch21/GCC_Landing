@@ -3,330 +3,183 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Gold Condor Capital — DeFi for Smart People</title>
-  <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+  <title>Gold Condor Capital — GCC</title>
+  <meta name="description" content="Gold Condor Capital (GCC) — a deflationary BNB Chain asset with locked liquidity, transparent mechanics, and AI-assisted market oversight." />
+  <link rel="icon" type="image/png" href="no_mask.png" />
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
   <link rel="stylesheet" href="styles.css"/>
-
-  <!-- App JS (keeps IDs: priceData, volumeData, connectMetaMaskButton, etc.) -->
   <script src="app.js" defer></script>
 </head>
 <body>
-  <!-- Background -->
-  <div class="bg-overlay">
-    <img src="matrix.png" alt="Matrix Background" class="bg-matrix" />
-  </div>
+  <div class="bg-overlay"></div>
 
-  <!-- Nav -->
   <header class="nav">
     <div class="nav__inner container">
-      <a class="brand" href="index.html" aria-label="GCC Home">
-        <img src="logo.jpeg" alt="GCC logo" />
+      <a class="brand" href="index.html">
+        <img src="no_mask.png" alt="Gold Condor Capital seal" />
         <span>Gold Condor Capital</span>
       </a>
       <nav class="nav__links">
         <a href="about.html">About</a>
-        <a href="https://thirdweb.com/binance/0x4bA7161d0FAF245c0c8bA83890c121a3D9Fe3AC9" target="_blank" rel="noopener">Ock's Gimps</a>
-        <a href="https://nft.gimpnftgallery.com/" target="_blank" rel="noopener">Ock's NFT</a>
-        <a href="https://gcc-bnblp.onrender.com/" target="_blank" rel="noopener">Stake Pancake LP Rewards</a>
-        <a href="https://www.ape.bond/swap" target="_blank" rel="noopener">ApeBond Swap</a>
-        <a href="https://bnb-gcc-apelp.onrender.com/" target="_blank" rel="noopener">Stake APE LP</a>
-        <a href="Nft_voting_proposal.html">Proposals</a>
-        <a href="voting.html">Vote</a>
-        <!-- Deeplink Freaky Friday/Freaks2 on mobile -->
-        <a
-          class="pill pill--accent js-mmx-dapp"
-          href="https://freaky-friday-frontend.onrender.com/"
-          data-dapp-url="https://freaky-friday-frontend.onrender.com/"
-          rel="noopener"
-        >Freaky Friday</a>
-
-        <a
-          class="pill pill--accent js-mmx-dapp"
-          href="https://freaks2-frontend.onrender.com/"
-          data-dapp-url="https://freaks2-frontend.onrender.com/"
-          target="_blank" rel="noopener"
-        >Freaks 2 (NEW)</a>
+        <a href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener">Verify</a>
+        <a href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener">Chart</a>
+        <a class="btn btn--sm btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener">Condor Safe Wallet</a>
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
   <section class="hero container">
     <div class="hero__copy">
-      <h1>DeFi for <span class="glow">Smart People</span></h1>
-      <p class="lead">GCC is a deflationary, liquidity-locked token on BNB Chain — engineered for clarity, discipline, and stamina in a chaotic market.</p>
-
-      <!-- Primary CTAs -->
-      <div class="cta">
-        <button id="connectMetaMaskButton" class="btn btn--primary">🦊 Connect MetaMask</button>
-        <button id="importTokenButton" class="btn">➕ Add GCC Token</button>
-        <button id="buyGccPancakeSwapButton" class="btn btn--success">🥞 Buy on PancakeSwap</button>
-        <a class="btn" href="https://www.ape.bond/swap" target="_blank" rel="noopener">🦍 Swap on ApeBond</a>
-        <button id="copyTokenButton" class="btn btn--ghost" title="Copy GCC address to clipboard">📋 Copy Token Address</button>
-      </div>
-
-      <!-- Trust row -->
-      <div class="trust">
-        <a href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener">Verify on BscScan</a>
-        <span aria-hidden>•</span>
-        <a href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener">Full Chart</a>
-        <span aria-hidden>•</span>
-        <a href="about.html">Read Tokenomics</a>
-      </div>
-    </div>
-
-    <div class="hero__visual">
-      <!-- Hide on mobile -->
-      <div class="holo mobile-hide">
-        <picture>
-          <source srcset="no mask.webp" type="image/webp">
-          <img src="no mask.png" alt="GCC Condor No Mask" class="condor-visual"/>
-        </picture>
-      </div>
-
-      <!-- Live stats wired to app.js -->
-      <div class="hero__stats">
-        <div class="stat">
-          <span class="label">Price</span>
-          <span id="priceData" class="value">—</span>
-          <!-- Mini sparkline (auto-updates + up/down glow) -->
-          <svg class="sparkline" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true">
-            <path id="priceSparkPath" d="M0 16 L120 16"></path>
+      <div class="eyebrow">
+        <span class="seal">
+          <svg viewBox="-2 -2 44 44" width="16" height="16">
+            <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
+            <circle class="mark" cx="20" cy="20" r="2.4"/>
           </svg>
+        </span>
+        BNB Chain · Deflationary Asset
+      </div>
+      <h1>Sound tokenomics.<br/>No noise.</h1>
+      <p class="lead">
+        GCC is built on discipline, not hype: locked liquidity through 2030, transparent
+        burn and reflection mechanics, and an AI-assisted oversight layer that keeps
+        an eye on the market so the community doesn't have to watch every tick.
+      </p>
+
+      <div class="cta">
+        <button id="connectMetaMaskButton" class="btn btn--primary">Connect Wallet</button>
+        <button id="buyGccPancakeSwapButton" class="btn btn--outline">Buy on PancakeSwap</button>
+        <a class="btn btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener">Condor Safe Wallet</a>
+        <button id="importTokenButton" class="btn btn--ghost">Add GCC to wallet</button>
+      </div>
+
+      <div class="ticker">
+        <div class="ticker__item">
+          <span class="ticker__label">Price</span>
+          <span id="priceData" class="ticker__value mono">—</span>
         </div>
-        <div class="stat">
-          <span class="label">24h Volume</span>
-          <span id="volumeData" class="value">—</span>
-          <!-- Mini bars (auto-updates) -->
-          <svg class="mini-bars" viewBox="0 0 120 32" preserveAspectRatio="none" aria-hidden="true" id="volumeBars"></svg>
+        <div class="ticker__item">
+          <span class="ticker__label">24h Volume</span>
+          <span id="volumeData" class="ticker__value mono">—</span>
         </div>
-        <div class="stat">
-          <span class="label">Liquidity Lock</span>
-          <span class="value">Until 2030 🔒</span>
+        <div class="ticker__item">
+          <span class="ticker__label">Liquidity Lock</span>
+          <span class="ticker__value mono">Until 2030</span>
         </div>
+      </div>
+
+      <div class="contract-row">
+        <span>0x092a...c13cf9a</span>
+        <button id="copyTokenButton">Copy address</button>
       </div>
     </div>
   </section>
 
-<!-- ApeBond + Staking Section -->
-<section class="ape-bond container">
-  <h2 class="section-title">Swap</h2>
-  <div class="ape-bond__links">
-    <a href="https://pancakeswap.finance/swap?outputCurrency=0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" 
-       class="btn btn--success" target="_blank" rel="noopener">PancakeSwap</a>
-    <a href="https://app.apebond.com/swap?outputCurrency=0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" 
-       class="btn btn--success" target="_blank" rel="noopener">ApeBond Swap</a>
-    <a href="https://gcc-me-vprotect.vercel.app/" 
-       class="btn btn--primary" target="_blank" rel="noopener">MEV SAFE SWAP</a>
-  </div>
-</section>
+  <section class="section container">
+    <div class="section__head">
+      <div class="eyebrow">
+        <span class="seal">
+          <svg viewBox="-2 -2 44 44" width="16" height="16">
+            <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
+            <circle class="mark" cx="20" cy="20" r="2.4"/>
+          </svg>
+        </span>
+        The thesis
+      </div>
+      <h2>Three principles, held without exception</h2>
+      <p>GCC's design favors predictability over speculation. Each mechanic exists to make the asset harder to destabilize, not easier to pump.</p>
+    </div>
 
-<section class="ape-bond container">  
-  <h2 class="section-title">Wallets</h2>
-  <div class="ape-bond__links">
-    <a href="https://condor-wallet-maker.vercel.app/" 
-       class="btn btn--primary" target="_blank" rel="noopener">CONDOR WALLET (EXPERIMENTAL)</a>
-  </div>
-</section>
-
-<section class="ape-bond container">
-  <h2 class="section-title">Stake</h2>  
-  <div class="ape-bond__links"> 
-    <a href="https://bnb-gcc-apelp.onrender.com/" 
-       class="btn btn--primary" target="_blank" rel="noopener">Stake APE LP Token</a>
-    <a href="https://gcc-bnblp.onrender.com/" 
-       class="btn btn--primary" target="_blank" rel="noopener">Stake Pancake LP Token</a>
-    <a href="https://nft-staking-3esn.onrender.com/" 
-       class="btn btn--primary" target="_blank" rel="noopener">NFT Staking</a>
-  </div>
-</section>
-
-
-  <!-- Why GCC -->
-  <section class="grid container mask-overlay">
-    <article class="card"><h3>Deflationary Mechanics</h3><p>Reflections + burns reward holders and create scarcity pressure.</p></article>
-    <article class="card"><h3>Liquidity Locked</h3><p>Funds are locked until 2030 to align long-term incentives.</p></article>
-    <article class="card"><h3>Aligned with Bitcoin</h3><p>Orbit BTC’s monetary gravity while pursuing disciplined yield.</p></article>
-    <article class="card card--accent"><h3>Community Rituals</h3><p>Join <strong>Freaky Friday</strong> — gasless entry via relayer; transparent outcomes.</p></article>
+    <div class="thesis">
+      <div class="thesis__card">
+        <svg class="mark" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="15" stroke="#c7a55c" stroke-width="1"/><path d="M17 9v16M11 17h12" stroke="#c7a55c" stroke-width="1"/></svg>
+        <h3>Deflationary by design</h3>
+        <p>A small fee on every transaction is burned and reflected to holders, tightening supply as activity grows.</p>
+      </div>
+      <div class="thesis__card">
+        <svg class="mark" viewBox="0 0 34 34" fill="none"><rect x="7" y="13" width="20" height="14" rx="2" stroke="#c7a55c" stroke-width="1"/><path d="M11 13v-3a6 6 0 0 1 12 0v3" stroke="#c7a55c" stroke-width="1"/></svg>
+        <h3>Liquidity locked to 2030</h3>
+        <p>Pool liquidity is time-locked, removing the single largest source of rug and dump risk in the category.</p>
+      </div>
+      <div class="thesis__card">
+        <svg class="mark" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="15" stroke="#c7a55c" stroke-width="1"/><path d="M10 20l5-6 4 4 5-7" stroke="#c7a55c" stroke-width="1"/></svg>
+        <h3>Verifiable, not promised</h3>
+        <p>Contract, supply, and lock terms are on-chain and checkable in minutes — we link to the receipts, not just the pitch.</p>
+      </div>
+    </div>
   </section>
 
-  <!-- CTA Banner -->
-  <section class="banner container">
-    <div>
-      <h2>Ready to move smarter?</h2>
-      <p>Connect, add GCC, and explore the ecosystem in minutes.</p>
+  <section class="section container">
+    <div class="advisor">
+      <div class="advisor__copy">
+        <div class="eyebrow">
+          <span class="seal">
+            <svg viewBox="-2 -2 44 44" width="16" height="16">
+              <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
+              <circle class="mark" cx="20" cy="20" r="2.4"/>
+            </svg>
+          </span>
+          AI-assisted oversight
+        </div>
+        <h2>An advisor watching the market, not chasing it</h2>
+        <p>
+          GCC pairs its on-chain mechanics with an AI-assisted monitoring layer that
+          tracks liquidity, volume, and volatility around the clock — surfacing what
+          matters to the team early, instead of reacting after the fact. It's a second
+          set of eyes on the data, not a signal service.
+        </p>
+        <ul>
+          <li><span class="dot">—</span> Continuous liquidity and volume monitoring</li>
+          <li><span class="dot">—</span> Early flags on abnormal on-chain activity</li>
+          <li><span class="dot">—</span> Human decisions, machine-assisted diligence</li>
+        </ul>
+      </div>
+      <div class="video-slot">
+        <video controls preload="metadata" playsinline>
+          <source src="/media/man_speaking.mp4" type="video/mp4">
+          Your browser doesn't support embedded video.
+        </video>
+      </div>
     </div>
-    <div class="banner__cta">
-      <button id="connectMetaMaskButton__dup" class="btn btn--primary">Connect Wallet</button>
-      <a class="btn btn--success" href="https://pancakeswap.finance/swap?outputCurrency=0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener">Buy GCC</a>
+  </section>
+
+  <section class="section container">
+    <div class="verify">
+      <div>
+        <div class="eyebrow" style="margin-bottom:6px">Due diligence</div>
+        <p style="color:var(--muted); margin:0; font-size:.92rem">Everything below is independently verifiable.</p>
+      </div>
+      <div class="verify__links">
+        <a href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener"><span class="dot"></span>Contract on BscScan</a>
+        <a href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener"><span class="dot"></span>Live chart</a>
+        <a href="about.html"><span class="dot"></span>Tokenomics</a>
+      </div>
     </div>
-    
   </section>
 
   <footer class="footer">
     <div class="container footer__inner">
-      <p>© 2025 Gold Condor Capital</p>
+      <p>© 2026 Gold Condor Capital</p>
       <nav>
         <a href="about.html">About</a>
-        <a href="voting.html">Voting</a>
-        <a href="https://twitter.com/GCCGoldCondor" target="_blank" rel="noopener">Twitter/X</a>
+        <a href="https://twitter.com/GCCGoldCondor" target="_blank" rel="noopener">Twitter / X</a>
       </nav>
     </div>
   </footer>
 
-  <!-- Mobile Quick Actions: always visible on small screens -->
-  <nav class="mobile-actions" aria-label="Mobile quick actions">
-    <a
-      class="macta js-mmx-dapp"
-      href="https://freaky-friday-frontend.onrender.com/"
-      data-dapp-url="https://freaky-friday-frontend.onrender.com/"
-      rel="noopener" aria-label="Open Freaky Friday"
-    >
-      🦅 <span>Freaky Friday</span>
-    </a>
-    <a
-      class="macta js-mmx-dapp"
-      href="https://freaks2-frontend.onrender.com/"
-      data-dapp-url="https://freaks2-frontend.onrender.com/"
-      target="_blank" rel="noopener" aria-label="Open Freaks 2"
-    >
-      🧬 <span>Freaks 2</span>
-    </a>
-  </nav>
-
-  <!-- MetaMask Deep Link Confirm Modal -->
-  <div id="mmx-modal" class="mmx-modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="mmx-title">
-    <div class="mmx-dialog">
-      <h3 id="mmx-title">Open in MetaMask</h3>
-      <p>You're on mobile. This will open the page inside the MetaMask app’s in-app browser.</p>
-      <div class="mmx-actions">
-        <button id="mmx-cancel" class="btn btn--ghost" type="button">Cancel</button>
-        <button id="mmx-continue" class="btn btn--primary" type="button">Open MetaMask</button>
-      </div>
-    </div>
-    <button id="mmx-backdrop" class="mmx-backdrop" aria-label="Close"></button>
-  </div>
-
-  <!-- Minimal inline JS (keeps your app.js in control) -->
   <script>
-    // Mirror secondary connect to primary
     document.addEventListener('DOMContentLoaded', () => {
-      const dup = document.getElementById('connectMetaMaskButton__dup');
-      const primary = document.getElementById('connectMetaMaskButton');
-      if (dup && primary) dup.addEventListener('click', () => primary.click());
+      ['priceData','volumeData'].forEach(id=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        new MutationObserver(()=>{
+          el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+        }).observe(el, { childList:true, characterData:true, subtree:true });
+      });
     });
-
-    // Flash price & volume when app.js updates them
-    ['priceData','volumeData'].forEach(id=>{
-      const el = document.getElementById(id);
-      if(!el) return;
-      new MutationObserver(()=>{
-        el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
-      }).observe(el, { childList:true, characterData:true, subtree:true });
-    });
-
-    // Helpers
-    const numFrom = (t) => {
-      const n = parseFloat(String(t || '').replace(/[^0-9.\-]/g,''));
-      return isNaN(n) ? null : n;
-    };
-
-    /* PRICE sparkline (green/red on tick) */
-    (function priceSpark(){
-      const el = document.getElementById('priceData');
-      const path = document.getElementById('priceSparkPath');
-      if(!el || !path) return;
-
-      const N = 30, W = 120, H = 32, PAD = 3;
-      const series = [];
-
-      function render(){
-        if(series.length < 2){
-          path.setAttribute('d', `M0 ${H/2} L${W} ${H/2}`);
-          path.classList.remove('up','down');
-          return;
-        }
-        const min = Math.min(...series), max = Math.max(...series);
-        const span = (max - min) || 1, step = W / (N - 1);
-        let d = '';
-        series.forEach((v,i)=>{
-          const x = i * step;
-          const y = H - PAD - ((v - min)/span) * (H - PAD*2);
-          d += (i ? ` L${x} ${y}` : `M${x} ${y}`);
-        });
-        path.setAttribute('d', d);
-        const last = series[series.length-1], prev = series[series.length-2];
-        path.classList.toggle('up', last > prev);
-        path.classList.toggle('down', last < prev);
-      }
-
-      new MutationObserver(()=>{
-        const n = numFrom(el.textContent);
-        if(n !== null){
-          series.push(n);
-          if(series.length > N) series.shift();
-          render();
-        }
-      }).observe(el, { childList:true, characterData:true, subtree:true });
-
-      render();
-    })();
-
-    /* VOLUME mini bars */
-    (function volumeBars(){
-      const el = document.getElementById('volumeData');
-      const svg = document.getElementById('volumeBars');
-      if(!el || !svg) return;
-
-      const N = 24, W = 120, H = 32, PAD = 3, GAP = 1;
-      const series = [];
-
-      function render(){
-        if(!series.length){
-          svg.innerHTML = `<rect x="${H/2}" y="0" width="1" height="${H}"></rect>`;
-          return;
-        }
-        const min = Math.min(...series), max = Math.max(...series);
-        const span = (max - min) || 1;
-        const barW = Math.max(1, Math.floor(W / N) - GAP);
-        let x = 0, html = '';
-
-        series.forEach((v,i)=>{
-          const norm = (v - min)/span;
-          const h = Math.max(2, Math.round(norm*(H - PAD*2)));
-          const y = H - PAD - h;
-          const last = i === series.length - 1;
-          html += `<rect class="${last ? 'last' : ''}" x="${x}" y="${y}" width="${barW}" height="${h}"></rect>`;
-          x += barW + GAP;
-        });
-        svg.innerHTML = html;
-
-        if(series.length > 1){
-          const last = series[series.length-1], prev = series[series.length-2];
-          const lastRect = svg.querySelector('rect.last');
-          if(lastRect){
-            lastRect.classList.toggle('up', last > prev);
-            lastRect.classList.toggle('down', last < prev);
-          }
-        }
-      }
-
-      new MutationObserver(()=>{
-        const n = numFrom(el.textContent);
-        if(n !== null){
-          series.push(n);
-          if(series.length > N) series.shift();
-          render();
-        }
-      }).observe(el, { childList:true, characterData:true, subtree:true });
-
-      render();
-    })();
   </script>
 </body>
 </html>
