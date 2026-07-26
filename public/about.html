@@ -47,7 +47,17 @@
 </head>
 <body>
   <div class="bg-overlay"></div>
+
   <div class="nav__scrim" id="navScrim" hidden></div>
+  <nav class="nav__links" id="primaryNav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="about.html" class="is-active" aria-current="page">About</a>
+    <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+    <a class="nav__extra" href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer">Verify</a>
+    <div class="nav__divider" aria-hidden="true"></div>
+    <a class="btn btn--sm btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Open Concierge</a>
+    <a class="btn btn--sm btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener noreferrer">Condor Safe Wallet</a>
+  </nav>
 
   <header class="nav">
     <div class="nav__inner container">
@@ -59,16 +69,6 @@
       <button type="button" class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="primaryNav">
         <span class="nav__toggle-bars" aria-hidden="true"></span>
       </button>
-
-      <nav class="nav__links" id="primaryNav" aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="about.html" class="is-active" aria-current="page">About</a>
-        <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
-        <a class="nav__extra" href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer">Verify</a>
-        <div class="nav__divider" aria-hidden="true"></div>
-        <a class="btn btn--sm btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Open Concierge</a>
-        <a class="btn btn--sm btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener noreferrer">Condor Safe Wallet</a>
-      </nav>
     </div>
   </header>
 
