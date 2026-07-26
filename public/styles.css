@@ -85,21 +85,27 @@ a{color:inherit}
 .eyebrow .seal{ width:16px; height:16px; flex:none }
 
 /* ===================== nav ===================== */
+/* Stacking: content < mobile-bar < scrim < drawer < bar chrome / burger */
 .nav{
-  position:sticky; top:0; z-index:50;
-  background:linear-gradient(180deg, rgba(11,12,14,.96), rgba(11,12,14,.88));
+  position:sticky; top:0; z-index:200;
+  background:linear-gradient(180deg, rgba(11,12,14,.98), rgba(11,12,14,.94));
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid var(--hairline);
   padding-top:var(--safe-t);
+  isolation:isolate; /* own stacking context so burger can sit above drawer */
 }
 .nav__inner{
+  position:relative;
+  z-index:30;
   display:flex; align-items:center; justify-content:space-between;
   min-height:var(--nav-h); padding:10px 0; gap:12px;
 }
 .brand{
   display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink);
   min-width:0; flex:1;
+  position:relative;
+  z-index:1;
 }
 .brand img{width:36px; height:36px; border-radius:50%; display:block; flex:none}
 .brand span{
@@ -109,23 +115,39 @@ a{color:inherit}
 
 .nav__toggle{
   display:none;
+  position:relative;
+  z-index:40; /* above drawer (20) and scrim (10) inside .nav */
   width:var(--touch); height:var(--touch); flex:none;
   align-items:center; justify-content:center;
-  border:1px solid var(--hairline-strong); border-radius:10px;
-  background:transparent; color:var(--ink); cursor:pointer; padding:0;
+  border:1px solid var(--gold-dim); border-radius:10px;
+  background:var(--surface-2);
+  color:var(--ink);
+  cursor:pointer;
+  padding:0;
+  box-shadow:0 4px 16px rgba(0,0,0,.45), 0 0 0 1px rgba(199,165,92,.12);
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.nav__toggle:hover{
+  border-color:var(--gold);
+  background:var(--surface);
 }
 .nav__toggle:focus-visible{ outline:2px solid var(--gold); outline-offset:2px }
 .nav__toggle-bars{
-  display:block; width:18px; height:2px; background:var(--ink); position:relative;
+  display:block; width:18px; height:2px; background:var(--gold-hi); position:relative;
   transition:background .2s;
 }
 .nav__toggle-bars::before,
 .nav__toggle-bars::after{
-  content:""; position:absolute; left:0; width:18px; height:2px; background:var(--ink);
+  content:""; position:absolute; left:0; width:18px; height:2px; background:var(--gold-hi);
   transition:transform .2s, top .2s;
 }
 .nav__toggle-bars::before{ top:-6px }
 .nav__toggle-bars::after{ top:6px }
+body.nav-open .nav__toggle{
+  border-color:var(--gold);
+  background:var(--surface);
+}
 body.nav-open .nav__toggle-bars{ background:transparent }
 body.nav-open .nav__toggle-bars::before{ top:0; transform:rotate(45deg) }
 body.nav-open .nav__toggle-bars::after{ top:0; transform:rotate(-45deg) }
@@ -144,7 +166,7 @@ body.nav-open .nav__toggle-bars::after{ top:0; transform:rotate(-45deg) }
 
 .nav__scrim{
   display:none;
-  position:fixed; inset:0; z-index:40;
+  position:fixed; inset:0; z-index:10;
   background:rgba(0,0,0,.55);
   opacity:0; pointer-events:none; transition:opacity .2s;
 }
@@ -284,10 +306,10 @@ body.nav-open .nav__toggle-bars::after{ top:0; transform:rotate(-45deg) }
 .verify__links a:hover{ color:var(--ink) }
 .verify__links a .dot{ width:6px; height:6px; border-radius:50%; background:var(--verify); display:inline-block; flex:none }
 
-/* sticky mobile action bar */
+/* sticky mobile action bar — below sticky header / burger */
 .mobile-bar{
   display:none;
-  position:fixed; left:0; right:0; bottom:0; z-index:45;
+  position:fixed; left:0; right:0; bottom:0; z-index:90;
   padding:10px 12px calc(10px + var(--safe-b));
   background:linear-gradient(180deg, rgba(11,12,14,.7), rgba(11,12,14,.96));
   backdrop-filter:blur(14px);
@@ -342,7 +364,7 @@ body.nav-open .nav__toggle-bars::after{ top:0; transform:rotate(-45deg) }
     top:calc(var(--nav-h) + var(--safe-t));
     right:0; bottom:0;
     width:min(320px, 86vw);
-    z-index:55;
+    z-index:20; /* below .nav__inner / burger (30–40), above scrim (10) */
     flex-direction:column;
     flex-wrap:nowrap;
     align-items:stretch;
@@ -355,8 +377,12 @@ body.nav-open .nav__toggle-bars::after{ top:0; transform:rotate(-45deg) }
     transform:translateX(105%);
     transition:transform .22s ease;
     overflow-y:auto;
+    pointer-events:none; /* ignore hits while off-canvas */
   }
-  body.nav-open .nav__links{ transform:translateX(0) }
+  body.nav-open .nav__links{
+    transform:translateX(0);
+    pointer-events:auto;
+  }
 
   .nav__links a{
     width:100%;
