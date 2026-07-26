@@ -24,6 +24,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css"/>
+  <script src="rooms.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -34,12 +35,13 @@
   <div class="nav__scrim" id="navScrim" hidden></div>
   <nav class="nav__links" id="primaryNav" aria-label="Primary">
     <a href="about.html">About</a>
-    <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+    <a href="#members-18">18+ Lounge</a>
     <a class="nav__extra" href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer">Verify</a>
     <a class="nav__extra" href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener noreferrer">Chart</a>
     <div class="nav__divider" aria-hidden="true"></div>
-    <a class="btn btn--sm btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Open Concierge</a>
-    <a class="btn btn--sm btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener noreferrer">Condor Safe Wallet</a>
+    <a class="btn btn--sm btn--primary" href="#" data-room="companion">Companion Room</a>
+    <a class="btn btn--sm btn--outline" href="#" data-room="game">Game Room</a>
+    <a class="btn btn--sm btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener noreferrer" title="Open Condor Safe Wallet to swap GCC">Condor Safe Wallet</a>
   </nav>
 
   <header class="nav">
@@ -75,7 +77,7 @@
         </p>
 
         <div class="cta">
-          <a class="btn btn--primary btn--wide" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Talk to Concierge</a>
+          <a class="btn btn--primary btn--wide" href="#members-18">Members lounge · 18+</a>
           <a class="btn btn--outline btn--wide" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener noreferrer" title="Open Condor Safe Wallet to swap GCC">
             Condor Safe Wallet — Swap
           </a>
@@ -168,7 +170,7 @@
             <li><span class="dot">—</span> Human decisions, machine-assisted diligence</li>
           </ul>
           <div class="advisor__actions">
-            <a class="btn btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Open Concierge</a>
+            <a class="btn btn--primary" href="#members-18">Open 18+ lounge</a>
             <a class="btn btn--outline" href="about.html">Read tokenomics</a>
           </div>
         </div>
@@ -181,6 +183,49 @@
       </div>
     </section>
 
+    <!-- Split 18+ lounge: Companion Room + Game Room -->
+    <section class="section section--adult container" id="members-18">
+      <div class="section__head">
+        <div class="eyebrow">
+          <span class="age-gate__badge">18+</span>
+          Members lounge
+        </div>
+        <h2>Two rooms. One velvet rope.</h2>
+        <p>
+          Adult destinations are split from the main site. Confirm you are 18+,
+          watch the room entry film, then step through to the live experience.
+        </p>
+      </div>
+
+      <div class="rooms-grid">
+        <article class="room-card">
+          <div class="room-card__badge">18+</div>
+          <h3>Companion Room</h3>
+          <p>Private companion experience after age confirmation. Entry film, then the live companion room.</p>
+          <ul class="room-card__meta">
+            <li>Entry video on open</li>
+            <li>Live companion destination</li>
+          </ul>
+          <a class="btn btn--primary btn--block" href="#" data-room="companion">Enter Companion Room</a>
+        </article>
+
+        <article class="room-card room-card--game">
+          <div class="room-card__badge">18+</div>
+          <h3>Game Room</h3>
+          <p>Members gaming room after age confirmation. Opens with <span class="mono">entry.mp4</span>, then the live game floor.</p>
+          <ul class="room-card__meta">
+            <li>Entry video on open</li>
+            <li>Live gaming destination</li>
+          </ul>
+          <a class="btn btn--primary btn--block" href="#" data-room="game">Enter Game Room</a>
+        </article>
+      </div>
+
+      <p class="rooms-disclaimer">
+        Self-attestation only — not KYC or identity verification. By continuing you confirm you are at least 18 years old.
+      </p>
+    </section>
+
     <section class="section container">
       <div class="verify">
         <div>
@@ -190,7 +235,7 @@
         <div class="verify__links">
           <a href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer"><span class="dot"></span>Contract on BscScan</a>
           <a href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener noreferrer"><span class="dot"></span>Live chart</a>
-          <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer"><span class="dot"></span>GCC Concierge</a>
+          <a href="#members-18"><span class="dot"></span>18+ Lounge</a>
           <a href="about.html"><span class="dot"></span>Tokenomics</a>
         </div>
       </div>
@@ -202,7 +247,7 @@
       <p>© 2026 Gold Condor Capital</p>
       <nav aria-label="Footer">
         <a href="about.html">About</a>
-        <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+        <a href="#members-18">18+ Lounge</a>
         <a href="https://twitter.com/GCCGoldCondor" target="_blank" rel="noopener noreferrer">Twitter / X</a>
       </nav>
     </div>
@@ -210,7 +255,7 @@
 
   <!-- Primary actions always one thumb-reach away on phones -->
   <div class="mobile-bar" role="navigation" aria-label="Quick actions">
-    <a class="btn btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+    <a class="btn btn--primary" href="#members-18">18+ Lounge</a>
     <button type="button" id="buyGccPancakeSwapButtonMobile" class="btn btn--outline">Buy GCC</button>
   </div>
 
