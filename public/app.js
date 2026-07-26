@@ -13,7 +13,7 @@ const dexscreenerTokenApi =
 // Canonical production host for MetaMask in-app browser deeplinks.
 // MetaMask cannot open localhost — when the page is already on a public
 // https origin we prefer that so previews (Vercel, custom domains) work.
-const DAPP_FALLBACK_HOST = "gcc-bsc.online";
+const DAPP_FALLBACK_HOST = "www.goldcondor.info";
 
 // --- Helpers ---
 const isMobileUA = () =>
