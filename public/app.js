@@ -176,8 +176,56 @@ async function fetchDexVolumeData() {
   }
 }
 
+function openPancakeSwap() {
+  window.open(
+    `https://pancakeswap.finance/swap?outputCurrency=${tokenAddress}`,
+    "_blank",
+    "noopener"
+  );
+}
+
+// --- Mobile navigation drawer ---
+function initMobileNav() {
+  const toggle = document.getElementById("navToggle");
+  const scrim = document.getElementById("navScrim");
+  const nav = document.getElementById("primaryNav");
+  if (!toggle || !nav) return;
+
+  const setOpen = (open) => {
+    document.body.classList.toggle("nav-open", open);
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    if (scrim) {
+      if (open) scrim.removeAttribute("hidden");
+      else scrim.setAttribute("hidden", "");
+    }
+  };
+
+  toggle.addEventListener("click", () => {
+    setOpen(!document.body.classList.contains("nav-open"));
+  });
+
+  if (scrim) {
+    scrim.addEventListener("click", () => setOpen(false));
+  }
+
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.matchMedia("(min-width: 901px)").matches) setOpen(false);
+  });
+}
+
 // --- Wire up buttons safely ---
 window.addEventListener("load", () => {
+  initMobileNav();
+
   let intervalId = null;
 
   const startPolling = () => {
@@ -192,33 +240,25 @@ window.addEventListener("load", () => {
     intervalId = null;
   };
 
-  startPolling();
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      stopPolling();
-    } else {
-      startPolling();
-    }
-  });
+  // Only poll market data when ticker elements exist (home page)
+  if (document.getElementById("priceData") || document.getElementById("volumeData")) {
+    startPolling();
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopPolling();
+      else startPolling();
+    });
+  }
 
   const connectBtn = document.getElementById("connectMetaMaskButton");
   const addBtn     = document.getElementById("importTokenButton");
   const buyBtn     = document.getElementById("buyGccPancakeSwapButton");
+  const buyBtnMobile = document.getElementById("buyGccPancakeSwapButtonMobile");
   const copyBtn    = document.getElementById("copyTokenButton");
 
   if (connectBtn) connectBtn.addEventListener("click", connectMetaMask);
   if (addBtn)     addBtn.addEventListener("click", addTokenToMetaMask);
-
-  if (buyBtn) {
-    buyBtn.addEventListener("click", () => {
-      window.open(
-        `https://pancakeswap.finance/swap?outputCurrency=${tokenAddress}`,
-        "_blank",
-        "noopener"
-      );
-    });
-  }
+  if (buyBtn)     buyBtn.addEventListener("click", openPancakeSwap);
+  if (buyBtnMobile) buyBtnMobile.addEventListener("click", openPancakeSwap);
 
   if (copyBtn) {
     copyBtn.addEventListener("click", async () => {

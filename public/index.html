@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b0c0e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Gold Condor Capital — GCC</title>
   <meta name="description" content="Gold Condor Capital (GCC) — a deflationary BNB Chain asset with locked liquidity, transparent mechanics, and AI-assisted market oversight." />
   <link rel="canonical" href="https://gcc-bsc.online/" />
@@ -26,160 +28,184 @@
 </head>
 <body>
   <div class="bg-overlay"></div>
+  <div class="nav__scrim" id="navScrim" hidden></div>
 
   <header class="nav">
     <div class="nav__inner container">
       <a class="brand" href="index.html">
-        <img src="no_mask.png" alt="Gold Condor Capital seal" />
+        <img src="no_mask.png" alt="Gold Condor Capital seal" width="36" height="36" />
         <span>Gold Condor Capital</span>
       </a>
-      <nav class="nav__links">
+
+      <button type="button" class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="primaryNav">
+        <span class="nav__toggle-bars" aria-hidden="true"></span>
+      </button>
+
+      <nav class="nav__links" id="primaryNav" aria-label="Primary">
         <a href="about.html">About</a>
-        <a class="nav__extra" href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener">Verify</a>
-        <a class="nav__extra" href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener">Chart</a>
-        <a class="btn btn--sm btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener">Condor Safe Wallet</a>
+        <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+        <a class="nav__extra" href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer">Verify</a>
+        <a class="nav__extra" href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener noreferrer">Chart</a>
+        <div class="nav__divider" aria-hidden="true"></div>
+        <a class="btn btn--sm btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Open Concierge</a>
+        <a class="btn btn--sm btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener noreferrer">Condor Safe Wallet</a>
       </nav>
     </div>
   </header>
 
-  <section class="hero container">
-    <div class="hero__copy">
-      <div class="eyebrow">
-        <span class="seal">
-          <svg viewBox="-2 -2 44 44" width="16" height="16">
-            <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
-            <circle class="mark" cx="20" cy="20" r="2.4"/>
-          </svg>
-        </span>
-        BNB Chain · Deflationary Asset
-      </div>
-      <h1>Sound tokenomics.<br/>No noise.</h1>
-      <p class="lead">
-        GCC is built on discipline, not hype: locked liquidity through 2030, transparent
-        burn and reflection mechanics, and an AI-assisted oversight layer that keeps
-        an eye on the market so the community doesn't have to watch every tick.
-      </p>
-
-      <div class="cta">
-        <button id="connectMetaMaskButton" class="btn btn--primary">Connect Wallet</button>
-        <button id="buyGccPancakeSwapButton" class="btn btn--outline">Buy on PancakeSwap</button>
-        <a class="btn btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener">Condor Safe Wallet</a>
-        <button id="importTokenButton" class="btn btn--ghost">Add GCC to wallet</button>
-      </div>
-
-      <div class="ticker">
-        <div class="ticker__item">
-          <span class="ticker__label">Price</span>
-          <span id="priceData" class="ticker__value mono">—</span>
-        </div>
-        <div class="ticker__item">
-          <span class="ticker__label">24h Volume</span>
-          <span id="volumeData" class="ticker__value mono">—</span>
-        </div>
-        <div class="ticker__item">
-          <span class="ticker__label">Liquidity Lock</span>
-          <span class="ticker__value mono">Until 2030</span>
-        </div>
-      </div>
-
-      <div class="contract-row">
-        <span title="0x092ac429b9c3450c9909433eb0662c3b7c13cf9a">0x092a…c13cf9a</span>
-        <button type="button" id="copyTokenButton">Copy address</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="section container">
-    <div class="section__head">
-      <div class="eyebrow">
-        <span class="seal">
-          <svg viewBox="-2 -2 44 44" width="16" height="16">
-            <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
-            <circle class="mark" cx="20" cy="20" r="2.4"/>
-          </svg>
-        </span>
-        The thesis
-      </div>
-      <h2>Three principles, held without exception</h2>
-      <p>GCC's design favors predictability over speculation. Each mechanic exists to make the asset harder to destabilize, not easier to pump.</p>
-    </div>
-
-    <div class="thesis">
-      <div class="thesis__card">
-        <svg class="mark" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="15" stroke="#c7a55c" stroke-width="1"/><path d="M17 9v16M11 17h12" stroke="#c7a55c" stroke-width="1"/></svg>
-        <h3>Deflationary by design</h3>
-        <p>A small fee on every transaction is burned and reflected to holders, tightening supply as activity grows.</p>
-      </div>
-      <div class="thesis__card">
-        <svg class="mark" viewBox="0 0 34 34" fill="none"><rect x="7" y="13" width="20" height="14" rx="2" stroke="#c7a55c" stroke-width="1"/><path d="M11 13v-3a6 6 0 0 1 12 0v3" stroke="#c7a55c" stroke-width="1"/></svg>
-        <h3>Liquidity locked to 2030</h3>
-        <p>Pool liquidity is time-locked, removing the single largest source of rug and dump risk in the category.</p>
-      </div>
-      <div class="thesis__card">
-        <svg class="mark" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="15" stroke="#c7a55c" stroke-width="1"/><path d="M10 20l5-6 4 4 5-7" stroke="#c7a55c" stroke-width="1"/></svg>
-        <h3>Verifiable, not promised</h3>
-        <p>Contract, supply, and lock terms are on-chain and checkable in minutes — we link to the receipts, not just the pitch.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section container">
-    <div class="advisor">
-      <div class="advisor__copy">
+  <main>
+    <section class="hero container">
+      <div class="hero__copy">
         <div class="eyebrow">
           <span class="seal">
-            <svg viewBox="-2 -2 44 44" width="16" height="16">
+            <svg viewBox="-2 -2 44 44" width="16" height="16" aria-hidden="true">
               <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
               <circle class="mark" cx="20" cy="20" r="2.4"/>
             </svg>
           </span>
-          AI-assisted oversight
+          BNB Chain · Deflationary Asset
         </div>
-        <h2>An advisor watching the market, not chasing it</h2>
-        <p>
-          GCC pairs its on-chain mechanics with an AI-assisted monitoring layer that
-          tracks liquidity, volume, and volatility around the clock — surfacing what
-          matters to the team early, instead of reacting after the fact. It's a second
-          set of eyes on the data, not a signal service.
+        <h1>Sound tokenomics.<br/>No noise.</h1>
+        <p class="lead">
+          GCC is built on discipline, not hype: locked liquidity through 2030, transparent
+          burn and reflection mechanics, and an AI-assisted oversight layer that keeps
+          an eye on the market so the community doesn't have to watch every tick.
         </p>
-        <ul>
-          <li><span class="dot">—</span> Continuous liquidity and volume monitoring</li>
-          <li><span class="dot">—</span> Early flags on abnormal on-chain activity</li>
-          <li><span class="dot">—</span> Human decisions, machine-assisted diligence</li>
-        </ul>
-      </div>
-      <div class="video-slot">
-        <video controls preload="metadata" playsinline>
-          <source src="/media/man_speaking.mp4" type="video/mp4">
-          Your browser doesn't support embedded video.
-        </video>
-      </div>
-    </div>
-  </section>
 
-  <section class="section container">
-    <div class="verify">
-      <div>
-        <div class="eyebrow" style="margin-bottom:6px">Due diligence</div>
-        <p style="color:var(--muted); margin:0; font-size:.92rem">Everything below is independently verifiable.</p>
+        <div class="cta">
+          <a class="btn btn--primary btn--wide" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Talk to Concierge</a>
+          <button type="button" id="buyGccPancakeSwapButton" class="btn btn--outline">Buy on PancakeSwap</button>
+          <button type="button" id="connectMetaMaskButton" class="btn btn--outline">Connect Wallet</button>
+          <a class="btn btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener noreferrer">Condor Safe Wallet</a>
+          <button type="button" id="importTokenButton" class="btn btn--ghost">Add GCC to wallet</button>
+        </div>
+
+        <div class="ticker" aria-live="polite">
+          <div class="ticker__item">
+            <span class="ticker__label">Price</span>
+            <span id="priceData" class="ticker__value mono">—</span>
+          </div>
+          <div class="ticker__item">
+            <span class="ticker__label">24h Volume</span>
+            <span id="volumeData" class="ticker__value mono">—</span>
+          </div>
+          <div class="ticker__item">
+            <span class="ticker__label">Liquidity Lock</span>
+            <span class="ticker__value mono">Until 2030</span>
+          </div>
+        </div>
+
+        <div class="contract-row">
+          <span title="0x092ac429b9c3450c9909433eb0662c3b7c13cf9a">0x092a…c13cf9a</span>
+          <button type="button" id="copyTokenButton">Copy address</button>
+        </div>
       </div>
-      <div class="verify__links">
-        <a href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener"><span class="dot"></span>Contract on BscScan</a>
-        <a href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener"><span class="dot"></span>Live chart</a>
-        <a href="about.html"><span class="dot"></span>Tokenomics</a>
+    </section>
+
+    <section class="section container">
+      <div class="section__head">
+        <div class="eyebrow">
+          <span class="seal">
+            <svg viewBox="-2 -2 44 44" width="16" height="16" aria-hidden="true">
+              <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
+              <circle class="mark" cx="20" cy="20" r="2.4"/>
+            </svg>
+          </span>
+          The thesis
+        </div>
+        <h2>Three principles, held without exception</h2>
+        <p>GCC's design favors predictability over speculation. Each mechanic exists to make the asset harder to destabilize, not easier to pump.</p>
       </div>
-    </div>
-  </section>
+
+      <div class="thesis">
+        <div class="thesis__card">
+          <svg class="mark" viewBox="0 0 34 34" fill="none" aria-hidden="true"><circle cx="17" cy="17" r="15" stroke="#c7a55c" stroke-width="1"/><path d="M17 9v16M11 17h12" stroke="#c7a55c" stroke-width="1"/></svg>
+          <h3>Deflationary by design</h3>
+          <p>A small fee on every transaction is burned and reflected to holders, tightening supply as activity grows.</p>
+        </div>
+        <div class="thesis__card">
+          <svg class="mark" viewBox="0 0 34 34" fill="none" aria-hidden="true"><rect x="7" y="13" width="20" height="14" rx="2" stroke="#c7a55c" stroke-width="1"/><path d="M11 13v-3a6 6 0 0 1 12 0v3" stroke="#c7a55c" stroke-width="1"/></svg>
+          <h3>Liquidity locked to 2030</h3>
+          <p>Pool liquidity is time-locked, removing the single largest source of rug and dump risk in the category.</p>
+        </div>
+        <div class="thesis__card">
+          <svg class="mark" viewBox="0 0 34 34" fill="none" aria-hidden="true"><circle cx="17" cy="17" r="15" stroke="#c7a55c" stroke-width="1"/><path d="M10 20l5-6 4 4 5-7" stroke="#c7a55c" stroke-width="1"/></svg>
+          <h3>Verifiable, not promised</h3>
+          <p>Contract, supply, and lock terms are on-chain and checkable in minutes — we link to the receipts, not just the pitch.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <div class="advisor">
+        <div class="advisor__copy">
+          <div class="eyebrow">
+            <span class="seal">
+              <svg viewBox="-2 -2 44 44" width="16" height="16" aria-hidden="true">
+                <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
+                <circle class="mark" cx="20" cy="20" r="2.4"/>
+              </svg>
+            </span>
+            AI-assisted oversight
+          </div>
+          <h2>An advisor watching the market, not chasing it</h2>
+          <p>
+            GCC pairs its on-chain mechanics with an AI-assisted monitoring layer that
+            tracks liquidity, volume, and volatility around the clock — surfacing what
+            matters to the team early, instead of reacting after the fact. It's a second
+            set of eyes on the data, not a signal service.
+          </p>
+          <ul>
+            <li><span class="dot">—</span> Continuous liquidity and volume monitoring</li>
+            <li><span class="dot">—</span> Early flags on abnormal on-chain activity</li>
+            <li><span class="dot">—</span> Human decisions, machine-assisted diligence</li>
+          </ul>
+          <div class="advisor__actions">
+            <a class="btn btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Open Concierge</a>
+            <a class="btn btn--outline" href="about.html">Read tokenomics</a>
+          </div>
+        </div>
+        <div class="video-slot">
+          <video controls preload="metadata" playsinline webkit-playsinline poster="">
+            <source src="/media/man_speaking.mp4" type="video/mp4">
+            Your browser doesn't support embedded video.
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <div class="verify">
+        <div>
+          <div class="eyebrow" style="margin-bottom:6px">Due diligence</div>
+          <p style="color:var(--muted); margin:0; font-size:.92rem">Everything below is independently verifiable.</p>
+        </div>
+        <div class="verify__links">
+          <a href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer"><span class="dot"></span>Contract on BscScan</a>
+          <a href="https://dexscreener.com/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833" target="_blank" rel="noopener noreferrer"><span class="dot"></span>Live chart</a>
+          <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer"><span class="dot"></span>GCC Concierge</a>
+          <a href="about.html"><span class="dot"></span>Tokenomics</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer class="footer">
     <div class="container footer__inner">
       <p>© 2026 Gold Condor Capital</p>
-      <nav>
+      <nav aria-label="Footer">
         <a href="about.html">About</a>
-        <a href="https://twitter.com/GCCGoldCondor" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+        <a href="https://twitter.com/GCCGoldCondor" target="_blank" rel="noopener noreferrer">Twitter / X</a>
       </nav>
     </div>
   </footer>
+
+  <!-- Primary actions always one thumb-reach away on phones -->
+  <div class="mobile-bar" role="navigation" aria-label="Quick actions">
+    <a class="btn btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+    <button type="button" id="buyGccPancakeSwapButtonMobile" class="btn btn--outline">Buy GCC</button>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {

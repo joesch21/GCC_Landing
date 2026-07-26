@@ -34,7 +34,8 @@
   <meta property="og:type" content="website">
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0c0e" />
   <title>About — Gold Condor Capital</title>
 
   <link rel="icon" type="image/png" href="no_mask.png" />
@@ -42,105 +43,133 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
+  <script src="app.js" defer></script>
 </head>
 <body>
   <div class="bg-overlay"></div>
+  <div class="nav__scrim" id="navScrim" hidden></div>
 
   <header class="nav">
     <div class="nav__inner container">
       <a class="brand" href="index.html">
-        <img src="no_mask.png" alt="Gold Condor Capital seal" />
+        <img src="no_mask.png" alt="Gold Condor Capital seal" width="36" height="36" />
         <span>Gold Condor Capital</span>
       </a>
-      <nav class="nav__links">
+
+      <button type="button" class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="primaryNav">
+        <span class="nav__toggle-bars" aria-hidden="true"></span>
+      </button>
+
+      <nav class="nav__links" id="primaryNav" aria-label="Primary">
         <a href="index.html">Home</a>
-        <a class="nav__extra" href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener">Verify</a>
-        <a class="btn btn--sm btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener">Condor Safe Wallet</a>
+        <a href="about.html" class="is-active" aria-current="page">About</a>
+        <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+        <a class="nav__extra" href="https://bscscan.com/token/0x092ac429b9c3450c9909433eb0662c3b7c13cf9a" target="_blank" rel="noopener noreferrer">Verify</a>
+        <div class="nav__divider" aria-hidden="true"></div>
+        <a class="btn btn--sm btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Open Concierge</a>
+        <a class="btn btn--sm btn--outline" href="https://trial-wallet-keccak.vercel.app/" target="_blank" rel="noopener noreferrer">Condor Safe Wallet</a>
       </nav>
     </div>
   </header>
 
-  <section class="hero container" style="padding-bottom:24px">
-    <div class="eyebrow">
-      <span class="seal">
-        <svg viewBox="-2 -2 44 44" width="16" height="16">
-          <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
-          <circle class="mark" cx="20" cy="20" r="2.4"/>
-        </svg>
-      </span>
-      Tokenomics
-    </div>
-    <h1 style="font-size:clamp(32px,4.4vw,48px)">How GCC actually works</h1>
-    <p class="lead">No promises about price. Just the mechanics, in plain terms, with links so you can check every claim yourself.</p>
-  </section>
-
-  <section class="section container">
-    <div class="prose">
-      <h2>What GCC is</h2>
-      <p>
-        Gold Condor Capital (GCC) is a token on the BNB Chain designed around one
-        idea: reduce the mechanisms that let a small asset be destabilized on
-        purpose. That means locked liquidity, transparent supply mechanics, and
-        an AI-assisted layer that watches for irregular activity around the clock.
-      </p>
-
-      <h2>Tokenomics</h2>
-      <ul>
-        <li><strong>Reflection fee</strong> — a portion of each transaction is distributed across existing holders.</li>
-        <li><strong>Burn fee</strong> — a portion of each transaction is permanently removed from supply.</li>
-        <li><strong>Development fee</strong> — a smaller portion funds continued project development.</li>
-        <li><strong>Locked liquidity</strong> — pool liquidity is time-locked until 2030.</li>
-      </ul>
-
-      <h2>Standard token functions</h2>
-      <p>GCC follows the standard BEP-20 / ERC-20 interface, so it behaves exactly as any wallet or exchange expects:</p>
-      <ul>
-        <li><strong>Total supply</strong> — the current circulating amount of GCC.</li>
-        <li><strong>Balance of</strong> — a wallet's current GCC holding.</li>
-        <li><strong>Transfer</strong> — moving tokens to another address.</li>
-        <li><strong>Allowance &amp; approve</strong> — authorizing another address to spend on your behalf.</li>
-        <li><strong>Transfer from</strong> — moving tokens using an approved allowance.</li>
-      </ul>
-
-      <h2>AI-assisted oversight</h2>
-      <p>
-        Alongside the on-chain mechanics, an AI-assisted monitoring layer tracks
-        liquidity depth, trading volume, and volatility, and flags anything that
-        looks abnormal for the team to review. It doesn't trade, and it doesn't
-        replace judgment — it just means fewer things slip through unnoticed.
-      </p>
-
-      <div class="video-slot">
-        <video controls preload="metadata" playsinline>
-          <source src="/media/man_speaking2.mp4" type="video/mp4">
-          Your browser doesn't support embedded video.
-        </video>
+  <main>
+    <section class="hero container" style="padding-bottom:24px">
+      <div class="eyebrow">
+        <span class="seal">
+          <svg viewBox="-2 -2 44 44" width="16" height="16" aria-hidden="true">
+            <circle class="ring ring--bright" cx="20" cy="20" r="17"/>
+            <circle class="mark" cx="20" cy="20" r="2.4"/>
+          </svg>
+        </span>
+        Tokenomics
       </div>
-
-      <h2>What could change this outlook</h2>
-      <p>
-        Adoption, liquidity depth, and broader market conditions all affect any
-        token's price — GCC is no exception. Locked liquidity and burn mechanics
-        reduce certain risks; they don't eliminate market risk. Do your own
-        research before acting.
-      </p>
-
-      <div class="disclosure">
-        This page describes token mechanics and is provided for informational
-        purposes only. Nothing here is financial advice, and past design
-        choices are not a guarantee of future value.
+      <h1 style="font-size:clamp(32px,8vw,48px)">How GCC actually works</h1>
+      <p class="lead">No promises about price. Just the mechanics, in plain terms, with links so you can check every claim yourself.</p>
+      <div class="cta" style="margin-top:20px">
+        <a class="btn btn--primary btn--wide" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Talk to Concierge</a>
+        <a class="btn btn--outline" href="index.html">Back to home</a>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="section container">
+      <div class="prose">
+        <h2>What GCC is</h2>
+        <p>
+          Gold Condor Capital (GCC) is a token on the BNB Chain designed around one
+          idea: reduce the mechanisms that let a small asset be destabilized on
+          purpose. That means locked liquidity, transparent supply mechanics, and
+          an AI-assisted layer that watches for irregular activity around the clock.
+        </p>
+
+        <h2>Tokenomics</h2>
+        <ul>
+          <li><strong>Reflection fee</strong> — a portion of each transaction is distributed across existing holders.</li>
+          <li><strong>Burn fee</strong> — a portion of each transaction is permanently removed from supply.</li>
+          <li><strong>Development fee</strong> — a smaller portion funds continued project development.</li>
+          <li><strong>Locked liquidity</strong> — pool liquidity is time-locked until 2030.</li>
+        </ul>
+
+        <h2>Standard token functions</h2>
+        <p>GCC follows the standard BEP-20 / ERC-20 interface, so it behaves exactly as any wallet or exchange expects:</p>
+        <ul>
+          <li><strong>Total supply</strong> — the current circulating amount of GCC.</li>
+          <li><strong>Balance of</strong> — a wallet's current GCC holding.</li>
+          <li><strong>Transfer</strong> — moving tokens to another address.</li>
+          <li><strong>Allowance &amp; approve</strong> — authorizing another address to spend on your behalf.</li>
+          <li><strong>Transfer from</strong> — moving tokens using an approved allowance.</li>
+        </ul>
+
+        <h2>AI-assisted oversight</h2>
+        <p>
+          Alongside the on-chain mechanics, an AI-assisted monitoring layer tracks
+          liquidity depth, trading volume, and volatility, and flags anything that
+          looks abnormal for the team to review. It doesn't trade, and it doesn't
+          replace judgment — it just means fewer things slip through unnoticed.
+        </p>
+        <p>
+          Prefer a guided walkthrough? Open the
+          <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer" style="color:var(--gold)">GCC Concierge</a>
+          for answers on mechanics, verification links, and next steps.
+        </p>
+
+        <div class="video-slot">
+          <video controls preload="metadata" playsinline webkit-playsinline>
+            <source src="/media/man_speaking2.mp4" type="video/mp4">
+            Your browser doesn't support embedded video.
+          </video>
+        </div>
+
+        <h2>What could change this outlook</h2>
+        <p>
+          Adoption, liquidity depth, and broader market conditions all affect any
+          token's price — GCC is no exception. Locked liquidity and burn mechanics
+          reduce certain risks; they don't eliminate market risk. Do your own
+          research before acting.
+        </p>
+
+        <div class="disclosure">
+          This page describes token mechanics and is provided for informational
+          purposes only. Nothing here is financial advice, and past design
+          choices are not a guarantee of future value.
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer class="footer">
     <div class="container footer__inner">
       <p>© 2026 Gold Condor Capital</p>
-      <nav>
+      <nav aria-label="Footer">
         <a href="index.html">Home</a>
-        <a href="https://twitter.com/GCCGoldCondor" target="_blank" rel="noopener">Twitter / X</a>
+        <a href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+        <a href="https://twitter.com/GCCGoldCondor" target="_blank" rel="noopener noreferrer">Twitter / X</a>
       </nav>
     </div>
   </footer>
+
+  <div class="mobile-bar" role="navigation" aria-label="Quick actions">
+    <a class="btn btn--primary" href="https://goldcondor.ngrok.io/" target="_blank" rel="noopener noreferrer">Concierge</a>
+    <a class="btn btn--outline" href="index.html">Home</a>
+  </div>
 </body>
 </html>
