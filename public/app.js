@@ -4,16 +4,19 @@ const tokenSymbol   = "GCC";
 const tokenDecimals = 18;
 const tokenImage    = "https://storage.top100token.com/images/fe7c179d-bfa8-4d49-a460-ca87ca248167.webp";
 
-const dexscreenerApi = "https://api.dexscreener.com/latest/dex/pairs/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833";
+// Prefer pair endpoint; fall back to token search if pair is empty
+const dexscreenerPairApi =
+  "https://api.dexscreener.com/latest/dex/pairs/bsc/0x3d32d359bdad07C587a52F8811027675E4f5A833";
+const dexscreenerTokenApi =
+  `https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`;
 
-// Your public site URL for deeplinking into MetaMask mobile
-const dappPublicUrl = "https://www.gcc-bsc.online"; // must include protocol
+// Public site URL for MetaMask mobile deeplinks (must include protocol)
+const dappPublicUrl = "https://www.gcc-bsc.online";
 
 // --- Helpers ---
 const isMobileUA = () => /iPhone|iPad|iPod|Android|Mobile|CriOS/i.test(navigator.userAgent);
 const mmDeeplink = (url) => `https://metamask.app.link/dapp/${encodeURIComponent(url)}`;
 
-// Optional: ensure BSC on desktop before connect (comment out if you don’t want it)
 const BSC_PARAMS = {
   chainId: "0x38",
   chainName: "BNB Smart Chain",
@@ -21,6 +24,7 @@ const BSC_PARAMS = {
   rpcUrls: ["https://bsc-dataseed.binance.org/"],
   blockExplorerUrls: ["https://bscscan.com"],
 };
+
 async function ensureBsc() {
   if (!window.ethereum) return;
   try {
@@ -34,8 +38,36 @@ async function ensureBsc() {
         method: "wallet_addEthereumChain",
         params: [BSC_PARAMS],
       });
-    } // else ignore and let user switch manually
+    }
   }
+}
+
+function formatUsdPrice(price) {
+  const n = parseFloat(price);
+  if (!Number.isFinite(n)) return "N/A";
+  if (n >= 1) return `$${n.toFixed(4)}`;
+  if (n >= 0.0001) return `$${n.toFixed(6)}`;
+  return `$${n.toPrecision(4)}`;
+}
+
+function formatUsdVolume(volume) {
+  const n = parseFloat(volume);
+  if (!Number.isFinite(n)) return "N/A";
+  return `$${n.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+}
+
+function pickPair(data) {
+  if (!data) return null;
+  if (data.pair) return data.pair;
+  if (Array.isArray(data.pairs) && data.pairs.length) {
+    // Prefer highest liquidity when multiple pairs exist
+    return data.pairs.slice().sort((a, b) => {
+      const la = parseFloat(a?.liquidity?.usd) || 0;
+      const lb = parseFloat(b?.liquidity?.usd) || 0;
+      return lb - la;
+    })[0];
+  }
+  return null;
 }
 
 // --- Wallet actions ---
@@ -44,7 +76,7 @@ async function connectMetaMask() {
     const isMobile = isMobileUA();
 
     if (window.ethereum) {
-      await ensureBsc(); // optional
+      await ensureBsc();
       const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
       const a0 = accounts?.[0];
       console.log("Connected wallet:", a0);
@@ -53,13 +85,9 @@ async function connectMetaMask() {
     }
 
     if (isMobile) {
-      // Keep this inside the click handler for iOS/Safari
-      alert("You’ll now be redirected to MetaMask to connect your wallet.");
+      alert("You'll now be redirected to MetaMask to connect your wallet.");
       const link = mmDeeplink(dappPublicUrl);
-      // Primary path: open MetaMask in-app browser on mobile
       window.location.href = link;
-
-      // Soft fallback if MetaMask not installed / deeplink blocked
       setTimeout(() => {
         window.open(dappPublicUrl, "_blank", "noopener");
       }, 1500);
@@ -79,7 +107,7 @@ async function addTokenToMetaMask() {
     return;
   }
   try {
-    await ensureBsc(); // optional
+    await ensureBsc();
     const wasAdded = await window.ethereum.request({
       method: "wallet_watchAsset",
       params: {
@@ -102,11 +130,19 @@ async function addTokenToMetaMask() {
 // --- Market data ---
 async function fetchDexVolumeData() {
   try {
-    const res = await fetch(dexscreenerApi, { cache: "no-store" });
-    if (!res.ok) throw new Error(`DexScreener HTTP ${res.status}`);
-    const data = await res.json();
+    let pair = null;
 
-    const pair = data?.pairs?.[0];
+    const pairRes = await fetch(dexscreenerPairApi, { cache: "no-store" });
+    if (pairRes.ok) {
+      pair = pickPair(await pairRes.json());
+    }
+
+    if (!pair) {
+      const tokenRes = await fetch(dexscreenerTokenApi, { cache: "no-store" });
+      if (!tokenRes.ok) throw new Error(`DexScreener HTTP ${tokenRes.status}`);
+      pair = pickPair(await tokenRes.json());
+    }
+
     if (!pair) throw new Error("No pair data available");
 
     const volume = pair.volume?.h24;
@@ -114,11 +150,11 @@ async function fetchDexVolumeData() {
 
     const priceEl = document.getElementById("priceData");
     const volEl   = document.getElementById("volumeData");
-    if (priceEl) priceEl.textContent = `$${parseFloat(price).toFixed(4)}`;
-    if (volEl)   volEl.textContent   = `$${parseFloat(volume).toLocaleString()}`;
+    if (priceEl) priceEl.textContent = formatUsdPrice(price);
+    if (volEl)   volEl.textContent   = formatUsdVolume(volume);
 
-    localStorage.setItem("cachedPrice", price);
-    localStorage.setItem("cachedVolume", volume);
+    localStorage.setItem("cachedPrice", String(price ?? ""));
+    localStorage.setItem("cachedVolume", String(volume ?? ""));
     localStorage.setItem("cachedTimestamp", new Date().toISOString());
   } catch (err) {
     console.error("Dex fetch error:", err);
@@ -130,8 +166,8 @@ async function fetchDexVolumeData() {
     const volEl   = document.getElementById("volumeData");
 
     if (cachedPrice && cachedVolume) {
-      if (priceEl) priceEl.textContent = `$${parseFloat(cachedPrice).toFixed(4)} (cached)`;
-      if (volEl)   volEl.textContent   = `$${parseFloat(cachedVolume).toLocaleString()} (cached)`;
+      if (priceEl) priceEl.textContent = `${formatUsdPrice(cachedPrice)} (cached)`;
+      if (volEl)   volEl.textContent   = `${formatUsdVolume(cachedVolume)} (cached)`;
       console.log(`Showing cached data from ${cachedTimestamp}`);
     } else {
       if (priceEl) priceEl.textContent = "N/A";
@@ -142,12 +178,28 @@ async function fetchDexVolumeData() {
 
 // --- Wire up buttons safely ---
 window.addEventListener("load", () => {
-  // initial + refresh every 60s
-  fetchDexVolumeData();
-  const intervalId = setInterval(fetchDexVolumeData, 60_000);
-  // Optional: clear on visibility change if you want to pause in background
+  let intervalId = null;
+
+  const startPolling = () => {
+    if (intervalId != null) return;
+    fetchDexVolumeData();
+    intervalId = setInterval(fetchDexVolumeData, 60_000);
+  };
+
+  const stopPolling = () => {
+    if (intervalId == null) return;
+    clearInterval(intervalId);
+    intervalId = null;
+  };
+
+  startPolling();
+
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden) { clearInterval(intervalId); }
+    if (document.hidden) {
+      stopPolling();
+    } else {
+      startPolling();
+    }
   });
 
   const connectBtn = document.getElementById("connectMetaMaskButton");
@@ -172,7 +224,9 @@ window.addEventListener("load", () => {
     copyBtn.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(tokenAddress);
-        alert("GCC token address copied! Paste it into ApeBond to swap.");
+        const prev = copyBtn.textContent;
+        copyBtn.textContent = "Copied";
+        setTimeout(() => { copyBtn.textContent = prev; }, 1600);
       } catch {
         alert(`Failed to copy. Please copy manually: ${tokenAddress}`);
       }

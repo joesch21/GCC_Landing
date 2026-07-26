@@ -1,18 +1,17 @@
 {
-  "name": "dapp_condor",
+  "name": "gcc-landing",
   "version": "1.0.0",
+  "description": "Gold Condor Capital (GCC) landing page — BNB Chain deflationary token site",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node server.js",
+    "test": "node testAPI.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["gcc", "bnb", "landing"],
+  "author": "Gold Condor Capital",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "express": "^4.19.2",
-    "body-parser": "^1.19.0",
-    "path": "^0.12.7"
+    "express": "^4.19.2"
   }
 }
