@@ -1,0 +1,28 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://www.goldcondor.info/data/gcc-regime-schema.json",
+  "title":"GCC regime output v1",
+  "type":"object",
+  "required":["schema_version","asset","network_name","window","model_version","model_config","mode","timestamp","price_environment","lp_environment","macro","network","inputs","weights","execution_enabled"],
+  "properties":{
+    "schema_version":{"const":"1.0.0"},
+    "asset":{"const":"GCC"},
+    "network_name":{"const":"BSC"},
+    "window":{"enum":["24h","48h","7d"]},
+    "model_version":{"type":"string"},
+    "model_config":{"type":"object","required":["version","price_environment","lp_environment","price_thresholds","lp_thresholds","macro_thresholds_pct","lp_penalties"]},
+    "mode":{"enum":["current","illustrative"]},
+    "timestamp":{"type":["string","null"],"format":"date-time","description":"Observation timestamp, null when current inputs are unavailable. Synthetic fixtures have an explicit scenario timestamp."},
+    "price_environment":{"$ref":"#/$defs/environment"},
+    "lp_environment":{"$ref":"#/$defs/environment"},
+    "macro":{"type":"object","required":["btc","bnb","alts","xaut"],"properties":{"btc":{"$ref":"#/$defs/macro"},"bnb":{"$ref":"#/$defs/macro"},"alts":{"$ref":"#/$defs/macro"},"xaut":{"const":"UNRESOLVED"}}},
+    "network":{"type":"object","required":["dispersion","compression","liquidity_health","confirmation","connected_asset_breadth"]},
+    "inputs":{"type":"object","required":["timestamp","window","mode","macro","price_inputs","lp_inputs","network"]},
+    "weights":{"type":"object","required":["price","lp"]},
+    "execution_enabled":{"const":false}
+  },
+  "$defs":{
+    "macro":{"enum":["STRONG_POSITIVE","POSITIVE","NEUTRAL","NEGATIVE","STRONG_NEGATIVE","UNAVAILABLE"]},
+    "environment":{"type":"object","required":["score","label","confidence","evidence_status","validation","inputs","weights","contributions"],"properties":{"score":{"type":["integer","null"],"minimum":0,"maximum":100},"label":{"enum":["STRONGLY FAVOURABLE","FAVOURABLE","MIXED","UNFAVOURABLE","STRONGLY UNFAVOURABLE","CAUTIOUS","UNAVAILABLE"]},"confidence":{"enum":["ILLUSTRATIVE","UNRESOLVED"]},"evidence_status":{"const":"UNRESOLVED"},"validation":{"const":"NOT_BACKTESTED"},"inputs":{"type":"object"},"weights":{"type":"object"},"contributions":{"type":"array","items":{"type":"object","required":["key","value","weight","penalty","contribution"]}}}}
+  }
+}

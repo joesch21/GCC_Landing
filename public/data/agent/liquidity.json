@@ -1,0 +1,118 @@
+{
+  "mode": "historical_research",
+  "source": "LE1-B8 / lp_total_return.csv",
+  "definition": "Historical hypothetical difference between providing liquidity and holding the same starting assets.",
+  "results": [
+    {
+      "pool": "GCC/WBNB — PancakeSwap",
+      "value": 111.01,
+      "unit": "bps",
+      "sample": 12,
+      "status": "HISTORICAL_OBSERVATION"
+    },
+    {
+      "pool": "GCC/WBNB — ApeSwap",
+      "value": 15.73,
+      "unit": "bps",
+      "sample": 10,
+      "status": "HISTORICAL_OBSERVATION"
+    },
+    {
+      "pool": "GCC/ICC",
+      "value": -4.58,
+      "unit": "bps",
+      "sample": 14,
+      "status": "HISTORICAL_OBSERVATION"
+    },
+    {
+      "pool": "GCC/BTCB",
+      "value": -23.48,
+      "unit": "bps",
+      "sample": 14,
+      "status": "HISTORICAL_OBSERVATION"
+    },
+    {
+      "pool": "GCC/SOL",
+      "value": -88,
+      "unit": "bps",
+      "sample": 10,
+      "status": "HISTORICAL_OBSERVATION"
+    }
+  ],
+  "current_environment": {
+    "score": null,
+    "label": "UNAVAILABLE",
+    "confidence": "UNRESOLVED",
+    "evidence_status": "UNRESOLVED",
+    "validation": "NOT_BACKTESTED",
+    "inputs": {
+      "fee_opportunity": null,
+      "corrective_activity": null,
+      "depth_quality": null,
+      "productive_dispersion": null,
+      "divergence_risk": null,
+      "adverse_selection": null,
+      "one_sided_movement": null
+    },
+    "weights": {
+      "fee_opportunity": 0.25,
+      "corrective_activity": 0.2,
+      "depth_quality": 0.15,
+      "productive_dispersion": 0.1,
+      "divergence_risk": 0.15,
+      "adverse_selection": 0.1,
+      "one_sided_movement": 0.05
+    },
+    "contributions": [
+      {
+        "key": "fee_opportunity",
+        "value": null,
+        "weight": 0.25,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "corrective_activity",
+        "value": null,
+        "weight": 0.2,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "depth_quality",
+        "value": null,
+        "weight": 0.15,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "productive_dispersion",
+        "value": null,
+        "weight": 0.1,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "divergence_risk",
+        "value": null,
+        "weight": 0.15,
+        "penalty": true,
+        "contribution": null
+      },
+      {
+        "key": "adverse_selection",
+        "value": null,
+        "weight": 0.1,
+        "penalty": true,
+        "contribution": null
+      },
+      {
+        "key": "one_sided_movement",
+        "value": null,
+        "weight": 0.05,
+        "penalty": true,
+        "contribution": null
+      }
+    ]
+  }
+}

@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "node testAPI.js"
+    "test": "node --test tests/*.test.mjs",
+    "test:legacy": "node testAPI.js",
+    "test:browser": "node scripts/test-opportunity-browser.mjs",
+    "build": "node scripts/build-opportunity.mjs",
+    "lint": "node --check server.js && node --check public/js/gccRegimeEngine.mjs && node --check public/js/opportunity.mjs && node --check public/js/opportunityVisuals.mjs"
   },
   "keywords": ["gcc", "bnb", "landing"],
   "author": "Gold Condor Capital",

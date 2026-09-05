@@ -1,0 +1,16 @@
+{
+  "schema_version":"1.0.0",
+  "published_at":"2026-09-05",
+  "mode":"historical_research",
+  "source":"/data/gcc-network-research.json",
+  "transmission":{"source":"LE1-B9 / transmission_coefficients.csv / MULTI_CRYPTO","status":"PARTIAL","period":"231 daily return observations","coefficients":[{"asset":"BTC","value":-0.152770039929,"ci":[-0.53146397111,0.225923891252]},{"asset":"BNB","value":1.00885114327,"ci":[0.688569730287,1.32913255626]},{"asset":"SOL","value":0.193207751246,"ci":[-0.020672461877,0.407087964369]}],"note":"BTC and SOL intervals cross zero. BNB is the clearest independent historical channel. Historical association, not a peg."},
+  "evidence":{
+    "ESTABLISHED":["GCC is a network of markets, not one market.","Recurring cross-pool dispersion and compression exist.","Mechanical/routing activity is material in the historical sample.","Corrective activity generates recurring measurable LP fees.","Effective inaccessible GCC exists.","Raw dispersion does not equal executable arbitrage profit."],
+    "PARTIAL":["Connected-asset transmission exists.","BNB is the clearest historical transmission channel.","Reflection contributes to effective scarcity."],
+    "UNRESOLVED":["Scarcity-to-price elasticity.","XAUT transmission.","Broader multi-asset solver profitability.","Long-run autonomous appreciation."],
+    "NOT_SUPPORTED":["Direct WBNB solver profitability.","Guaranteed LP outperformance.","Raw spread = profit."]
+  },
+  "definitions":{"network_dispersion":"Difference between implied GCC prices across connected pools.","corrective_activity":"Transactions associated with cross-pool price compression in the historical sample; not proof of intent or automation.","effective_scarcity":"GCC held at an address considered economically inaccessible; not a reduction in totalSupply.","lp_vs_hodl":"Historical hypothetical difference between providing liquidity and holding the same starting assets.","connected_asset_transmission":"Historical return association between connected quote assets and the GCC network reference; not causality or permanence.","solver_delta_nav":"Change in controlled-wallet net asset value after execution costs.","evidence_status":"Strength and scope of research support for a claim; distinct from live input confidence and model validation."},
+  "agent":{"network":"BSC","settlement_asset":"GCC","opportunity_types":["Settlement","Routing","Liquidity intelligence","Task rewards","Future network services"],"authority":"Condor credential / policy","execution_enabled":false,"availability":"Research context only; opportunity types are not executable offers"},
+  "roadmap":["V1 · Research-backed static data","V2 · Read-only live market feeds","V3 · Agent API","V4 · Opportunity discovery","V5 · Condor-authorised settlement"]
+}

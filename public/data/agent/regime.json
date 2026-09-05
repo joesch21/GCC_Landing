@@ -1,0 +1,329 @@
+{
+  "schema_version": "1.0.0",
+  "asset": "GCC",
+  "network_name": "BSC",
+  "window": "48h",
+  "model_version": "0.1-research",
+  "model_config": {
+    "version": "0.1-research",
+    "status": "EXPERIMENTAL REGIME MODEL",
+    "price_environment": {
+      "bnb": 0.25,
+      "btc": 0.15,
+      "alts": 0.15,
+      "network_confirmation": 0.2,
+      "dispersion": 0.15,
+      "liquidity": 0.1
+    },
+    "lp_environment": {
+      "fee_opportunity": 0.25,
+      "corrective_activity": 0.2,
+      "depth_quality": 0.15,
+      "productive_dispersion": 0.1,
+      "divergence_risk": 0.15,
+      "adverse_selection": 0.1,
+      "one_sided_movement": 0.05
+    },
+    "lp_penalties": [
+      "divergence_risk",
+      "adverse_selection",
+      "one_sided_movement"
+    ],
+    "price_thresholds": [
+      [
+        80,
+        "STRONGLY FAVOURABLE"
+      ],
+      [
+        65,
+        "FAVOURABLE"
+      ],
+      [
+        45,
+        "MIXED"
+      ],
+      [
+        30,
+        "UNFAVOURABLE"
+      ],
+      [
+        0,
+        "STRONGLY UNFAVOURABLE"
+      ]
+    ],
+    "lp_thresholds": [
+      [
+        80,
+        "STRONGLY FAVOURABLE"
+      ],
+      [
+        65,
+        "FAVOURABLE"
+      ],
+      [
+        45,
+        "MIXED"
+      ],
+      [
+        30,
+        "CAUTIOUS"
+      ],
+      [
+        0,
+        "UNFAVOURABLE"
+      ]
+    ],
+    "macro_thresholds_pct": {
+      "strong": 5,
+      "neutral": 0.5,
+      "relative_outperformance": 2
+    },
+    "normalization": "Inputs are explicit 0–100 assessments. Macro: 0/25/50/75/100 for strong negative through strong positive. Network and LP inputs require a documented provider methodology before live use.",
+    "missing_policy": "Any missing weighted input withholds the score; never reweight missing inputs.",
+    "xaut_enabled": false,
+    "breadth_role": "Informational confirmation; not an additional weighted input.",
+    "historical_pool_performance_role": "Informational prior only; excluded from LP score.",
+    "validation": "Weights, thresholds and normalization are provisional, not backtested. Scores measure input alignment, not probability, expected yield or a forecast."
+  },
+  "gcc_price_regime_model": "v0.1-research",
+  "mode": "current",
+  "timestamp": null,
+  "price_environment": {
+    "score": null,
+    "label": "UNAVAILABLE",
+    "confidence": "UNRESOLVED",
+    "evidence_status": "UNRESOLVED",
+    "validation": "NOT_BACKTESTED",
+    "inputs": {
+      "bnb": null,
+      "btc": null,
+      "alts": null,
+      "network_confirmation": null,
+      "dispersion": null,
+      "liquidity": null
+    },
+    "weights": {
+      "bnb": 0.25,
+      "btc": 0.15,
+      "alts": 0.15,
+      "network_confirmation": 0.2,
+      "dispersion": 0.15,
+      "liquidity": 0.1
+    },
+    "contributions": [
+      {
+        "key": "bnb",
+        "value": null,
+        "weight": 0.25,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "btc",
+        "value": null,
+        "weight": 0.15,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "alts",
+        "value": null,
+        "weight": 0.15,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "network_confirmation",
+        "value": null,
+        "weight": 0.2,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "dispersion",
+        "value": null,
+        "weight": 0.15,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "liquidity",
+        "value": null,
+        "weight": 0.1,
+        "penalty": false,
+        "contribution": null
+      }
+    ]
+  },
+  "lp_environment": {
+    "score": null,
+    "label": "UNAVAILABLE",
+    "confidence": "UNRESOLVED",
+    "evidence_status": "UNRESOLVED",
+    "validation": "NOT_BACKTESTED",
+    "inputs": {
+      "fee_opportunity": null,
+      "corrective_activity": null,
+      "depth_quality": null,
+      "productive_dispersion": null,
+      "divergence_risk": null,
+      "adverse_selection": null,
+      "one_sided_movement": null
+    },
+    "weights": {
+      "fee_opportunity": 0.25,
+      "corrective_activity": 0.2,
+      "depth_quality": 0.15,
+      "productive_dispersion": 0.1,
+      "divergence_risk": 0.15,
+      "adverse_selection": 0.1,
+      "one_sided_movement": 0.05
+    },
+    "contributions": [
+      {
+        "key": "fee_opportunity",
+        "value": null,
+        "weight": 0.25,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "corrective_activity",
+        "value": null,
+        "weight": 0.2,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "depth_quality",
+        "value": null,
+        "weight": 0.15,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "productive_dispersion",
+        "value": null,
+        "weight": 0.1,
+        "penalty": false,
+        "contribution": null
+      },
+      {
+        "key": "divergence_risk",
+        "value": null,
+        "weight": 0.15,
+        "penalty": true,
+        "contribution": null
+      },
+      {
+        "key": "adverse_selection",
+        "value": null,
+        "weight": 0.1,
+        "penalty": true,
+        "contribution": null
+      },
+      {
+        "key": "one_sided_movement",
+        "value": null,
+        "weight": 0.05,
+        "penalty": true,
+        "contribution": null
+      }
+    ]
+  },
+  "macro": {
+    "btc": "UNAVAILABLE",
+    "bnb": "UNAVAILABLE",
+    "alts": "UNAVAILABLE",
+    "xaut": "UNRESOLVED"
+  },
+  "crypto_regime": "UNAVAILABLE",
+  "gold_divergence": false,
+  "network": {
+    "dispersion": "unavailable",
+    "compression": "unavailable",
+    "liquidity_health": "unavailable",
+    "confirmation": "unavailable",
+    "connected_asset_breadth": "unavailable"
+  },
+  "inputs": {
+    "timestamp": null,
+    "window": "48h",
+    "mode": "current",
+    "macro": {
+      "btc": {
+        "move": null,
+        "move_24h": null,
+        "move_48h": null,
+        "series": [],
+        "source": "No market provider connected"
+      },
+      "bnb": {
+        "move": null,
+        "move_24h": null,
+        "move_48h": null,
+        "series": [],
+        "source": "No market provider connected"
+      },
+      "alts": {
+        "move": null,
+        "move_24h": null,
+        "move_48h": null,
+        "series": [],
+        "source": "No market provider connected"
+      },
+      "xaut": {
+        "move": null,
+        "move_24h": null,
+        "move_48h": null,
+        "series": [],
+        "source": "No market provider connected"
+      }
+    },
+    "price_inputs": {
+      "bnb": null,
+      "btc": null,
+      "alts": null,
+      "network_confirmation": null,
+      "dispersion": null,
+      "liquidity": null
+    },
+    "lp_inputs": {
+      "fee_opportunity": null,
+      "corrective_activity": null,
+      "depth_quality": null,
+      "productive_dispersion": null,
+      "divergence_risk": null,
+      "adverse_selection": null,
+      "one_sided_movement": null
+    },
+    "network": {
+      "dispersion": "unavailable",
+      "compression": "unavailable",
+      "liquidity_health": "unavailable",
+      "confirmation": "unavailable",
+      "connected_asset_breadth": "unavailable"
+    },
+    "historical_pool_prior": "Informational only; see B8 research"
+  },
+  "weights": {
+    "price": {
+      "bnb": 0.25,
+      "btc": 0.15,
+      "alts": 0.15,
+      "network_confirmation": 0.2,
+      "dispersion": 0.15,
+      "liquidity": 0.1
+    },
+    "lp": {
+      "fee_opportunity": 0.25,
+      "corrective_activity": 0.2,
+      "depth_quality": 0.15,
+      "productive_dispersion": 0.1,
+      "divergence_risk": 0.15,
+      "adverse_selection": 0.1,
+      "one_sided_movement": 0.05
+    }
+  },
+  "execution_enabled": false
+}

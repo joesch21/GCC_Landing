@@ -1,0 +1,1101 @@
+{
+  "mode": "illustrative",
+  "warning": "Synthetic test fixtures, not market observations",
+  "records": [
+    {
+      "schema_version": "1.0.0",
+      "asset": "GCC",
+      "network_name": "BSC",
+      "window": "24h",
+      "model_version": "0.1-research",
+      "model_config": {
+        "version": "0.1-research",
+        "status": "EXPERIMENTAL REGIME MODEL",
+        "price_environment": {
+          "bnb": 0.25,
+          "btc": 0.15,
+          "alts": 0.15,
+          "network_confirmation": 0.2,
+          "dispersion": 0.15,
+          "liquidity": 0.1
+        },
+        "lp_environment": {
+          "fee_opportunity": 0.25,
+          "corrective_activity": 0.2,
+          "depth_quality": 0.15,
+          "productive_dispersion": 0.1,
+          "divergence_risk": 0.15,
+          "adverse_selection": 0.1,
+          "one_sided_movement": 0.05
+        },
+        "lp_penalties": [
+          "divergence_risk",
+          "adverse_selection",
+          "one_sided_movement"
+        ],
+        "price_thresholds": [
+          [
+            80,
+            "STRONGLY FAVOURABLE"
+          ],
+          [
+            65,
+            "FAVOURABLE"
+          ],
+          [
+            45,
+            "MIXED"
+          ],
+          [
+            30,
+            "UNFAVOURABLE"
+          ],
+          [
+            0,
+            "STRONGLY UNFAVOURABLE"
+          ]
+        ],
+        "lp_thresholds": [
+          [
+            80,
+            "STRONGLY FAVOURABLE"
+          ],
+          [
+            65,
+            "FAVOURABLE"
+          ],
+          [
+            45,
+            "MIXED"
+          ],
+          [
+            30,
+            "CAUTIOUS"
+          ],
+          [
+            0,
+            "UNFAVOURABLE"
+          ]
+        ],
+        "macro_thresholds_pct": {
+          "strong": 5,
+          "neutral": 0.5,
+          "relative_outperformance": 2
+        },
+        "normalization": "Inputs are explicit 0–100 assessments. Macro: 0/25/50/75/100 for strong negative through strong positive. Network and LP inputs require a documented provider methodology before live use.",
+        "missing_policy": "Any missing weighted input withholds the score; never reweight missing inputs.",
+        "xaut_enabled": false,
+        "breadth_role": "Informational confirmation; not an additional weighted input.",
+        "historical_pool_performance_role": "Informational prior only; excluded from LP score.",
+        "validation": "Weights, thresholds and normalization are provisional, not backtested. Scores measure input alignment, not probability, expected yield or a forecast."
+      },
+      "gcc_price_regime_model": "v0.1-research",
+      "mode": "illustrative",
+      "timestamp": "2026-09-05T00:00:00.000Z",
+      "price_environment": {
+        "score": 67,
+        "label": "FAVOURABLE",
+        "confidence": "ILLUSTRATIVE",
+        "evidence_status": "UNRESOLVED",
+        "validation": "NOT_BACKTESTED",
+        "inputs": {
+          "bnb": 75,
+          "btc": 75,
+          "alts": 75,
+          "network_confirmation": 60,
+          "dispersion": 50,
+          "liquidity": 60
+        },
+        "weights": {
+          "bnb": 0.25,
+          "btc": 0.15,
+          "alts": 0.15,
+          "network_confirmation": 0.2,
+          "dispersion": 0.15,
+          "liquidity": 0.1
+        },
+        "contributions": [
+          {
+            "key": "bnb",
+            "value": 75,
+            "weight": 0.25,
+            "penalty": false,
+            "contribution": 18.75
+          },
+          {
+            "key": "btc",
+            "value": 75,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 11.25
+          },
+          {
+            "key": "alts",
+            "value": 75,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 11.25
+          },
+          {
+            "key": "network_confirmation",
+            "value": 60,
+            "weight": 0.2,
+            "penalty": false,
+            "contribution": 12
+          },
+          {
+            "key": "dispersion",
+            "value": 50,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 7.5
+          },
+          {
+            "key": "liquidity",
+            "value": 60,
+            "weight": 0.1,
+            "penalty": false,
+            "contribution": 6
+          }
+        ]
+      },
+      "lp_environment": {
+        "score": 44,
+        "label": "CAUTIOUS",
+        "confidence": "ILLUSTRATIVE",
+        "evidence_status": "UNRESOLVED",
+        "validation": "NOT_BACKTESTED",
+        "inputs": {
+          "fee_opportunity": 60,
+          "corrective_activity": 60,
+          "depth_quality": 45,
+          "productive_dispersion": 55,
+          "divergence_risk": 95,
+          "adverse_selection": 75,
+          "one_sided_movement": 70
+        },
+        "weights": {
+          "fee_opportunity": 0.25,
+          "corrective_activity": 0.2,
+          "depth_quality": 0.15,
+          "productive_dispersion": 0.1,
+          "divergence_risk": 0.15,
+          "adverse_selection": 0.1,
+          "one_sided_movement": 0.05
+        },
+        "contributions": [
+          {
+            "key": "fee_opportunity",
+            "value": 60,
+            "weight": 0.25,
+            "penalty": false,
+            "contribution": 15
+          },
+          {
+            "key": "corrective_activity",
+            "value": 60,
+            "weight": 0.2,
+            "penalty": false,
+            "contribution": 12
+          },
+          {
+            "key": "depth_quality",
+            "value": 45,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 6.75
+          },
+          {
+            "key": "productive_dispersion",
+            "value": 55,
+            "weight": 0.1,
+            "penalty": false,
+            "contribution": 5.5
+          },
+          {
+            "key": "divergence_risk",
+            "value": 95,
+            "weight": 0.15,
+            "penalty": true,
+            "contribution": 0.75
+          },
+          {
+            "key": "adverse_selection",
+            "value": 75,
+            "weight": 0.1,
+            "penalty": true,
+            "contribution": 2.5
+          },
+          {
+            "key": "one_sided_movement",
+            "value": 70,
+            "weight": 0.05,
+            "penalty": true,
+            "contribution": 1.5
+          }
+        ]
+      },
+      "macro": {
+        "btc": "POSITIVE",
+        "bnb": "POSITIVE",
+        "alts": "POSITIVE",
+        "xaut": "UNRESOLVED"
+      },
+      "crypto_regime": "CRYPTO EXPANSION",
+      "gold_divergence": true,
+      "network": {
+        "dispersion": "compressing",
+        "compression": "illustrative",
+        "liquidity_health": "mixed",
+        "confirmation": "partial",
+        "connected_asset_breadth": "3 / 3 positive (synthetic)"
+      },
+      "inputs": {
+        "timestamp": "2026-09-05T00:00:00.000Z",
+        "window": "24h",
+        "mode": "illustrative",
+        "macro": {
+          "btc": {
+            "move": 1.32,
+            "move_24h": 1.32,
+            "move_48h": 2.2,
+            "series": [
+              0,
+              0.2376,
+              0.132,
+              0.5544,
+              0.42240000000000005,
+              0.9372,
+              0.8448000000000001,
+              1.32
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          },
+          "bnb": {
+            "move": 3.24,
+            "move_24h": 3.24,
+            "move_48h": 5.4,
+            "series": [
+              0,
+              0.5831999999999999,
+              0.324,
+              1.3608,
+              1.0368000000000002,
+              2.3004,
+              2.0736000000000003,
+              3.24
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          },
+          "alts": {
+            "move": 1.9799999999999998,
+            "move_24h": 1.9799999999999998,
+            "move_48h": 3.3,
+            "series": [
+              0,
+              0.3564,
+              0.198,
+              0.8315999999999999,
+              0.6336,
+              1.4058,
+              1.2672,
+              1.9799999999999998
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          },
+          "xaut": {
+            "move": -0.48,
+            "move_24h": -0.48,
+            "move_48h": -0.8,
+            "series": [
+              0,
+              -0.08639999999999999,
+              -0.04800000000000001,
+              -0.2016,
+              -0.1536,
+              -0.34079999999999994,
+              -0.3072,
+              -0.48
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          }
+        },
+        "price_inputs": {
+          "bnb": 75,
+          "btc": 75,
+          "alts": 75,
+          "network_confirmation": 60,
+          "dispersion": 50,
+          "liquidity": 60
+        },
+        "lp_inputs": {
+          "fee_opportunity": 60,
+          "corrective_activity": 60,
+          "depth_quality": 45,
+          "productive_dispersion": 55,
+          "divergence_risk": 95,
+          "adverse_selection": 75,
+          "one_sided_movement": 70
+        },
+        "network": {
+          "dispersion": "compressing",
+          "compression": "illustrative",
+          "liquidity_health": "mixed",
+          "confirmation": "partial",
+          "connected_asset_breadth": "3 / 3 positive (synthetic)"
+        },
+        "historical_pool_prior": "Informational only; see B8 research"
+      },
+      "weights": {
+        "price": {
+          "bnb": 0.25,
+          "btc": 0.15,
+          "alts": 0.15,
+          "network_confirmation": 0.2,
+          "dispersion": 0.15,
+          "liquidity": 0.1
+        },
+        "lp": {
+          "fee_opportunity": 0.25,
+          "corrective_activity": 0.2,
+          "depth_quality": 0.15,
+          "productive_dispersion": 0.1,
+          "divergence_risk": 0.15,
+          "adverse_selection": 0.1,
+          "one_sided_movement": 0.05
+        }
+      },
+      "execution_enabled": false
+    },
+    {
+      "schema_version": "1.0.0",
+      "asset": "GCC",
+      "network_name": "BSC",
+      "window": "48h",
+      "model_version": "0.1-research",
+      "model_config": {
+        "version": "0.1-research",
+        "status": "EXPERIMENTAL REGIME MODEL",
+        "price_environment": {
+          "bnb": 0.25,
+          "btc": 0.15,
+          "alts": 0.15,
+          "network_confirmation": 0.2,
+          "dispersion": 0.15,
+          "liquidity": 0.1
+        },
+        "lp_environment": {
+          "fee_opportunity": 0.25,
+          "corrective_activity": 0.2,
+          "depth_quality": 0.15,
+          "productive_dispersion": 0.1,
+          "divergence_risk": 0.15,
+          "adverse_selection": 0.1,
+          "one_sided_movement": 0.05
+        },
+        "lp_penalties": [
+          "divergence_risk",
+          "adverse_selection",
+          "one_sided_movement"
+        ],
+        "price_thresholds": [
+          [
+            80,
+            "STRONGLY FAVOURABLE"
+          ],
+          [
+            65,
+            "FAVOURABLE"
+          ],
+          [
+            45,
+            "MIXED"
+          ],
+          [
+            30,
+            "UNFAVOURABLE"
+          ],
+          [
+            0,
+            "STRONGLY UNFAVOURABLE"
+          ]
+        ],
+        "lp_thresholds": [
+          [
+            80,
+            "STRONGLY FAVOURABLE"
+          ],
+          [
+            65,
+            "FAVOURABLE"
+          ],
+          [
+            45,
+            "MIXED"
+          ],
+          [
+            30,
+            "CAUTIOUS"
+          ],
+          [
+            0,
+            "UNFAVOURABLE"
+          ]
+        ],
+        "macro_thresholds_pct": {
+          "strong": 5,
+          "neutral": 0.5,
+          "relative_outperformance": 2
+        },
+        "normalization": "Inputs are explicit 0–100 assessments. Macro: 0/25/50/75/100 for strong negative through strong positive. Network and LP inputs require a documented provider methodology before live use.",
+        "missing_policy": "Any missing weighted input withholds the score; never reweight missing inputs.",
+        "xaut_enabled": false,
+        "breadth_role": "Informational confirmation; not an additional weighted input.",
+        "historical_pool_performance_role": "Informational prior only; excluded from LP score.",
+        "validation": "Weights, thresholds and normalization are provisional, not backtested. Scores measure input alignment, not probability, expected yield or a forecast."
+      },
+      "gcc_price_regime_model": "v0.1-research",
+      "mode": "illustrative",
+      "timestamp": "2026-09-05T00:00:00.000Z",
+      "price_environment": {
+        "score": 73,
+        "label": "FAVOURABLE",
+        "confidence": "ILLUSTRATIVE",
+        "evidence_status": "UNRESOLVED",
+        "validation": "NOT_BACKTESTED",
+        "inputs": {
+          "bnb": 100,
+          "btc": 75,
+          "alts": 75,
+          "network_confirmation": 60,
+          "dispersion": 50,
+          "liquidity": 60
+        },
+        "weights": {
+          "bnb": 0.25,
+          "btc": 0.15,
+          "alts": 0.15,
+          "network_confirmation": 0.2,
+          "dispersion": 0.15,
+          "liquidity": 0.1
+        },
+        "contributions": [
+          {
+            "key": "bnb",
+            "value": 100,
+            "weight": 0.25,
+            "penalty": false,
+            "contribution": 25
+          },
+          {
+            "key": "btc",
+            "value": 75,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 11.25
+          },
+          {
+            "key": "alts",
+            "value": 75,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 11.25
+          },
+          {
+            "key": "network_confirmation",
+            "value": 60,
+            "weight": 0.2,
+            "penalty": false,
+            "contribution": 12
+          },
+          {
+            "key": "dispersion",
+            "value": 50,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 7.5
+          },
+          {
+            "key": "liquidity",
+            "value": 60,
+            "weight": 0.1,
+            "penalty": false,
+            "contribution": 6
+          }
+        ]
+      },
+      "lp_environment": {
+        "score": 44,
+        "label": "CAUTIOUS",
+        "confidence": "ILLUSTRATIVE",
+        "evidence_status": "UNRESOLVED",
+        "validation": "NOT_BACKTESTED",
+        "inputs": {
+          "fee_opportunity": 60,
+          "corrective_activity": 60,
+          "depth_quality": 45,
+          "productive_dispersion": 55,
+          "divergence_risk": 95,
+          "adverse_selection": 75,
+          "one_sided_movement": 70
+        },
+        "weights": {
+          "fee_opportunity": 0.25,
+          "corrective_activity": 0.2,
+          "depth_quality": 0.15,
+          "productive_dispersion": 0.1,
+          "divergence_risk": 0.15,
+          "adverse_selection": 0.1,
+          "one_sided_movement": 0.05
+        },
+        "contributions": [
+          {
+            "key": "fee_opportunity",
+            "value": 60,
+            "weight": 0.25,
+            "penalty": false,
+            "contribution": 15
+          },
+          {
+            "key": "corrective_activity",
+            "value": 60,
+            "weight": 0.2,
+            "penalty": false,
+            "contribution": 12
+          },
+          {
+            "key": "depth_quality",
+            "value": 45,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 6.75
+          },
+          {
+            "key": "productive_dispersion",
+            "value": 55,
+            "weight": 0.1,
+            "penalty": false,
+            "contribution": 5.5
+          },
+          {
+            "key": "divergence_risk",
+            "value": 95,
+            "weight": 0.15,
+            "penalty": true,
+            "contribution": 0.75
+          },
+          {
+            "key": "adverse_selection",
+            "value": 75,
+            "weight": 0.1,
+            "penalty": true,
+            "contribution": 2.5
+          },
+          {
+            "key": "one_sided_movement",
+            "value": 70,
+            "weight": 0.05,
+            "penalty": true,
+            "contribution": 1.5
+          }
+        ]
+      },
+      "macro": {
+        "btc": "POSITIVE",
+        "bnb": "STRONG_POSITIVE",
+        "alts": "POSITIVE",
+        "xaut": "UNRESOLVED"
+      },
+      "crypto_regime": "ALTSEASON / DISPERSION",
+      "gold_divergence": true,
+      "network": {
+        "dispersion": "compressing",
+        "compression": "illustrative",
+        "liquidity_health": "mixed",
+        "confirmation": "partial",
+        "connected_asset_breadth": "3 / 3 positive (synthetic)"
+      },
+      "inputs": {
+        "timestamp": "2026-09-05T00:00:00.000Z",
+        "window": "48h",
+        "mode": "illustrative",
+        "macro": {
+          "btc": {
+            "move": 2.2,
+            "move_24h": 1.32,
+            "move_48h": 2.2,
+            "series": [
+              0,
+              0.396,
+              0.22000000000000003,
+              0.924,
+              0.7040000000000001,
+              1.562,
+              1.4080000000000001,
+              2.2
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          },
+          "bnb": {
+            "move": 5.4,
+            "move_24h": 3.24,
+            "move_48h": 5.4,
+            "series": [
+              0,
+              0.972,
+              0.54,
+              2.2680000000000002,
+              1.7280000000000002,
+              3.834,
+              3.4560000000000004,
+              5.4
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          },
+          "alts": {
+            "move": 3.3,
+            "move_24h": 1.9799999999999998,
+            "move_48h": 3.3,
+            "series": [
+              0,
+              0.594,
+              0.33,
+              1.386,
+              1.056,
+              2.343,
+              2.112,
+              3.3
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          },
+          "xaut": {
+            "move": -0.8,
+            "move_24h": -0.48,
+            "move_48h": -0.8,
+            "series": [
+              0,
+              -0.144,
+              -0.08000000000000002,
+              -0.336,
+              -0.256,
+              -0.568,
+              -0.512,
+              -0.8
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          }
+        },
+        "price_inputs": {
+          "bnb": 100,
+          "btc": 75,
+          "alts": 75,
+          "network_confirmation": 60,
+          "dispersion": 50,
+          "liquidity": 60
+        },
+        "lp_inputs": {
+          "fee_opportunity": 60,
+          "corrective_activity": 60,
+          "depth_quality": 45,
+          "productive_dispersion": 55,
+          "divergence_risk": 95,
+          "adverse_selection": 75,
+          "one_sided_movement": 70
+        },
+        "network": {
+          "dispersion": "compressing",
+          "compression": "illustrative",
+          "liquidity_health": "mixed",
+          "confirmation": "partial",
+          "connected_asset_breadth": "3 / 3 positive (synthetic)"
+        },
+        "historical_pool_prior": "Informational only; see B8 research"
+      },
+      "weights": {
+        "price": {
+          "bnb": 0.25,
+          "btc": 0.15,
+          "alts": 0.15,
+          "network_confirmation": 0.2,
+          "dispersion": 0.15,
+          "liquidity": 0.1
+        },
+        "lp": {
+          "fee_opportunity": 0.25,
+          "corrective_activity": 0.2,
+          "depth_quality": 0.15,
+          "productive_dispersion": 0.1,
+          "divergence_risk": 0.15,
+          "adverse_selection": 0.1,
+          "one_sided_movement": 0.05
+        }
+      },
+      "execution_enabled": false
+    },
+    {
+      "schema_version": "1.0.0",
+      "asset": "GCC",
+      "network_name": "BSC",
+      "window": "7d",
+      "model_version": "0.1-research",
+      "model_config": {
+        "version": "0.1-research",
+        "status": "EXPERIMENTAL REGIME MODEL",
+        "price_environment": {
+          "bnb": 0.25,
+          "btc": 0.15,
+          "alts": 0.15,
+          "network_confirmation": 0.2,
+          "dispersion": 0.15,
+          "liquidity": 0.1
+        },
+        "lp_environment": {
+          "fee_opportunity": 0.25,
+          "corrective_activity": 0.2,
+          "depth_quality": 0.15,
+          "productive_dispersion": 0.1,
+          "divergence_risk": 0.15,
+          "adverse_selection": 0.1,
+          "one_sided_movement": 0.05
+        },
+        "lp_penalties": [
+          "divergence_risk",
+          "adverse_selection",
+          "one_sided_movement"
+        ],
+        "price_thresholds": [
+          [
+            80,
+            "STRONGLY FAVOURABLE"
+          ],
+          [
+            65,
+            "FAVOURABLE"
+          ],
+          [
+            45,
+            "MIXED"
+          ],
+          [
+            30,
+            "UNFAVOURABLE"
+          ],
+          [
+            0,
+            "STRONGLY UNFAVOURABLE"
+          ]
+        ],
+        "lp_thresholds": [
+          [
+            80,
+            "STRONGLY FAVOURABLE"
+          ],
+          [
+            65,
+            "FAVOURABLE"
+          ],
+          [
+            45,
+            "MIXED"
+          ],
+          [
+            30,
+            "CAUTIOUS"
+          ],
+          [
+            0,
+            "UNFAVOURABLE"
+          ]
+        ],
+        "macro_thresholds_pct": {
+          "strong": 5,
+          "neutral": 0.5,
+          "relative_outperformance": 2
+        },
+        "normalization": "Inputs are explicit 0–100 assessments. Macro: 0/25/50/75/100 for strong negative through strong positive. Network and LP inputs require a documented provider methodology before live use.",
+        "missing_policy": "Any missing weighted input withholds the score; never reweight missing inputs.",
+        "xaut_enabled": false,
+        "breadth_role": "Informational confirmation; not an additional weighted input.",
+        "historical_pool_performance_role": "Informational prior only; excluded from LP score.",
+        "validation": "Weights, thresholds and normalization are provisional, not backtested. Scores measure input alignment, not probability, expected yield or a forecast."
+      },
+      "gcc_price_regime_model": "v0.1-research",
+      "mode": "illustrative",
+      "timestamp": "2026-09-05T00:00:00.000Z",
+      "price_environment": {
+        "score": 73,
+        "label": "FAVOURABLE",
+        "confidence": "ILLUSTRATIVE",
+        "evidence_status": "UNRESOLVED",
+        "validation": "NOT_BACKTESTED",
+        "inputs": {
+          "bnb": 100,
+          "btc": 75,
+          "alts": 75,
+          "network_confirmation": 60,
+          "dispersion": 50,
+          "liquidity": 60
+        },
+        "weights": {
+          "bnb": 0.25,
+          "btc": 0.15,
+          "alts": 0.15,
+          "network_confirmation": 0.2,
+          "dispersion": 0.15,
+          "liquidity": 0.1
+        },
+        "contributions": [
+          {
+            "key": "bnb",
+            "value": 100,
+            "weight": 0.25,
+            "penalty": false,
+            "contribution": 25
+          },
+          {
+            "key": "btc",
+            "value": 75,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 11.25
+          },
+          {
+            "key": "alts",
+            "value": 75,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 11.25
+          },
+          {
+            "key": "network_confirmation",
+            "value": 60,
+            "weight": 0.2,
+            "penalty": false,
+            "contribution": 12
+          },
+          {
+            "key": "dispersion",
+            "value": 50,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 7.5
+          },
+          {
+            "key": "liquidity",
+            "value": 60,
+            "weight": 0.1,
+            "penalty": false,
+            "contribution": 6
+          }
+        ]
+      },
+      "lp_environment": {
+        "score": 44,
+        "label": "CAUTIOUS",
+        "confidence": "ILLUSTRATIVE",
+        "evidence_status": "UNRESOLVED",
+        "validation": "NOT_BACKTESTED",
+        "inputs": {
+          "fee_opportunity": 60,
+          "corrective_activity": 60,
+          "depth_quality": 45,
+          "productive_dispersion": 55,
+          "divergence_risk": 95,
+          "adverse_selection": 75,
+          "one_sided_movement": 70
+        },
+        "weights": {
+          "fee_opportunity": 0.25,
+          "corrective_activity": 0.2,
+          "depth_quality": 0.15,
+          "productive_dispersion": 0.1,
+          "divergence_risk": 0.15,
+          "adverse_selection": 0.1,
+          "one_sided_movement": 0.05
+        },
+        "contributions": [
+          {
+            "key": "fee_opportunity",
+            "value": 60,
+            "weight": 0.25,
+            "penalty": false,
+            "contribution": 15
+          },
+          {
+            "key": "corrective_activity",
+            "value": 60,
+            "weight": 0.2,
+            "penalty": false,
+            "contribution": 12
+          },
+          {
+            "key": "depth_quality",
+            "value": 45,
+            "weight": 0.15,
+            "penalty": false,
+            "contribution": 6.75
+          },
+          {
+            "key": "productive_dispersion",
+            "value": 55,
+            "weight": 0.1,
+            "penalty": false,
+            "contribution": 5.5
+          },
+          {
+            "key": "divergence_risk",
+            "value": 95,
+            "weight": 0.15,
+            "penalty": true,
+            "contribution": 0.75
+          },
+          {
+            "key": "adverse_selection",
+            "value": 75,
+            "weight": 0.1,
+            "penalty": true,
+            "contribution": 2.5
+          },
+          {
+            "key": "one_sided_movement",
+            "value": 70,
+            "weight": 0.05,
+            "penalty": true,
+            "contribution": 1.5
+          }
+        ]
+      },
+      "macro": {
+        "btc": "POSITIVE",
+        "bnb": "STRONG_POSITIVE",
+        "alts": "POSITIVE",
+        "xaut": "UNRESOLVED"
+      },
+      "crypto_regime": "ALTSEASON / DISPERSION",
+      "gold_divergence": true,
+      "network": {
+        "dispersion": "compressing",
+        "compression": "illustrative",
+        "liquidity_health": "mixed",
+        "confirmation": "partial",
+        "connected_asset_breadth": "3 / 3 positive (synthetic)"
+      },
+      "inputs": {
+        "timestamp": "2026-09-05T00:00:00.000Z",
+        "window": "7d",
+        "mode": "illustrative",
+        "macro": {
+          "btc": {
+            "move": 3.08,
+            "move_24h": 1.32,
+            "move_48h": 2.2,
+            "series": [
+              0,
+              0.5544,
+              0.308,
+              1.2936,
+              0.9856,
+              2.1868,
+              1.9712,
+              3.08
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          },
+          "bnb": {
+            "move": 7.56,
+            "move_24h": 3.24,
+            "move_48h": 5.4,
+            "series": [
+              0,
+              1.3607999999999998,
+              0.756,
+              3.1752000000000002,
+              2.4192,
+              5.3675999999999995,
+              4.8384,
+              7.56
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          },
+          "alts": {
+            "move": 4.619999999999999,
+            "move_24h": 1.9799999999999998,
+            "move_48h": 3.3,
+            "series": [
+              0,
+              0.8315999999999999,
+              0.46199999999999997,
+              1.9403999999999997,
+              1.4784,
+              3.2802,
+              2.9568,
+              4.619999999999999
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          },
+          "xaut": {
+            "move": -1.1199999999999999,
+            "move_24h": -0.48,
+            "move_48h": -0.8,
+            "series": [
+              0,
+              -0.20159999999999997,
+              -0.11200000000000002,
+              -0.4704,
+              -0.3584,
+              -0.7951999999999999,
+              -0.7168,
+              -1.1199999999999999
+            ],
+            "source": "SYNTHETIC SCENARIO — not market observations"
+          }
+        },
+        "price_inputs": {
+          "bnb": 100,
+          "btc": 75,
+          "alts": 75,
+          "network_confirmation": 60,
+          "dispersion": 50,
+          "liquidity": 60
+        },
+        "lp_inputs": {
+          "fee_opportunity": 60,
+          "corrective_activity": 60,
+          "depth_quality": 45,
+          "productive_dispersion": 55,
+          "divergence_risk": 95,
+          "adverse_selection": 75,
+          "one_sided_movement": 70
+        },
+        "network": {
+          "dispersion": "compressing",
+          "compression": "illustrative",
+          "liquidity_health": "mixed",
+          "confirmation": "partial",
+          "connected_asset_breadth": "3 / 3 positive (synthetic)"
+        },
+        "historical_pool_prior": "Informational only; see B8 research"
+      },
+      "weights": {
+        "price": {
+          "bnb": 0.25,
+          "btc": 0.15,
+          "alts": 0.15,
+          "network_confirmation": 0.2,
+          "dispersion": 0.15,
+          "liquidity": 0.1
+        },
+        "lp": {
+          "fee_opportunity": 0.25,
+          "corrective_activity": 0.2,
+          "depth_quality": 0.15,
+          "productive_dispersion": 0.1,
+          "divergence_risk": 0.15,
+          "adverse_selection": 0.1,
+          "one_sided_movement": 0.05
+        }
+      },
+      "execution_enabled": false
+    }
+  ]
+}

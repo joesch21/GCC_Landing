@@ -1,0 +1,23 @@
+{
+  "network": "BSC",
+  "settlement_asset": "GCC",
+  "opportunity_types": [
+    "Settlement",
+    "Routing",
+    "Liquidity intelligence",
+    "Task rewards",
+    "Future network services"
+  ],
+  "authority": "Condor credential / policy",
+  "execution_enabled": false,
+  "availability": "Research context only; opportunity types are not executable offers",
+  "state": {
+    "dispersion": "unavailable",
+    "compression": "unavailable",
+    "liquidity_health": "unavailable",
+    "confirmation": "unavailable",
+    "connected_asset_breadth": "unavailable"
+  },
+  "timestamp": null,
+  "mode": "current_unavailable"
+}

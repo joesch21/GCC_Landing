@@ -1,0 +1,16 @@
+{
+  "version": "0.1-research",
+  "status": "EXPERIMENTAL REGIME MODEL",
+  "price_environment": {"bnb":0.25,"btc":0.15,"alts":0.15,"network_confirmation":0.20,"dispersion":0.15,"liquidity":0.10},
+  "lp_environment": {"fee_opportunity":0.25,"corrective_activity":0.20,"depth_quality":0.15,"productive_dispersion":0.10,"divergence_risk":0.15,"adverse_selection":0.10,"one_sided_movement":0.05},
+  "lp_penalties": ["divergence_risk","adverse_selection","one_sided_movement"],
+  "price_thresholds": [[80,"STRONGLY FAVOURABLE"],[65,"FAVOURABLE"],[45,"MIXED"],[30,"UNFAVOURABLE"],[0,"STRONGLY UNFAVOURABLE"]],
+  "lp_thresholds": [[80,"STRONGLY FAVOURABLE"],[65,"FAVOURABLE"],[45,"MIXED"],[30,"CAUTIOUS"],[0,"UNFAVOURABLE"]],
+  "macro_thresholds_pct": {"strong":5,"neutral":0.5,"relative_outperformance":2},
+  "normalization": "Inputs are explicit 0–100 assessments. Macro: 0/25/50/75/100 for strong negative through strong positive. Network and LP inputs require a documented provider methodology before live use.",
+  "missing_policy": "Any missing weighted input withholds the score; never reweight missing inputs.",
+  "xaut_enabled": false,
+  "breadth_role": "Informational confirmation; not an additional weighted input.",
+  "historical_pool_performance_role": "Informational prior only; excluded from LP score.",
+  "validation": "Weights, thresholds and normalization are provisional, not backtested. Scores measure input alignment, not probability, expected yield or a forecast."
+}
