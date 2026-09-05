@@ -1,0 +1,25 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://www.goldcondor.info/data/gcc-opportunity-schema.json",
+  "title":"GCC Opportunity",
+  "description":"Conceptual read-only schema for future Condor agent opportunity discovery. V1 does not activate execution or settlement.",
+  "type":"object",
+  "required":["id","type","network","settlementAsset","reward","rewardUnit","requiredAuthority","deadline","verification"],
+  "properties":{
+    "id":{"type":"string"},
+    "type":{"enum":["TASK","SETTLEMENT","ROUTING","LIQUIDITY","NETWORK_SERVICE","FUTURE_FINANCIAL_ACTION"]},
+    "network":{"type":"string","examples":["BSC"]},
+    "settlementAsset":{"const":"GCC"},
+    "reward":{"type":["number","string"]},
+    "rewardUnit":{"const":"GCC"},
+    "escrowed":{"type":"boolean"},
+    "requiredAuthority":{"type":"string","examples":["CONDOR_LEVEL_2"]},
+    "deadline":{"type":"string","format":"date-time"},
+    "estimatedGas":{"type":"string"},
+    "estimatedNetworkFriction":{"type":"string"},
+    "netExpectedReward":{"type":"string"},
+    "risk":{"type":"array","items":{"type":"string"}},
+    "verification":{"type":"object","required":["type"],"properties":{"type":{"enum":["proof","escrow","attestation","human_review"]},"uri":{"type":"string"}}}
+  },
+  "example":{"id":"gcc-opportunity-001","type":"TASK","network":"BSC","settlementAsset":"GCC","reward":"125","rewardUnit":"GCC","escrowed":true,"requiredAuthority":"CONDOR_LEVEL_2","deadline":"2026-09-30T10:00:00Z","estimatedGas":"quoted at discovery","estimatedNetworkFriction":"quoted at discovery","netExpectedReward":"reward minus measured costs","verification":{"type":"proof"}}
+}

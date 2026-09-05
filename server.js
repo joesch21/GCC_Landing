@@ -40,6 +40,11 @@ app.post('/api/winning-nft', (req, res) => {
 });
 
 // Serve the main index.html for any other routes
+app.get(['/about', '/agents', '/network'], (req, res) => {
+  const page = { '/about': 'about.html', '/agents': 'agents.html', '/network': 'network.html' }[req.path];
+  res.sendFile(path.join(__dirname, 'public', page));
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

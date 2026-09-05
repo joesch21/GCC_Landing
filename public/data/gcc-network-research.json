@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "published_at": "2026-09-05",
+  "network": {
+    "name": "Gold Condor",
+    "asset": "GCC",
+    "chain": "BNB Smart Chain",
+    "chain_id": 56,
+    "contract": "0x092ac429b9c3450c9909433eb0662c3b7c13cf9a",
+    "mode": "historical_research",
+    "note": "Read-only public research layer. It is not a live execution or trading endpoint."
+  },
+  "metrics": [
+    {"id":"nominal_supply","label":"Nominal GCC supply","value":1000000,"unit":"GCC","period":"current chain observation","status":"ESTABLISHED","source":"LE1-B10 / totalSupply probe","description":"The ERC-20 nominal supply reported by the contract.","updated_at":"2026-09-05"},
+    {"id":"dead_wallet_balance","label":"Dead / inaccessible GCC","value":50774.22042076904,"unit":"GCC","period":"current chain observation","status":"ESTABLISHED","source":"LE1-B10 / balanceOf(dead)","description":"GCC held at the standard inaccessible address; this is not presented as a literal totalSupply reduction.","updated_at":"2026-09-05"},
+    {"id":"dead_wallet_share","label":"Effective inaccessible share","value":5.077422042076904,"unit":"percent of nominal supply","period":"current chain observation","status":"ESTABLISHED","source":"LE1-B10 / derived from nominal supply and dead balance","description":"A supply-accessibility indicator, not a contract burn metric.","updated_at":"2026-09-05"},
+    {"id":"explicit_dead_transfers","label":"Explicit historical dead-address transfers","value":46597.56387716958,"unit":"GCC","period":"bounded historical export","status":"HISTORICAL_OBSERVATION","source":"LE1-B10 / gcc_dead_wallet_history.csv","description":"Transfers explicitly identified to the standard dead address in the bounded export.","updated_at":"2026-09-05"},
+    {"id":"additional_dead_balance","label":"Balance above explicit transfers","value":4176.65654359946,"unit":"GCC","period":"current observation minus explicit historical transfers","status":"PARTIALLY_SUPPORTED","source":"LE1-B10 / derived comparison","description":"Consistent with reflection-style accumulation, but the exact attribution is not isolated by the available data.","updated_at":"2026-09-05"},
+    {"id":"reflection_mechanics","label":"Reflection-style token mechanics","value":"ABI functions present","unit":"mechanism","period":"contract interface observation","status":"STRONGLY_SUPPORTED","source":"GCC ABI / gcc_monetary_mechanics.md","description":"The exposed interface includes reflectionFee, reflect, reflectionFromToken and totalFeesRedistributed alongside fee-account functions.","updated_at":"2026-09-05"},
+    {"id":"researched_pools","label":"Canonical pools in LP study","value":5,"unit":"pools","period":"historical research sample","status":"ESTABLISHED","source":"LE1-B7 / LE1-B8","description":"Pancake WBNB, ApeSwap WBNB, BTCB, SOL-like and ICC pools. XAUT remains unresolved for historical series.","updated_at":"2026-09-05"},
+    {"id":"dispersion_observations","label":"Cross-pool dispersion observations","value":4046,"unit":"observations","period":"bounded historical export","status":"HISTORICAL_OBSERVATION","source":"LE1-B10 / dispersion_events.csv","description":"Receipt and state observations used to study price disagreement; not all are unique opportunities.","updated_at":"2026-09-05"},
+    {"id":"corrective_events","label":"Unique corrective-looking events","value":1197,"unit":"events","period":"B7 clean-leg study","status":"HISTORICAL_OBSERVATION","source":"LE1-B7 / corrective_fee_share.csv and report","description":"Historical events supporting event-level fee-side calculations; classification does not prove causal intent.","updated_at":"2026-09-05"},
+    {"id":"corrective_fee_share","label":"Corrective clean-leg DEX fee share","value":35.08581891660768,"unit":"percent","period":"B7 historical sample","status":"STRONGLY_SUPPORTED","source":"LE1-B7 / corrective_fee_share.csv","description":"Share of estimated measurable clean-leg DEX fees associated with corrective-looking activity, not all historical fees.","updated_at":"2026-09-05"},
+    {"id":"corrective_active_months","label":"Months with corrective candidates","value":"11/11","unit":"observed months","period":"B7 historical sample","status":"HISTORICAL_OBSERVATION","source":"LE1-B7 report","description":"Corrective fee candidates appeared in every observed month in the B7 sample.","updated_at":"2026-09-05"},
+    {"id":"dispersion_fee_spearman","label":"Dispersion → fee Spearman","value":0.643,"unit":"correlation","period":"B7 historical sample","status":"HISTORICAL_OBSERVATION","source":"LE1-B7 report","description":"An observed association between initial dispersion and base fee across deduplicated events; not causality.","updated_at":"2026-09-05"},
+    {"id":"lp_pancake_excess","label":"Pancake GCC/WBNB LP-vs-HODL median","value":111.01,"unit":"basis points","period":"B8 historical hypothetical cohorts","status":"HISTORICAL_OBSERVATION","source":"LE1-B8 / lp_total_return.csv","description":"Median historical hypothetical excess return for 12 normalized cohorts.","updated_at":"2026-09-05"},
+    {"id":"lp_apeswap_excess","label":"ApeSwap GCC/WBNB LP-vs-HODL median","value":15.73,"unit":"basis points","period":"B8 historical hypothetical cohorts","status":"HISTORICAL_OBSERVATION","source":"LE1-B8 / lp_total_return.csv","description":"Median historical hypothetical excess return for 10 normalized cohorts.","updated_at":"2026-09-05"},
+    {"id":"lp_icc_excess","label":"GCC/ICC LP-vs-HODL median","value":-4.58,"unit":"basis points","period":"B8 historical hypothetical cohorts","status":"HISTORICAL_OBSERVATION","source":"LE1-B8 / lp_total_return.csv","description":"Median historical hypothetical excess return for 14 normalized cohorts.","updated_at":"2026-09-05"},
+    {"id":"lp_btcb_excess","label":"GCC/BTCB LP-vs-HODL median","value":-23.48,"unit":"basis points","period":"B8 historical hypothetical cohorts","status":"HISTORICAL_OBSERVATION","source":"LE1-B8 / lp_total_return.csv","description":"Median historical hypothetical excess return for 14 normalized cohorts.","updated_at":"2026-09-05"},
+    {"id":"lp_sol_excess","label":"GCC/SOL LP-vs-HODL median","value":-88,"unit":"basis points","period":"B8 historical hypothetical cohorts","status":"HISTORICAL_OBSERVATION","source":"LE1-B8 / lp_total_return.csv","description":"Median historical hypothetical excess return for 10 normalized cohorts.","updated_at":"2026-09-05"},
+    {"id":"lp_all_excess","label":"All LP-vs-HODL cohorts median","value":-4.17,"unit":"basis points","period":"B8 historical hypothetical cohorts","status":"HISTORICAL_OBSERVATION","source":"LE1-B8 report","description":"Across 60 hypothetical cohorts; 35 were negative. This is not a realized LP-owner return.","updated_at":"2026-09-05"},
+    {"id":"crypto_factor_beta","label":"Equal BTC / BNB / SOL factor beta","value":0.8852,"unit":"coefficient","period":"B9 daily return regression","status":"PARTIALLY_SUPPORTED","source":"LE1-B9 / transmission_coefficients.csv","description":"Historical association with an equal crypto factor; no causal or permanent relationship is implied.","updated_at":"2026-09-05"},
+    {"id":"bnb_conditional_beta","label":"Conditional BNB coefficient","value":1.0089,"unit":"coefficient","period":"B9 multi-asset daily return regression","status":"PARTIALLY_SUPPORTED","source":"LE1-B9 / transmission_coefficients.csv","description":"BNB was the clearest independent historical association in the multi-asset regression.","updated_at":"2026-09-05"},
+    {"id":"autonomous_bridge_index","label":"Autonomous transmission bridge ending index","value":110.06,"unit":"index (start 100)","period":"B9/B10 modelled historical conditions","status":"MODEL_RESULT","source":"B9 / autonomous_model_worlds.csv","description":"Reduced-form external-transmission-only bridge; not a forecast.","updated_at":"2026-09-05"},
+    {"id":"observed_network_index","label":"Observed GCC network ending index","value":420.78,"unit":"index (start 100)","period":"B9 232-day historical window","status":"HISTORICAL_OBSERVATION","source":"B9 / gcc_network_reference.csv","description":"Observed historical index that is much larger than the reduced-form bridge; the residual is not assigned to a cause.","updated_at":"2026-09-05"},
+    {"id":"daily_volatility_activity_spearman","label":"Daily volatility → corrective activity Spearman","value":0.0063,"unit":"correlation","period":"B10 diagnostic","status":"NOT_SUPPORTED","source":"B10 / model_validation_b10.csv","description":"Generic daily volatility was not useful as an explanatory variable; relative cross-pool dispersion is the more useful historical lens.","updated_at":"2026-09-05"},
+    {"id":"solver_events","label":"NET-2C direct-WBNB routes settled","value":"48/50","unit":"routes","period":"historical fork experiment","status":"ESTABLISHED","source":"NET-2C report","description":"48 of 50 expanded direct-WBNB routes settled locally; two reference legs were unavailable.","updated_at":"2026-09-05"},
+    {"id":"solver_profitable_routes","label":"NET-2C profitable direct routes","value":0,"unit":"routes","period":"historical fork experiment","status":"NOT_SUPPORTED","source":"NET-2C report","description":"No tested direct-WBNB route produced positive post-cost ΔNAV.","updated_at":"2026-09-05"},
+    {"id":"solver_aggregate_delta_nav","label":"NET-2C aggregate post-cost ΔNAV","value":-1.419261899,"unit":"WBNB","period":"historical fork experiment","status":"HISTORICAL_OBSERVATION","source":"NET-2C report","description":"Aggregate controlled-wallet net-asset change across the 48 settled routes.","updated_at":"2026-09-05"},
+    {"id":"solver_median_delta_nav","label":"NET-2C median trade ΔNAV","value":-0.029705485,"unit":"WBNB","period":"historical fork experiment","status":"HISTORICAL_OBSERVATION","source":"NET-2C report","description":"Median controlled-wallet net-asset change after execution costs.","updated_at":"2026-09-05"},
+    {"id":"solver_dispersion_range","label":"NET-2C executable dispersion range","value":"8.22–788.42","unit":"basis points","period":"historical fork experiment","status":"HISTORICAL_OBSERVATION","source":"NET-2C report","description":"Observed N−1 dispersion range. Visible spread did not cross a post-cost break-even threshold.","updated_at":"2026-09-05"}
+  ],
+  "lp_results": [
+    {"pool":"GCC/WBNB — PancakeSwap","value":111.01,"unit":"bps","sample":12,"status":"HISTORICAL_OBSERVATION"},
+    {"pool":"GCC/WBNB — ApeSwap","value":15.73,"unit":"bps","sample":10,"status":"HISTORICAL_OBSERVATION"},
+    {"pool":"GCC/ICC","value":-4.58,"unit":"bps","sample":14,"status":"HISTORICAL_OBSERVATION"},
+    {"pool":"GCC/BTCB","value":-23.48,"unit":"bps","sample":14,"status":"HISTORICAL_OBSERVATION"},
+    {"pool":"GCC/SOL","value":-88,"unit":"bps","sample":10,"status":"HISTORICAL_OBSERVATION"}
+  ],
+  "evidence_map": [
+    {"claim":"Fragmented GCC liquidity exists across multiple quote assets","status":"ESTABLISHED","note":"Five canonical pools are covered by the B7/B8 historical study."},
+    {"claim":"Cross-pool dispersion and corrective activity recur","status":"ESTABLISHED","note":"Historical observations show repeated dispersion/compression patterns."},
+    {"claim":"Corrective-looking activity generates measurable LP fee-side flow","status":"STRONGLY_SUPPORTED","note":"B7 estimates 35.09% of clean-leg measurable fees in the sample."},
+    {"claim":"LPs always outperform HODL","status":"NOT_SUPPORTED","note":"B8 is mixed by pool; all-cohort median is -4.17 bps."},
+    {"claim":"Connected assets transmit into GCC","status":"PARTIALLY_SUPPORTED","note":"B9 regressions show historical association, not causality or permanence."},
+    {"claim":"Reflection contributes to effective scarcity","status":"PARTIALLY_SUPPORTED","note":"Mechanism is visible in the interface; balance attribution remains incomplete."},
+    {"claim":"Generic volatility automatically creates profitable activity","status":"NOT_SUPPORTED","note":"Daily volatility/activity Spearman is approximately 0.0063."},
+    {"claim":"Raw dispersion equals executable arbitrage profit","status":"NOT_SUPPORTED","note":"NET-2C tested 48 settled direct-WBNB routes with zero profitable outcomes."},
+    {"claim":"Autonomous long-run GCC appreciation","status":"UNRESOLVED","note":"No defensible scarcity-price elasticity or forecast is published."},
+    {"claim":"Agent settlement opportunity","status":"UNRESOLVED","note":"Strategic thesis and future research direction, not a released financial product."}
+  ],
+  "future_api_contracts": [
+    {"method":"GET","path":"/api/agent/network-state","mode":"read-only contract"},
+    {"method":"GET","path":"/api/agent/opportunities","mode":"read-only contract"},
+    {"method":"GET","path":"/api/agent/quote","mode":"read-only contract"},
+    {"method":"GET","path":"/api/agent/routes","mode":"read-only contract"},
+    {"method":"GET","path":"/api/agent/liquidity","mode":"read-only contract"},
+    {"method":"GET","path":"/api/agent/authority","mode":"read-only contract"},
+    {"method":"POST","path":"/api/agent/intent","mode":"not active in V1"},
+    {"method":"POST","path":"/api/agent/settlement","mode":"not active in V1"}
+  ]
+}

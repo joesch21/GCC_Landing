@@ -1,0 +1,18 @@
+{
+  "schema_version":"1.0.0",
+  "mode":"read_only_historical",
+  "network":"BNB Smart Chain",
+  "chainId":56,
+  "asset":"GCC",
+  "contract":"0x092ac429b9c3450c9909433eb0662c3b7c13cf9a",
+  "referencePrice":{"value":null,"unit":"USD","status":"UNRESOLVED","period":"not bundled in the historical snapshot","description":"Live market pricing is intentionally not asserted by this research snapshot."},
+  "effectiveSupply":{"nominal":1000000,"inaccessible":50774.22042076904,"inaccessiblePercent":5.077422042076904,"status":"ESTABLISHED","period":"current chain observation"},
+  "pools":["GCC/WBNB — PancakeSwap","GCC/WBNB — ApeSwap","GCC/BTCB","GCC/SOL","GCC/ICC"],
+  "xaut":{"status":"UNRESOLVED","note":"Pair address is recorded in the registry, but historical reserve/reference series are unavailable."},
+  "lastKnownDispersion":{"value":null,"unit":"bps","status":"HISTORICAL_OBSERVATION","description":"Use the research dataset for historical dispersion observations; no live quote is represented here."},
+  "routeAvailability":{"directWbnbSolver":"NOT_SUPPORTED","broaderMultiAssetRoutes":"UNRESOLVED"},
+  "tokenFriction":{"status":"PARTIALLY_SUPPORTED","description":"Fee/reflection-related interface is visible, but exact historical balance attribution is incomplete."},
+  "researchConfidence":"mixed_by_metric",
+  "timestamp":"2026-09-05T00:00:00Z",
+  "source":"public/data/gcc-network-research.json"
+}

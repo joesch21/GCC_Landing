@@ -421,3 +421,43 @@ window.addEventListener("load", () => {
     });
   }
 });
+
+async function initPublicResearchLayer() {
+  const stateUrl = "/data/gcc-network-state.json";
+  const researchUrl = "/data/gcc-network-research.json";
+  try {
+    const [stateResponse, researchResponse] = await Promise.all([
+      fetch(stateUrl, { cache: "no-store" }),
+      fetch(researchUrl, { cache: "no-store" }),
+    ]);
+    if (!stateResponse.ok || !researchResponse.ok) throw new Error("Public research data unavailable");
+    const state = await stateResponse.json();
+    const research = await researchResponse.json();
+    window.GCC_PUBLIC_DATA = { state, research };
+    const metrics = new Map(research.metrics.map((metric) => [metric.id, metric]));
+    document.querySelectorAll("[data-metric]").forEach((element) => {
+      const metric = metrics.get(element.dataset.metric);
+      if (!metric) return;
+      if (typeof metric.value !== "number") {
+        element.textContent = metric.value;
+        return;
+      }
+      const id = metric.id;
+      const digits = id === "nominal_supply" || id === "researched_pools" ? 0 :
+        id === "dead_wallet_balance" || id === "dead_wallet_share" || id === "corrective_fee_share" ? 2 :
+        id.includes("beta") || id.includes("spearman") ? 4 :
+        id.includes("delta_nav") ? 9 : 2;
+      const formatted = metric.value.toLocaleString("en-US", { maximumFractionDigits: digits, minimumFractionDigits: digits });
+      element.textContent = id === "dead_wallet_share" || id === "corrective_fee_share" ? formatted + "%" : formatted;
+    });
+    document.documentElement.dataset.researchReady = "true";
+    document.querySelectorAll("[data-research-source]").forEach((element) => {
+      element.textContent = "Source: public/data/gcc-network-research.json";
+    });
+  } catch (error) {
+    document.documentElement.dataset.researchReady = "false";
+    console.warn("Public research layer unavailable:", error);
+  }
+}
+
+window.addEventListener("load", initPublicResearchLayer);
