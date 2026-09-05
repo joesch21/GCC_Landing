@@ -1,11 +1,10 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/about", "destination": "/public/about.html" },
-    { "source": "/agents", "destination": "/public/agents.html" },
-    { "source": "/network", "destination": "/public/opportunity.html" },
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/public/$1" }
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/agents", "destination": "/agents.html" },
+    { "source": "/network", "destination": "/opportunity.html" },
+    { "source": "/api/(.*)", "destination": "/api/$1" }
   ],
   "headers": [
     {
