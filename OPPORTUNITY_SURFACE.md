@@ -30,4 +30,4 @@ Definitions match the published white paper. Evidence uses icon plus word: estab
 
 `npm run build`, `npm test`, and `npm run lint` need only the existing Node environment. `npm run test:browser` requires Playwright and Chromium; set `PLAYWRIGHT_MODULE` to an existing Playwright package path if it is not installed locally. The browser suite starts an isolated server copy, runs the existing mutating NFT API test against that copy, checks mobile layout, routes, controls, JSON and data failure states, and captures desktop/mobile screenshots under ignored `artifacts/`.
 
-The requested image `/mnt/data/gold_condor_network_intelligence_dashboard.png` was unavailable. The interface follows the work order's dark navy, gold, compact financial design specification; it does not claim pixel matching to the absent reference.
+The approved visual reference is preserved outside the published site at `artifacts/reference/gold_condor_network_intelligence_dashboard.png`. The interface follows its dark navy, gold, compact financial design specification without referencing or embedding the image.

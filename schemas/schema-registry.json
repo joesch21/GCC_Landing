@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "contracts": [
+    {
+      "id": "gcc-network-research",
+      "path": "public/data/gcc-network-research.json",
+      "authority": "curated research publication",
+      "schema": null,
+      "generated": false,
+      "consumer": ["opportunity.mjs", "gcc-network-research agent export", "network.html", "about.html"]
+    },
+    {
+      "id": "gcc-network-state",
+      "path": "public/data/gcc-network-state.json",
+      "authority": "curated research publication",
+      "schema": null,
+      "generated": false,
+      "consumer": ["legacy network.html", "agent network-state export"]
+    },
+    {
+      "id": "gcc-opportunity-research",
+      "path": "public/data/gcc-opportunity-research.json",
+      "authority": "curated opportunity research contract",
+      "schema": null,
+      "generated": false,
+      "consumer": ["opportunity.mjs", "agent research export", "agent regime context"]
+    },
+    {
+      "id": "gcc-regime-config",
+      "path": "public/data/gcc-regime-config.json",
+      "authority": "research scoring configuration",
+      "schema": null,
+      "generated": false,
+      "consumer": ["gccRegimeEngine.mjs", "build-opportunity.mjs", "tests"]
+    },
+    {
+      "id": "gcc-regime-output",
+      "path": "public/data/agent/regime.json",
+      "authority": "gccRegimeEngine.mjs",
+      "schema": "public/data/gcc-regime-schema.json",
+      "generated": true,
+      "consumer": ["agents", "opportunity.mjs", "autonomous agents"]
+    },
+    {
+      "id": "gcc-network-state-agent",
+      "path": "public/data/agent/network-state.json",
+      "authority": "build-opportunity.mjs from curated data and engine output",
+      "schema": null,
+      "generated": true,
+      "consumer": ["autonomous agents"]
+    },
+    {
+      "id": "gcc-liquidity-agent",
+      "path": "public/data/agent/liquidity.json",
+      "authority": "build-opportunity.mjs from B8 curated data",
+      "schema": null,
+      "generated": true,
+      "consumer": ["autonomous agents"]
+    },
+    {
+      "id": "gcc-research-agent",
+      "path": "public/data/agent/research.json",
+      "authority": "build-opportunity.mjs from curated research contracts",
+      "schema": null,
+      "generated": true,
+      "consumer": ["autonomous agents"]
+    },
+    {
+      "id": "gcc-replay-examples",
+      "path": "public/data/agent/replay-examples.json",
+      "authority": "build-opportunity.mjs from gccRegimeEngine.mjs fixtures",
+      "schema": "public/data/gcc-regime-schema.json",
+      "generated": true,
+      "consumer": ["tests", "future backtesting"]
+    },
+    {
+      "id": "gcc-regime-schema",
+      "path": "public/data/gcc-regime-schema.json",
+      "authority": "public regime output contract",
+      "schema": null,
+      "generated": false,
+      "consumer": ["tests", "check-schema-drift.mjs", "agents"]
+    },
+    {
+      "id": "gcc-opportunity-schema",
+      "path": "public/data/gcc-opportunity-schema.json",
+      "authority": "future opportunity contract",
+      "schema": null,
+      "generated": false,
+      "consumer": ["agents", "future opportunity discovery"]
+    }
+  ]
+}
