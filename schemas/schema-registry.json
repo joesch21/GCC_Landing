@@ -90,6 +90,14 @@
       "consumer": ["agents", "future opportunity discovery"]
     },
     {
+      "id": "gcc-scarcity-observation",
+      "path": "public/data/gcc-scarcity-observation.json",
+      "authority": "read-only BSC mainnet observation imported into Opportunity Engine",
+      "schema": null,
+      "generated": false,
+      "consumer": ["scripts/import-opportunity-engine.mjs", "opportunity-engine.json", "research provenance"]
+    },
+    {
       "id": "opportunity-engine-snapshot",
       "path": "public/data/opportunity-engine.json",
       "authority": "canonical Opportunity Engine snapshot imported from TrialWalletKeccak",

@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 
 const read = file => JSON.parse(readFileSync(file, 'utf8'));
 const snapshot = read('public/data/opportunity-engine.json');
+const scarcityObservation = read('public/data/gcc-scarcity-observation.json');
 const html = readFileSync('public/opportunity.html', 'utf8');
 const adapter = readFileSync('public/js/opportunity-engine-surface.mjs', 'utf8');
 
@@ -26,12 +27,22 @@ test('production snapshot exposes required historical evidence and withholds liv
   assert.ok(snapshot.engine.pool_bias.metrics.length > 0);
   assert.equal(snapshot.engine.gcc_price_environment.current_score.value, null);
   assert.equal(snapshot.engine.gcc_lp_environment.current_score.value, null);
+  const scarcity = id => snapshot.engine.scarcity.metrics.find(item => item.metric_id === id);
+  assert.equal(scarcity('gcc.scarcity.dead_address_balance').evidence_status, 'ESTABLISHED');
+  assert.equal(scarcity('gcc.scarcity.nominal_total_supply').value, 1000000);
+  assert.equal(scarcity('gcc.scarcity.dead_address_share').value, 5.077510545149);
+  assert.equal(scarcity('gcc.reflection.dead_address_accumulation').evidence_status, 'PARTIAL');
+  assert.equal(snapshot.provenance.enrichments[0].source_file, 'public/data/gcc-scarcity-observation.json');
+  assert.equal(scarcityObservation.raw.dead_code, '0x');
 });
 
 test('network page uses the engine adapter and retains compatibility data', () => {
   assert.match(html, /opportunity-engine\.css/);
   assert.match(html, /opportunity-engine-surface\.mjs/);
   assert.match(html, /data\/opportunity-engine\.json/);
+  assert.match(html, /engine-hero/);
+  assert.match(adapter, /Live observation being established/);
+  assert.match(adapter, /No contemporaneous observation window exists yet/);
   assert.match(adapter, /fetch\('\/data\/opportunity-engine\.json'/);
   assert.doesNotMatch(adapter, /eth_sendTransaction|personal_sign|privateKey|signer|wallet|swap/i);
   assert.ok(read('public/data/gcc-network-research.json'));

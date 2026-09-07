@@ -17,3 +17,7 @@ npm run import:engine
 ```
 
 The import requires the canonical source checkout at the default path or an explicit `OPPORTUNITY_ENGINE_SOURCE`; it does not fetch live data and does not execute wallet, signing, trading, or deployment logic.
+
+## Current GCC scarcity observation
+
+The committed `public/data/gcc-scarcity-observation.json` is a read-only BSC mainnet observation at block `0x72da145`. The import adds its SHA-256, block and observation time to the engine snapshot provenance. It establishes the observed dead-address balance, nominal supply, derived percentage and conventional inaccessibility without claiming a reduction in `totalSupply()`. The contract's reflection interface and current dead-address reward eligibility are established; historical dead-address balance accumulation remains PARTIAL because the public RPC used for verification did not provide archive state.

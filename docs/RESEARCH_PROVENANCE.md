@@ -2,7 +2,7 @@
 
 | Public metric/claim | Source experiment | Evidence | Public file | Panel | White-paper section |
 | --- | --- | --- | --- | --- | --- |
-| Dead/inaccessible GCC ≈50,774; ≈5.08% | LE1-B10 supply/balance probe | ESTABLISHED observation; extra attribution partial | `gcc-network-research.json` dead-wallet metrics | Effective scarcity | §10 |
+| Current dead-address GCC balance and nominal share | BSC mainnet read-only observation at block `0x72da145` | ESTABLISHED for observed balance/share/inaccessibility; reflection accumulation PARTIAL | `gcc-scarcity-observation.json` → `opportunity-engine.json` | Effective scarcity | §10 |
 | LP-vs-HODL +111.01, +15.73, −4.58, −23.48, −88 bps | LE1-B8 normalized hypothetical cohorts | HISTORICAL_OBSERVATION; mixed | `gcc-network-research.json.lp_results` | LP outcomes | §11 |
 | Corrective fee share ≈35.09%, 11/11 months, Spearman ≈0.643 | LE1-B7 corrective-fee study | STRONGLY_SUPPORTED/sample-limited association | `corrective_*` metrics | Corrective fee economics | §§9, 11 |
 | Equal crypto factor beta ≈0.8852; BNB ≈1.0089 | LE1-B9 daily regressions, 231 observations | PARTIALLY_SUPPORTED; association | `crypto_factor_beta`, `bnb_conditional_beta` | Transmission | §12 |
@@ -12,3 +12,6 @@
 | XAUT transmission | No usable historical reserve/reference series | UNRESOLVED | opportunity research/network state | XAUT macro/node | §§7, 12, 18 |
 
 The dashboard, agent files and white paper use the same definitions for network dispersion, corrective activity, effective scarcity, LP-vs-HODL, connected-asset transmission and solver ΔNAV. Source research under `/home/joseph/research/` is not modified by this repository.
+
+
+The current observation is reproducible through BSC JSON-RPC using `eth_chainId`, `eth_call`, `eth_getCode` and `eth_getBlockByNumber`; its raw integer reads and limitations are retained in `public/data/gcc-scarcity-observation.json`.
