@@ -1,0 +1,32 @@
+.engine-metric-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:12px 0; }
+.engine-metric-grid > div { border:1px solid var(--line); padding:10px; min-width:0; }
+.engine-metric-grid strong { display:block; color:var(--gold); font:600 23px/1.2 Arial,sans-serif; }
+.engine-metric-grid span { display:block; color:var(--muted); font-size:10px; margin:5px 0; }
+.engine-metric-grid .badge { margin-top:5px; }
+.engine-line { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:3px 8px; padding:9px 0; border-bottom:1px solid var(--line); }
+.engine-line strong { color:var(--gold); font:600 18px/1.2 Arial,sans-serif; margin-right:6px; }
+.engine-line span { color:var(--muted); font-size:10px; }
+.engine-line small { grid-column:1 / -1; color:var(--muted); font:9px/1.5 monospace; overflow-wrap:anywhere; }
+.engine-score-grid { display:grid; gap:8px; margin-top:8px; }
+.engine-score-grid > div, .engine-status-block { display:grid; gap:5px; border-top:1px solid var(--line); padding-top:8px; }
+.engine-score-grid strong, .engine-status-block strong { font-size:11px; color:var(--text); }
+.engine-score-grid span { color:var(--gold); font:600 17px Arial,sans-serif; }
+.engine-score-grid small, .engine-status-block small, .engine-status-block p { color:var(--muted); font-size:10px; line-height:1.5; margin:0; }
+.engine-component-list { display:grid; gap:7px; }
+.engine-component-list > div { display:grid; grid-template-columns:1fr auto; gap:3px 8px; border-bottom:1px solid #ffffff08; padding:5px 0; }
+.engine-component-list span { font:10px monospace; }
+.engine-component-list strong { color:var(--gold); font:10px monospace; }
+.engine-component-list small { grid-column:1 / -1; color:var(--muted); font-size:9px; }
+.engine-evidence-group { border-top:1px solid var(--line); padding-top:8px; margin-top:8px; }
+.engine-evidence-group ul { margin:7px 0 0; padding-left:16px; color:var(--muted); font-size:10px; }
+.engine-evidence-group li { margin:5px 0; }
+.engine-status-block code { color:var(--gold); font:10px monospace; overflow-wrap:anywhere; }
+@media (max-width:640px) {
+  .engine-metric-grid { grid-template-columns:1fr 1fr; }
+  .engine-metric-grid strong { font-size:19px; }
+}
+
+@media (max-width:640px) { .gauge-layout { grid-template-columns:minmax(0,1fr); } .network-svg { overflow:hidden; } .research-card { overflow:hidden; } .engine-line strong { overflow-wrap:anywhere; } }
+
+.research-card { min-width:0; overflow:hidden; }
+.engine-line strong { overflow-wrap:anywhere; }

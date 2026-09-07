@@ -88,6 +88,14 @@
       "schema": null,
       "generated": false,
       "consumer": ["agents", "future opportunity discovery"]
+    },
+    {
+      "id": "opportunity-engine-snapshot",
+      "path": "public/data/opportunity-engine.json",
+      "authority": "canonical Opportunity Engine snapshot imported from TrialWalletKeccak",
+      "schema": null,
+      "generated": true,
+      "consumer": ["opportunity-engine-surface.mjs", "agents", "research inspection"]
     }
   ]
 }
