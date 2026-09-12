@@ -1,24 +1,13 @@
-const qs = (selector) => document.querySelector(selector);
-const qsa = (selector) => [...document.querySelectorAll(selector)];
+document.querySelectorAll('img[data-product-image]').forEach((img) => {
+  const handleError = () => {
+    const media = img.closest('.product-media, .hero-media');
+    if (media) media.classList.add('image-failed');
+    img.hidden = true;
+  };
 
-qsa('.filter').forEach((button) => {
-  button.addEventListener('click', () => {
-    qsa('.filter').forEach((item) => item.classList.remove('active'));
-    button.classList.add('active');
-    const filter = button.dataset.filter;
-    qsa('.product-card').forEach((card) => {
-      card.hidden = filter !== 'all' && card.dataset.category !== filter;
-    });
-  });
+  img.addEventListener('error', handleError);
+
+  if (img.complete && img.naturalWidth === 0) {
+    handleError();
+  }
 });
-
-const waitlistForm = qs('#waitlistForm');
-if (waitlistForm) {
-  waitlistForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const email = qs('#email').value.trim();
-    if (!email) return;
-    qs('#waitlistMessage').textContent = 'Preview only — registration is not stored yet. Mailing-list integration will be connected after sample approval.';
-    event.currentTarget.reset();
-  });
-}
