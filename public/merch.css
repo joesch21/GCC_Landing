@@ -190,3 +190,21 @@ footer{padding:30px clamp(20px,4vw,72px);border-top:1px solid var(--line);displa
   .concepts{padding-bottom:80px}
   .photo-grid{grid-template-columns:1fr}
 }
+
+/* Drop 01 shirt model photography */
+.product-photo--model{
+  height:460px;
+  background:#050708
+}
+.product-photo--model img{
+  object-fit:cover;
+  object-position:center top
+}
+.product-badge--dark{
+  background:#111923;
+  color:var(--gold);
+  border:1px solid rgba(243,201,76,.35)
+}
+@media (max-width:640px){
+  .product-photo--model{height:560px}
+}
