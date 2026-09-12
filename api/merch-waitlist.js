@@ -18,8 +18,14 @@ module.exports = async (req, res) => {
     return res.status(204).end();
   }
 
+  if (req.method === 'GET') {
+    return res.status(200).json({
+      enabled: Boolean(process.env.MERCH_WAITLIST_WEBHOOK_URL)
+    });
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST, OPTIONS');
+    res.setHeader('Allow', 'GET, POST, OPTIONS');
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
