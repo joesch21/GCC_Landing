@@ -95,10 +95,10 @@ button,input{font:inherit}
   letter-spacing:.22em
 }
 .hero{
-  min-height:720px;
+  min-height:640px;
   display:grid;
-  grid-template-columns:1fr .92fr;
-  gap:78px;
+  grid-template-columns:1.12fr .78fr;
+  gap:56px;
   align-items:center;
   padding:72px 0 88px
 }
@@ -144,9 +144,9 @@ button,input{font:inherit}
 }
 .proof-strip span:not(:last-child)::after{content:"/";margin-left:18px;color:#365159}
 
-.hero-stage{position:relative;min-height:590px}
+.hero-stage{position:relative;min-height:500px;display:flex;align-items:center;justify-content:flex-end}
 .hero-media{
-  width:min(100%,470px);
+  width:min(100%,380px);
   aspect-ratio:4/5;
   margin-left:auto;
   position:relative;
@@ -188,8 +188,8 @@ button,input{font:inherit}
 }
 .hero-card{
   position:absolute;
-  left:0;
-  bottom:34px;
+  left:10px;
+  bottom:26px;
   min-width:240px;
   padding:18px 20px;
   border:1px solid var(--line);
