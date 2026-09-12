@@ -4,6 +4,7 @@
     { "source": "/about", "destination": "/about.html" },
     { "source": "/agents", "destination": "/agents.html" },
     { "source": "/network", "destination": "/opportunity.html" },
+    { "source": "/merch", "destination": "/merch.html" },
     { "source": "/api/(.*)", "destination": "/api/$1" }
   ],
   "headers": [
