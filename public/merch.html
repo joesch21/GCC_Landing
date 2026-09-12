@@ -263,7 +263,7 @@ footer{padding:40px 0}
         <a class="btn btn-gold" href="#operator">See Operator Series</a>
         <a class="btn btn-lab" href="#lab">See Condor Lab</a>
       </div>
-      <form class="waitlist" id="merch-waitlist" action="/api/merch-waitlist" method="post">
+      <form class="waitlist" id="merch-waitlist" action="/api/merch-waitlist" method="post" hidden>
         <label class="waitlist-label" for="waitlist-email">Get the Drop 01 launch email</label>
         <div class="waitlist-row">
           <input id="waitlist-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="waitlist-status">
@@ -509,6 +509,13 @@ footer{padding:40px 0}
   if (!form) return;
   const status = document.getElementById('waitlist-status');
   const button = form.querySelector('button[type="submit"]');
+
+  fetch('/api/merch-waitlist', {headers: {'Accept': 'application/json'}})
+    .then((response) => response.ok ? response.json() : {enabled: false})
+    .then((result) => {
+      if (result.enabled) form.hidden = false;
+    })
+    .catch(() => {});
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
