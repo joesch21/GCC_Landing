@@ -144,9 +144,9 @@ button,input{font:inherit}
 }
 .proof-strip span:not(:last-child)::after{content:"/";margin-left:18px;color:#365159}
 
-.hero-stage{position:relative;min-height:590px}
+.hero-stage{position:relative;min-height:500px;display:flex;align-items:center;justify-content:flex-end}
 .hero-media{
-  width:min(100%,470px);
+  width:min(100%,380px);
   aspect-ratio:4/5;
   margin-left:auto;
   position:relative;
