@@ -18,7 +18,7 @@ if (waitlistForm) {
     event.preventDefault();
     const email = qs('#email').value.trim();
     if (!email) return;
-    qs('#waitlistMessage').textContent = 'Interest noted locally for this preview. Mailing-list integration will be connected after sample approval.';
+    qs('#waitlistMessage').textContent = 'Preview only — registration is not stored yet. Mailing-list integration will be connected after sample approval.';
     event.currentTarget.reset();
   });
 }
