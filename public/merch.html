@@ -9,14 +9,81 @@
 <link rel="canonical" href="https://www.goldcondor.info/merch">
 <meta property="og:title" content="Condor — Drop 01 & Lab Preview">
 <meta property="og:description" content="Two lines. One Condor. Operator is the premium core; Condor Lab is the machine-culture side project.">
-<meta property="og:image" content="https://www.goldcondor.info/merch/products/condor-cap-navy.webp?v=20260912e">
+<meta property="og:image" content="https://www.goldcondor.info/merch/products/condor-cap-navy.webp?v=20260912f">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Product",
+      "@id": "https://www.goldcondor.info/merch#operator-crest-tee",
+      "name": "Operator Crest Tee",
+      "brand": {"@type": "Brand", "name": "Condor"},
+      "image": "https://www.goldcondor.info/merch/products/condor-crest-tee-model.webp",
+      "description": "Premium AS Colour 5001 black tee with gold Condor crest print.",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "AUD",
+        "price": "55.00",
+        "availability": "https://schema.org/PreOrder",
+        "url": "https://www.goldcondor.info/merch#operator-crest-tee"
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://www.goldcondor.info/merch#operator-cap",
+      "name": "Operator Cap",
+      "brand": {"@type": "Brand", "name": "Condor"},
+      "image": "https://www.goldcondor.info/merch/products/condor-cap-navy.webp",
+      "description": "Navy Yupoong 6245CM cap with gold Condor embroidery.",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "AUD",
+        "price": "45.00",
+        "availability": "https://schema.org/PreOrder",
+        "url": "https://www.goldcondor.info/merch#operator-cap"
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://www.goldcondor.info/merch#founders-seal-tee",
+      "name": "Founders Seal Tee",
+      "brand": {"@type": "Brand", "name": "Condor"},
+      "image": "https://www.goldcondor.info/merch/products/condor-seal-tee-model.webp",
+      "description": "Premium black tee with the compact gold Condor founders seal.",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "AUD",
+        "price": "55.00",
+        "availability": "https://schema.org/PreOrder",
+        "url": "https://www.goldcondor.info/merch#founders-seal-tee"
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://www.goldcondor.info/merch#vault-hoodie",
+      "name": "Vault Hoodie",
+      "brand": {"@type": "Brand", "name": "Condor"},
+      "description": "Condor Vault Series hoodie in navy or black with restrained technical branding.",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "AUD",
+        "price": "99.00",
+        "availability": "https://schema.org/PreOrder",
+        "url": "https://www.goldcondor.info/merch#vault-hoodie"
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#05080b;--bg-2:#0b1218;--panel:#0e161d;--line:#1c2830;--line-soft:#141d24;
-  --ink:#edf1f3;--ink-dim:#8a97a1;--ink-faint:#5b666e;
+  --ink:#edf1f3;--ink-dim:#8a97a1;--ink-faint:#71808a;
   --gold:#bb8f37;--gold-bright:#e5be63;--gold-dim:#6e5527;
   --lab-red:#b24141;--lab-red-bright:#d96a6a;--lab-bg:#08090a;
   --radius-s:3px;--radius-m:6px;--maxw:1160px;
@@ -143,6 +210,26 @@ footer{padding:40px 0}
   .product-row-bottom{align-items:flex-start;flex-direction:column}
   .status-pill{text-align:left}
 }
+
+.waitlist{margin-top:30px;max-width:560px}
+.waitlist-label{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:9px}
+.waitlist-row{display:flex;gap:10px}
+.waitlist-row input{flex:1;min-width:0;background:#0b1218;color:var(--ink);border:1px solid var(--line);border-radius:var(--radius-s);padding:13px 14px;font:inherit}
+.waitlist-row input::placeholder{color:#71808a}
+.waitlist-row input:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px}
+.waitlist-status{min-height:24px;margin-top:8px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-dim)}
+.waitlist-honeypot{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}
+.product-card--pending .shot{display:grid;place-items:center;background:linear-gradient(145deg,#08111a,#030609);border-bottom:1px solid var(--line)}
+.photo-pending{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);padding:28px;text-align:center}
+.operator-stack .product-card .shot{aspect-ratio:16/10}
+.drop-readiness{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.readiness-list{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.readiness-list li{display:flex;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid var(--line);font-family:"IBM Plex Mono",monospace;font-size:12px}
+.readiness-list .done{color:var(--gold-bright)}
+.readiness-list .open{color:var(--ink-dim)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:700px){.waitlist-row{flex-direction:column}.waitlist-row .btn{width:100%}.drop-readiness{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -176,9 +263,18 @@ footer{padding:40px 0}
         <a class="btn btn-gold" href="#operator">See Operator Series</a>
         <a class="btn btn-lab" href="#lab">See Condor Lab</a>
       </div>
+      <form class="waitlist" id="merch-waitlist" action="/api/merch-waitlist" method="post">
+        <label class="waitlist-label" for="waitlist-email">Get the Drop 01 launch email</label>
+        <div class="waitlist-row">
+          <input id="waitlist-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="waitlist-status">
+          <input class="waitlist-honeypot" name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn btn-gold" type="submit">Notify me at launch</button>
+        </div>
+        <p class="waitlist-status" id="waitlist-status" role="status" aria-live="polite"></p>
+      </form>
     </div>
     <div class="hero-visual">
-      <img src="/merch/products/condor-cap-navy.webp?v=20260912e" alt="Navy Operator Cap with gold embroidered Condor crest, studio shot">
+      <img src="/merch/products/condor-cap-navy.webp?v=20260912f" alt="Navy Operator Cap with gold embroidered Condor crest, studio shot" width="1024" height="1024" fetchpriority="high" decoding="async">
       <div class="hero-caption">OPERATOR CAP · NAVY · GOLD EMBROIDERY</div>
     </div>
   </div>
@@ -195,9 +291,9 @@ footer{padding:40px 0}
     </div>
 
     <div class="operator-grid">
-      <div class="product-card">
+      <div class="product-card" id="operator-crest-tee">
         <div class="shot">
-          <img src="/merch/products/condor-crest-tee-model.webp?v=20260912e" alt="Model wearing black Operator Crest Tee with gold Condor crest and wordmark">
+          <img src="/merch/products/condor-crest-tee-model.webp?v=20260912f" alt="Operator Crest Tee shown on model" width="800" height="1000" loading="lazy" decoding="async">
         </div>
         <div class="body">
           <span class="tag">Signature</span>
@@ -211,9 +307,9 @@ footer{padding:40px 0}
       </div>
 
       <div class="operator-stack">
-        <div class="product-card">
+        <div class="product-card" id="operator-cap">
           <div class="shot">
-            <img src="/merch/products/condor-cap-navy.webp?v=20260912e" alt="Navy Operator Cap with gold embroidered Condor crest">
+            <img src="/merch/products/condor-cap-navy.webp?v=20260912f" alt="Operator Cap in navy with gold Condor embroidery" width="1024" height="1024" loading="lazy" decoding="async">
           </div>
           <div class="body">
             <span class="tag">Headwear</span>
@@ -226,14 +322,32 @@ footer{padding:40px 0}
           </div>
         </div>
 
-        <div class="product-card">
-          <div class="body" style="padding:24px">
-            <span class="tag">Vault series</span>
-            <h3>Founders Seal Tee & Vault Hoodie</h3>
-            <p class="spec">Quieter marks, technical labelling — the rest of the Operator line is still in fit and print sign-off. Full specs go live with Drop 01.</p>
+        <div class="product-card" id="founders-seal-tee">
+          <div class="shot">
+            <img src="/merch/products/condor-seal-tee-model.webp?v=20260912f" alt="Founders Seal Tee shown on model" width="800" height="1000" loading="lazy" decoding="async">
+          </div>
+          <div class="body">
+            <span class="tag">Founders seal</span>
+            <h3>Founders Seal Tee</h3>
+            <p class="spec">Premium AS Colour 5001 · Black · Gold DTG · S–3XL</p>
             <div class="product-row-bottom">
-              <span class="price">from A$55</span>
-              <span class="status-pill">In production</span>
+              <span class="price">A$55</span>
+              <span class="status-pill">Drop 01 — coming soon</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card product-card--pending" id="vault-hoodie">
+          <div class="shot" aria-label="Vault Hoodie product photography pending">
+            <div class="photo-pending">Vault Hoodie photography pending final sample</div>
+          </div>
+          <div class="body">
+            <span class="tag">Vault series</span>
+            <h3>Vault Hoodie</h3>
+            <p class="spec">AS Colour 5101 · Navy / Black · DTG · S–2XL</p>
+            <div class="product-row-bottom">
+              <span class="price">A$99</span>
+              <span class="status-pill">Sample photography open</span>
             </div>
           </div>
         </div>
@@ -262,7 +376,7 @@ footer{padding:40px 0}
     <div class="lab-grid">
       <div class="lab-card">
         <div class="shot">
-          <img src="/merch/products/ai-satire-tee-02.webp?v=20260912e" alt="Judgment Day Help Desk concept tee" onerror="this.parentElement.classList.add('image-missing');this.remove()">
+          <img src="/merch/products/ai-satire-tee-02.webp?v=20260912f" alt="Judgment Day Help Desk concept tee" width="800" height="1000" loading="lazy" decoding="async" onerror="this.parentElement.classList.add('image-missing');this.remove()">
         </div>
         <div class="body">
           <span class="tag">Lab preview</span>
@@ -278,7 +392,7 @@ footer{padding:40px 0}
 
       <div class="lab-card">
         <div class="shot">
-          <img src="/merch/products/ai-satire-tee-03.webp?v=20260912e" alt="Skynet Tech Support concept tee" onerror="this.parentElement.classList.add('image-missing');this.remove()">
+          <img src="/merch/products/ai-satire-tee-03.webp?v=20260912f" alt="Skynet Tech Support concept tee" width="800" height="1000" loading="lazy" decoding="async" onerror="this.parentElement.classList.add('image-missing');this.remove()">
         </div>
         <div class="body">
           <span class="tag">Lab preview</span>
@@ -294,7 +408,7 @@ footer{padding:40px 0}
 
       <div class="lab-card">
         <div class="shot">
-          <img src="/merch/products/ai-satire-tee-01.webp?v=20260912e" alt="Ctrl Alt Delete concept tee" onerror="this.parentElement.classList.add('image-missing');this.remove()">
+          <img src="/merch/products/ai-satire-tee-01.webp?v=20260912f" alt="Ctrl Alt Delete concept tee" width="800" height="1000" loading="lazy" decoding="async" onerror="this.parentElement.classList.add('image-missing');this.remove()">
         </div>
         <div class="body">
           <span class="tag">Lab preview</span>
@@ -361,6 +475,24 @@ footer{padding:40px 0}
   </div>
 </section>
 
+
+<section id="drop-readiness">
+  <div class="wrap drop-readiness">
+    <div>
+      <span class="kicker">Drop readiness</span>
+      <h2 style="font-size:32px;margin-bottom:14px">What is left before launch.</h2>
+      <p style="color:var(--ink-dim);max-width:48ch">Drop 01 remains preview-only until physical samples and fulfilment details are signed off.</p>
+    </div>
+    <ul class="readiness-list" aria-label="Drop 01 launch checklist">
+      <li><span>Core product hierarchy</span><span class="done">DONE</span></li>
+      <li><span>Founders Seal photography</span><span class="done">LIVE</span></li>
+      <li><span>Vault Hoodie photography</span><span class="open">OPEN</span></li>
+      <li><span>Fit / print / embroidery sign-off</span><span class="open">OPEN</span></li>
+      <li><span>Waitlist delivery webhook</span><span class="open">CONFIG</span></li>
+    </ul>
+  </div>
+</section>
+
 </main>
 
 <footer>
@@ -370,5 +502,42 @@ footer{padding:40px 0}
     <span>© 2026 Condor</span>
   </div>
 </footer>
+
+<script>
+(() => {
+  const form = document.getElementById('merch-waitlist');
+  if (!form) return;
+  const status = document.getElementById('waitlist-status');
+  const button = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    status.textContent = 'Joining…';
+    button.disabled = true;
+
+    try {
+      const body = Object.fromEntries(new FormData(form).entries());
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({...body, source: 'merch-hero'})
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Waitlist is temporarily unavailable.');
+      }
+
+      form.reset();
+      status.textContent = 'You’re on the Drop 01 launch list.';
+    } catch (error) {
+      status.textContent = error.message || 'Waitlist is temporarily unavailable.';
+    } finally {
+      button.disabled = false;
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
