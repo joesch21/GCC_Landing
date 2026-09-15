@@ -82,7 +82,7 @@ check(output.price_environment?.score === null && output.lp_environment?.score =
 for (const label of [output.price_environment?.label,output.lp_environment?.label]) check(regimeLabels.has(label), `unknown regime output label ${label}`);
 for (const status of [...(research.metrics||[]).map(metric=>metric.status), ...Object.keys(opportunitySource.evidence||{})]) check(canonicalEvidence.has(status), `unknown evidence status ${status}`);
 
-const expectedRoutes = {'/about':'about.html','/agents':'agents.html','/network':'opportunity.html'};
+const expectedRoutes = {'/about':'about.html','/agents':'agents.html','/network':'opportunity.html','/merch':'merch.html'};
 const server = readFileSync(path.join(root,'server.js'),'utf8');
 for (const [route,file] of Object.entries(expectedRoutes)) check(new RegExp(`['"]${route}['"]\\s*:\\s*['"]${file}['"]`).test(server), `Express route parity missing ${route} -> ${file}`);
 const vercel = read('vercel.json');

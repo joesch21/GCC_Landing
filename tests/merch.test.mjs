@@ -30,7 +30,7 @@ test('merch product photography avoids generic emblem placeholders', async () =>
   const html = await readFile(merchPath, 'utf8');
 
   assert.match(html, /condor-seal-tee-model\.webp/);
-  assert.match(html, /Vault Hoodie photography pending final sample/);
+  assert.match(html, /condor-vault-hoodie\.webp\?v=20260915a/);
 
   const operatorSection = html.slice(
     html.indexOf('<section id="operator">'),
