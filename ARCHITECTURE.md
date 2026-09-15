@@ -13,6 +13,7 @@ flowchart TD
   Browser --> About[/about]
   Browser --> Agents[/agents]
   Browser --> Network[/network]
+  Browser --> Merch[/merch]
   Network --> Opportunity[public/opportunity.html]
   Opportunity --> UI[public/js/opportunity.mjs]
   UI --> Engine[public/js/gccRegimeEngine.mjs]
@@ -26,9 +27,9 @@ The browser loads `opportunity.html`, then the page module fetches `gcc-regime-c
 
 ## Deployment architecture
 
-Local Express starts at `server.js` (`npm start`, port 3000 by default). `express.static(public)` exposes direct static files at root URLs. Explicit Express routes map `/about` to `about.html`, `/agents` to `agents.html`, and `/network` to `opportunity.html`; the final Express catch-all serves `index.html` for other paths. `api/winning-nft.js` is a Vercel-style API artifact; local Express also contains equivalent winning-NFT routes.
+Local Express starts at `server.js` (`npm start`, port 3000 by default). `express.static(public)` exposes direct static files at root URLs. Explicit Express routes map `/about` to `about.html`, `/agents` to `agents.html`, `/network` to `opportunity.html`, and `/merch` (including `/merch/`) to `merch.html`; the final Express catch-all serves `index.html` for other paths. Local Express mounts the merch waitlist function and also contains equivalent winning-NFT routes.
 
-Vercel reads `vercel.json`. Named rewrites map `/about → /about.html`, `/agents → /agents.html`, `/network → /opportunity.html`, and preserve `/api/(.*)`. There is intentionally no `/public` prefix catch-all: Vercel publishes files under `public/` at root URLs. This keeps `/network` canonical while preserving `/opportunity.html` direct access.
+Vercel reads `vercel.json`. Named rewrites map `/about → /about.html`, `/agents → /agents.html`, `/network → /opportunity.html`, `/merch → /merch.html`, and preserve `/api/(.*)`. There is intentionally no `/public` prefix catch-all: Vercel publishes files under `public/` at root URLs. This keeps `/network` canonical while preserving `/opportunity.html` direct access.
 
 ## Data architecture
 

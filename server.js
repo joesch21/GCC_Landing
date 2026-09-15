@@ -5,10 +5,14 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const winningNFTFilePath = path.join(__dirname, 'winningNFT.json');
+const merchWaitlist = require('./api/merch-waitlist');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Keep the local server in parity with the Vercel merch waitlist function.
+app.all('/api/merch-waitlist', merchWaitlist);
 
 // API endpoint to get the winning NFT
 app.get('/api/winning-nft', (req, res) => {
@@ -39,9 +43,17 @@ app.post('/api/winning-nft', (req, res) => {
   });
 });
 
-// Serve the main index.html for any other routes
-app.get(['/about', '/agents', '/network'], (req, res) => {
-  const page = { '/about': 'about.html', '/agents': 'agents.html', '/network': 'opportunity.html' }[req.path];
+// Serve named pages before the homepage fallback. Both merch URL forms are
+// supported locally because Express does not automatically normalize a
+// trailing slash the way the deployed site does.
+app.get(['/about', '/agents', '/network', '/merch', '/merch/'], (req, res) => {
+  const route = req.path === '/merch/' ? '/merch' : req.path;
+  const page = {
+    '/about': 'about.html',
+    '/agents': 'agents.html',
+    '/network': 'opportunity.html',
+    '/merch': 'merch.html'
+  }[route];
   res.sendFile(path.join(__dirname, 'public', page));
 });
 

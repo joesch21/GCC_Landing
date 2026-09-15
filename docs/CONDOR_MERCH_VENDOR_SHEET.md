@@ -1,8 +1,27 @@
 # Condor Merch — Drop 01 Vendor Sheet
 
-Research date: 2026-09-12  
-Proposed fulfilment merchant: Printful  
+Research date: 2026-09-16
+Supplier status: Printful candidate — catalogue capability verified; not yet sample-approved
 Launch region: Australia first
+
+## Supplier verification (2026-09-16)
+
+Printful remains the current production candidate for an Australia-first launch. Its official catalogue pages confirm the planned product families and decoration methods:
+
+- [AS Colour 5001 Men's Staple T-Shirt](https://www.printful.com/custom/mens/shirts/mens-staple-t-shirt-as-colour-5001): DTG printing and embroidery, S–3XL; listed as Australia/New Zealand-only.
+- [AS Colour 5101 Unisex Kangaroo Pocket Hoodie](https://www.printful.com/custom/mens/hoodies/unisex-kangaroo-pocket-hoodie-as-colour-5101): DTG printing, S–2XL, with Navy and Black listed; Australia/New Zealand-only.
+- [Yupoong 6245CM Classic Dad Hat](https://www.printful.com/custom/embroidered/dad-hats/classic-dad-cap-yupoong-6245cm): front embroidery, Navy, one size.
+- [Black Glossy Mug](https://www.printful.com/custom/mugs/personalized/black-glossy-mug): sublimation, 11 oz or 15 oz.
+- [Embroidered Tactical Patches](https://www.printful.com/custom/patches/personalized/embroidered-tactical-patches): circular 3 in, embroidery, hook-and-loop backing, no minimums.
+
+This verifies catalogue capability, not that a sample has been produced or approved. Before listing a product for sale:
+
+1. Set the Printful account delivery country to Australia and confirm live catalogue availability, fulfilment location, taxes, shipping and current prices. The catalogue can show a product as unavailable until the account region is set.
+2. Upload production artwork rather than the WebP mockups used on this page. Follow Printful's [print-file guidance](https://help.printful.com/hc/en-us/articles/28491464259740-How-should-I-prepare-my-print-file-for-the-best-results); transparent, high-resolution PNG files are the safer source for logos.
+3. Have Printful digitize and review the cap and patch embroidery. Follow its [embroidery guidance](https://help.printful.com/hc/en-us/articles/28727397325340-How-should-I-prepare-my-design-for-embroidery); fine lines, small gaps and gradients may be simplified, and separate files may be needed for hats and apparel.
+4. Order physical samples and approve print placement, colour, fit, embroidery and landed cost.
+
+Printful's [sample-order programme](https://help.printful.com/hc/en-us/articles/360014067959-How-do-sample-orders-work) offers 20% off when eligible, with account and quantity limits. Checkout should remain disabled until the sample gate below passes.
 
 ## Decision
 
@@ -12,7 +31,7 @@ Do not connect live checkout until physical samples are approved.
 
 ## Proposed SKU map
 
-| Condor storefront product | Printful blank | Vendor colour | Technique | Sizes | Observed base price* | Approx. AUD base** | Proposed retail | Gross margin before shipping/tax/fees |
+| Condor storefront product | Printful blank | Vendor colour | Technique | Sizes | Planning base price (USD, observed 2026-09-12)* | Approx. AUD base** | Proposed retail | Gross margin before shipping/tax/fees |
 | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: |
 | Condor Crest Tee | Men's Staple T-Shirt — AS Colour 5001 | Black | DTG front print | S–3XL | US$19.95 | A$27.73 | A$55 | 49.6% |
 | Night Flight Tee | Men's Staple T-Shirt — AS Colour 5001 | Navy or Midnight Blue | DTG front print, silver-tone artwork | S–3XL | US$19.95 | A$27.73 | A$55 | 49.6% |
@@ -21,7 +40,7 @@ Do not connect live checkout until physical samples are approved.
 | Cold Storage Mug | Black Glossy Mug | Black | Sublimation | 11 oz | US$8.11 | A$11.27 | A$29 | 61.1% |
 | Founders Mark Patch | Embroidered Tactical Patch | Black / circular | Embroidery + hook-and-loop | Circular Ø3 in | US$8.72 | A$12.12 | A$24 | 49.5% |
 
-* Vendor prices are observed catalogue prices and can vary by fulfilment location, production method, colour, size, tax and currency.  
+* Planning prices were observed on 2026-09-12 and are not current quotes; they can vary by fulfilment location, production method, colour, size, tax and currency.
 ** Approximate conversion uses 1 USD ≈ 1.39 AUD on 2026-09-12. This is planning data, not a final landed cost.
 
 ## Product notes

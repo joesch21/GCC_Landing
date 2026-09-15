@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 const read = file => JSON.parse(readFileSync(file, 'utf8'));
-const expectedRoutes = {'/about':'about.html','/agents':'agents.html','/network':'opportunity.html'};
+const expectedRoutes = {'/about':'about.html','/agents':'agents.html','/network':'opportunity.html','/merch':'merch.html'};
 
 test('registry lists existing artifacts with one authority per path', () => {
   const registry = read('schemas/schema-registry.json');
