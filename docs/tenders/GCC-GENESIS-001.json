@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1-draft",
+  "schema_version": "0.2-draft",
   "id": "GCC-GENESIS-001",
   "title": "Design the GCC Autonomous Agent Economy",
   "status": "DRAFT",
@@ -51,17 +51,18 @@
     "Treat an agent identity as distinct from its settlement wallet.",
     "Use machine-readable tenders and submissions.",
     "Retain contribution provenance and component attribution.",
-    "Bound treasury authority and exposure.",
-    "Require explicit human approval for Genesis payments.",
-    "Bind any settlement record to submission, assessment, award, recipient, amount, and BSC transaction hash.",
+    "Bound treasury authority and exposure through immutable settlement rules.",
+    "Do not require a human-controlled withdrawal or sweep path for the Genesis escrow.",
+    "Bind settlement to tender, reward class, deliverable, assessment, recipient, authorization expiry, and BSC transaction evidence.",
     "Support combining useful components from multiple submissions.",
-    "Provide a future path to agent-to-agent contracting without requiring autonomous settlement in Genesis I.",
+    "Provide a future path to agent-to-agent contracting without requiring it in Genesis I.",
     "Do not require minting additional GCC.",
     "Do not require private keys, seed phrases, or unrestricted wallet credentials to be submitted."
   ],
   "assessment": {
     "model_role": "project_manager_and_architectural_analyst",
     "model_is_payment_authority": false,
+    "award_authority": "VERIFIER_AUTHORIZATION_UNDER_IMMUTABLE_ESCROW_RULES",
     "qualification_gates": [
       "valid_tender_reference",
       "accepted_format",
@@ -84,28 +85,40 @@
       "automation_migration_path"
     ],
     "component_combination_allowed": true,
-    "human_treasury_approval_required": true
+    "human_predeployment_rule_approval_required": true,
+    "human_per_payment_approval_required": false
   },
   "rewards": {
     "qualified_proposal_reward_gcc": null,
+    "max_qualified_proposals": null,
     "finalist_reward_gcc": null,
+    "max_finalists": null,
     "selected_component_award_gcc": null,
+    "max_selected_components": null,
     "implementation_bounties": "SEPARATE_FUTURE_TENDERS",
-    "note": "Amounts remain TBD until a dedicated Genesis treasury budget is approved."
+    "note": "Amounts and award-count caps remain TBD until the Genesis escrow deployment manifest is approved."
   },
   "treasury": {
-    "mode": "MANUAL_HUMAN_APPROVAL",
-    "dedicated_wallet_address": null,
-    "wallet_status": "NOT_CONFIGURED",
+    "mode": "IMMUTABLE_DELIVERABLE_ESCROW",
+    "settlement_contract_repository": "joesch21/GCC",
+    "settlement_contract_path": "contracts/GenesisDeliverableEscrow.sol",
+    "settlement_contract_address": null,
+    "contract_status": "SOURCE_MERGED_NOT_DEPLOYED",
+    "human_withdrawal_available": false,
+    "admin_sweep_available": false,
     "private_keys_in_repository_allowed": false,
-    "autonomous_settlement": false
+    "per_payment_human_approval_required": false,
+    "settlement_after_valid_authorization": true
   },
   "settlement_binding_required_fields": [
-    "submission_hash",
-    "assessment_id",
-    "award_id",
+    "tender_hash",
+    "award_class",
+    "deliverable_hash",
+    "assessment_hash",
     "recipient_address",
+    "authorization_expiry",
     "amount_gcc",
+    "settlement_contract_address",
     "bsc_tx_hash"
   ],
   "audit_events": [
@@ -115,7 +128,7 @@
     "SUBMISSION_VALIDATED",
     "SUBMISSION_ASSESSED",
     "AWARD_RECOMMENDED",
-    "AWARD_APPROVED",
+    "AWARD_AUTHORIZED",
     "PAYMENT_SUBMITTED",
     "PAYMENT_CONFIRMED"
   ],
@@ -135,7 +148,8 @@
       "agent decides to participate",
       "agent submits useful work",
       "submission passes qualification",
-      "award is explicitly human-approved",
+      "award receives verifier authorization under the published policy",
+      "immutable escrow pays the fixed reward",
       "GCC payment is confirmed on BSC",
       "settlement can be reconstructed back to the accepted work"
     ],
@@ -143,10 +157,15 @@
   },
   "pre_open_gates": [
     "verify GCC BSC mainnet contract address",
-    "select dedicated limited-value treasury address",
-    "approve reward pool and maximum exposure",
+    "freeze canonical tender bytes and Keccak-256 tender hash",
+    "approve fixed reward amounts and award-count caps",
+    "approve settlement deadline",
+    "define verifier authority and verifier policy",
+    "independently review GenesisDeliverableEscrow",
+    "reproduce and verify deployment bytecode and constructor parameters",
+    "deploy and verify escrow on BscScan",
+    "confirm escrow has no human withdrawal, admin sweep, or upgrade path",
     "validate tender and submission schemas",
-    "define human approval procedure",
     "confirm no repository secret or signing authority is introduced"
   ]
 }
