@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.goldcondor.info/schemas/gcc-genesis-tender.schema.json",
+  "title": "GCC Genesis Tender",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "status",
+    "publication",
+    "objective",
+    "research_hypothesis",
+    "network",
+    "economic_constraints",
+    "deliverable",
+    "mandatory_requirements",
+    "assessment",
+    "rewards",
+    "treasury",
+    "settlement_binding_required_fields",
+    "audit_events",
+    "planned_discovery",
+    "success_criteria",
+    "pre_open_gates"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1-draft"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^GCC-GENESIS-[0-9]{3}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "OPEN",
+        "CLOSED",
+        "AWARDED"
+      ]
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "live",
+        "created_date",
+        "deadline",
+        "note"
+      ],
+      "properties": {
+        "live": {
+          "type": "boolean"
+        },
+        "created_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "deadline": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_hypothesis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chain",
+        "chain_id",
+        "settlement_asset",
+        "gcc_contract_address",
+        "contract_address_status",
+        "autonomous_execution_enabled"
+      ],
+      "properties": {
+        "chain": {
+          "type": "string",
+          "const": "BNB Smart Chain"
+        },
+        "chain_id": {
+          "type": "integer",
+          "const": 56
+        },
+        "settlement_asset": {
+          "type": "string",
+          "const": "GCC"
+        },
+        "gcc_contract_address": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "contract_address_status": {
+          "type": "string"
+        },
+        "autonomous_execution_enabled": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "economic_constraints": {
+      "type": "object"
+    },
+    "deliverable": {
+      "type": "object"
+    },
+    "mandatory_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "assessment": {
+      "type": "object"
+    },
+    "rewards": {
+      "type": "object"
+    },
+    "treasury": {
+      "type": "object",
+      "required": [
+        "mode",
+        "dedicated_wallet_address",
+        "wallet_status",
+        "private_keys_in_repository_allowed",
+        "autonomous_settlement"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "const": "MANUAL_HUMAN_APPROVAL"
+        },
+        "dedicated_wallet_address": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "wallet_status": {
+          "type": "string"
+        },
+        "private_keys_in_repository_allowed": {
+          "type": "boolean",
+          "const": false
+        },
+        "autonomous_settlement": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "settlement_binding_required_fields": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "string"
+      }
+    },
+    "audit_events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "planned_discovery": {
+      "type": "object"
+    },
+    "success_criteria": {
+      "type": "object"
+    },
+    "pre_open_gates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
