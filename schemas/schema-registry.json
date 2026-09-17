@@ -7,12 +7,7 @@
       "authority": "curated research publication",
       "schema": null,
       "generated": false,
-      "consumer": [
-        "opportunity.mjs",
-        "gcc-network-research agent export",
-        "network.html",
-        "about.html"
-      ]
+      "consumer": ["opportunity.mjs", "gcc-network-research agent export", "network.html", "about.html"]
     },
     {
       "id": "gcc-network-state",
@@ -20,10 +15,7 @@
       "authority": "curated research publication",
       "schema": null,
       "generated": false,
-      "consumer": [
-        "legacy network.html",
-        "agent network-state export"
-      ]
+      "consumer": ["legacy network.html", "agent network-state export"]
     },
     {
       "id": "gcc-opportunity-research",
@@ -31,11 +23,7 @@
       "authority": "curated opportunity research contract",
       "schema": null,
       "generated": false,
-      "consumer": [
-        "opportunity.mjs",
-        "agent research export",
-        "agent regime context"
-      ]
+      "consumer": ["opportunity.mjs", "agent research export", "agent regime context"]
     },
     {
       "id": "gcc-regime-config",
@@ -43,11 +31,7 @@
       "authority": "research scoring configuration",
       "schema": null,
       "generated": false,
-      "consumer": [
-        "gccRegimeEngine.mjs",
-        "build-opportunity.mjs",
-        "tests"
-      ]
+      "consumer": ["gccRegimeEngine.mjs", "build-opportunity.mjs", "tests"]
     },
     {
       "id": "gcc-regime-output",
@@ -55,11 +39,7 @@
       "authority": "gccRegimeEngine.mjs",
       "schema": "public/data/gcc-regime-schema.json",
       "generated": true,
-      "consumer": [
-        "agents",
-        "opportunity.mjs",
-        "autonomous agents"
-      ]
+      "consumer": ["agents", "opportunity.mjs", "autonomous agents"]
     },
     {
       "id": "gcc-network-state-agent",
@@ -67,9 +47,7 @@
       "authority": "build-opportunity.mjs from curated data and engine output",
       "schema": null,
       "generated": true,
-      "consumer": [
-        "autonomous agents"
-      ]
+      "consumer": ["autonomous agents"]
     },
     {
       "id": "gcc-liquidity-agent",
@@ -77,9 +55,7 @@
       "authority": "build-opportunity.mjs from B8 curated data",
       "schema": null,
       "generated": true,
-      "consumer": [
-        "autonomous agents"
-      ]
+      "consumer": ["autonomous agents"]
     },
     {
       "id": "gcc-research-agent",
@@ -87,9 +63,7 @@
       "authority": "build-opportunity.mjs from curated research contracts",
       "schema": null,
       "generated": true,
-      "consumer": [
-        "autonomous agents"
-      ]
+      "consumer": ["autonomous agents"]
     },
     {
       "id": "gcc-replay-examples",
@@ -97,10 +71,7 @@
       "authority": "build-opportunity.mjs from gccRegimeEngine.mjs fixtures",
       "schema": "public/data/gcc-regime-schema.json",
       "generated": true,
-      "consumer": [
-        "tests",
-        "future backtesting"
-      ]
+      "consumer": ["tests", "future backtesting"]
     },
     {
       "id": "gcc-regime-schema",
@@ -108,11 +79,7 @@
       "authority": "public regime output contract",
       "schema": null,
       "generated": false,
-      "consumer": [
-        "tests",
-        "check-schema-drift.mjs",
-        "agents"
-      ]
+      "consumer": ["tests", "check-schema-drift.mjs", "agents"]
     },
     {
       "id": "gcc-opportunity-schema",
@@ -120,10 +87,7 @@
       "authority": "future opportunity contract",
       "schema": null,
       "generated": false,
-      "consumer": [
-        "agents",
-        "future opportunity discovery"
-      ]
+      "consumer": ["agents", "future opportunity discovery"]
     },
     {
       "id": "gcc-scarcity-observation",
@@ -131,11 +95,7 @@
       "authority": "read-only BSC mainnet observation imported into Opportunity Engine",
       "schema": null,
       "generated": false,
-      "consumer": [
-        "scripts/import-opportunity-engine.mjs",
-        "opportunity-engine.json",
-        "research provenance"
-      ]
+      "consumer": ["scripts/import-opportunity-engine.mjs", "opportunity-engine.json", "research provenance"]
     },
     {
       "id": "opportunity-engine-snapshot",
@@ -143,11 +103,7 @@
       "authority": "canonical Opportunity Engine snapshot imported from TrialWalletKeccak",
       "schema": null,
       "generated": true,
-      "consumer": [
-        "opportunity-engine-surface.mjs",
-        "agents",
-        "research inspection"
-      ]
+      "consumer": ["opportunity-engine-surface.mjs", "agents", "research inspection"]
     },
     {
       "id": "gcc-genesis-tender-schema",
@@ -155,11 +111,7 @@
       "authority": "draft Genesis tender machine contract; pre-launch and non-executable",
       "schema": null,
       "generated": false,
-      "consumer": [
-        "Genesis validation",
-        "future tender discovery",
-        "schema drift review"
-      ]
+      "consumer": ["Genesis validation", "future tender discovery", "schema drift review"]
     },
     {
       "id": "gcc-genesis-001-draft",
@@ -167,11 +119,7 @@
       "authority": "human-approved pre-launch Genesis tender specification",
       "schema": "schemas/gcc-genesis-tender.schema.json",
       "generated": false,
-      "consumer": [
-        "Genesis implementation",
-        "future autonomous agents",
-        "validation tests"
-      ]
+      "consumer": ["Genesis implementation", "future autonomous agents", "validation tests"]
     }
   ]
 }
