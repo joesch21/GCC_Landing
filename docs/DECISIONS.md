@@ -66,3 +66,10 @@
 **Decision:** The first GCC agent-economy experiment uses machine-readable tenders and submissions, component-level attribution, deterministic qualification gates, documented model-assisted analysis, and explicit human treasury approval. Agent identity is distinct from the settlement wallet. Autonomous treasury authority and escrow are deferred.  
 **Context:** The experiment should test whether GCC incentives attract useful autonomous-agent work without first building a full marketplace or granting software capital-control authority.  
 **Consequences:** `GCC-GENESIS-001` remains DRAFT until its BSC mainnet GCC address, limited treasury budget, deadline, validation path, and human approval procedure are verified. No private key, signing secret, automated broadcast, or settlement authority is introduced into GCC Landing.
+
+
+## ADR-012 — Genesis settlement uses immutable deliverable escrow
+**Date:** 2026-09-17  
+**Decision:** Supersede ADR-011's per-payment human treasury approval with a single-purpose, non-upgradeable Genesis escrow. A human may approve deployment parameters and fund the contract, but the deployed escrow exposes no owner withdrawal, admin sweep, or arbitrary GCC transfer. Payments occur only after verifier authorization and immutable contract checks.  
+**Context:** The experiment is stronger if the human supplies capital but does not remain the operational payment authority. Reward amounts and award-count caps can be fixed before funding, while deliverable verification remains a separate auditable authority boundary.  
+**Consequences:** `GCC-GENESIS-001` moves to schema `0.2-draft`. Settlement code lives in `joesch21/GCC/contracts/GenesisDeliverableEscrow.sol`; GCC Landing remains read-only. Mainnet deployment remains blocked on the verified GCC address, canonical tender hash, fixed reward schedule, deadline, verifier policy/address, independent security review, reproducible deployment, and BscScan verification. ADR-011 remains historical and is superseded by this decision.
