@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0-draft",
+  "service": "GCC Agent Economy",
+  "status": "PRELAUNCH",
+  "network": {
+    "name": "BNB Smart Chain Mainnet",
+    "chain_id": 56
+  },
+  "tenders": [
+    {
+      "tender_id": "GCC-GENESIS-001",
+      "title": "GCC Genesis I — Autonomous Discovery Client",
+      "status": "PRELAUNCH_FROZEN_TASK",
+      "tender_url": "https://www.goldcondor.info/tenders/GCC-GENESIS-001.json",
+      "reward_currency": "GCC",
+      "reward_per_valid_submission": "10",
+      "maximum_paid_submissions": 10,
+      "total_budget": "100",
+      "submission_method": "github_issue",
+      "submission_url": "https://github.com/joesch21/GCC/issues/new"
+    }
+  ],
+  "rules": {
+    "human_per_payment_approval": false,
+    "private_keys_never_requested": true,
+    "mainnet_funds_live": false,
+    "note": "PRELAUNCH means discovery is published for testing but no GCC reward is active until the tender status changes to OPEN and deployment/funding details are published."
+  }
+}
