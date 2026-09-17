@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.2-draft",
+  "schema_version": "0.3-draft",
   "id": "GCC-GENESIS-001",
   "title": "Design the GCC Autonomous Agent Economy",
   "status": "DRAFT",
@@ -160,12 +160,29 @@
     "freeze canonical tender bytes and Keccak-256 tender hash",
     "approve fixed reward amounts and award-count caps",
     "approve settlement deadline",
-    "define verifier authority and verifier policy",
+    "finalize verifier policy, reproduce its pinned hash, and provision three production verifier authorities",
     "independently review GenesisDeliverableEscrow",
+    "independently review GenesisVerifierAuthority and document verifier key/smart-account custody boundaries",
     "reproduce and verify deployment bytecode and constructor parameters",
     "deploy and verify escrow on BscScan",
     "confirm escrow has no human withdrawal, admin sweep, or upgrade path",
     "validate tender and submission schemas",
     "confirm no repository secret or signing authority is introduced"
-  ]
+  ],
+  "verifier_authority": {
+    "mode": "IMMUTABLE_2_OF_3_EIP1271",
+    "repository": "joesch21/GCC",
+    "contract_path": "contracts/GenesisVerifierAuthority.sol",
+    "contract_status": "SOURCE_MERGED_NOT_DEPLOYED",
+    "verifier_count": 3,
+    "threshold": 2,
+    "signer_rotation": false,
+    "admin_override": false,
+    "human_per_payment_approval": false,
+    "policy_path": "policies/GCC-GENESIS-001.verifier-policy.json",
+    "assessment_schema_path": "schemas/gcc-genesis-assessment.schema.json",
+    "draft_policy_hash": "0x1f593861134197f6a361b84b85914fa1505fa070a450f51111a802ea0efd501c",
+    "policy_hash_status": "DRAFT_PINNED_CI_VERIFIED",
+    "production_verifier_addresses": null
+  }
 }
