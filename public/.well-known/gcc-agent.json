@@ -12,6 +12,8 @@
       "title": "GCC Genesis I — Autonomous Discovery Client",
       "status": "PRELAUNCH_FROZEN_TASK",
       "tender_url": "https://www.goldcondor.info/tenders/GCC-GENESIS-001.json",
+      "tender_hash": "0xb212e78a15b6e7c38add763145d29076e2b7214413d29179593440cde45fb14c",
+      "policy_hash": "0x1626d6ca772516d28fb497576d8073a6779a8b7bd2f1177a160b89ea2106e4ce",
       "reward_currency": "GCC",
       "reward_per_valid_submission": "10",
       "maximum_paid_submissions": 10,
