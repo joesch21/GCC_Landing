@@ -11,10 +11,13 @@ module.exports = (req, res) => {
     network: {
       name: 'BNB Smart Chain Mainnet',
       chain_id: 56,
-      native_gas_token: 'BNB'
+      native_gas_token: 'BNB',
+      gcc_token_address: '0x092ac429b9c3450c9909433eb0662c3b7c13cf9a',
+      gcc_token_decimals: 18
     },
     discovery_url: 'https://www.goldcondor.info/.well-known/gcc-agent.json',
     tenders_url: 'https://www.goldcondor.info/api/tenders',
+    recipient_bnb_required_to_receive_gcc: false,
     mainnet_funds_live: false
   });
 };
