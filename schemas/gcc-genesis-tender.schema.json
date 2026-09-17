@@ -28,7 +28,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "0.1-draft"
+      "const": "0.2-draft"
     },
     "id": {
       "type": "string",
@@ -137,47 +137,120 @@
       }
     },
     "assessment": {
-      "type": "object"
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_role",
+        "model_is_payment_authority",
+        "award_authority",
+        "qualification_gates",
+        "analysis_dimensions",
+        "component_combination_allowed",
+        "human_predeployment_rule_approval_required",
+        "human_per_payment_approval_required"
+      ],
+      "properties": {
+        "model_role": {
+          "type": "string"
+        },
+        "model_is_payment_authority": {
+          "type": "boolean",
+          "const": false
+        },
+        "award_authority": {
+          "type": "string",
+          "const": "VERIFIER_AUTHORIZATION_UNDER_IMMUTABLE_ESCROW_RULES"
+        },
+        "qualification_gates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "analysis_dimensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "component_combination_allowed": {
+          "type": "boolean"
+        },
+        "human_predeployment_rule_approval_required": {
+          "type": "boolean",
+          "const": true
+        },
+        "human_per_payment_approval_required": {
+          "type": "boolean",
+          "const": false
+        }
+      }
     },
     "rewards": {
       "type": "object"
     },
     "treasury": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "mode",
-        "dedicated_wallet_address",
-        "wallet_status",
+        "settlement_contract_repository",
+        "settlement_contract_path",
+        "settlement_contract_address",
+        "contract_status",
+        "human_withdrawal_available",
+        "admin_sweep_available",
         "private_keys_in_repository_allowed",
-        "autonomous_settlement"
+        "per_payment_human_approval_required",
+        "settlement_after_valid_authorization"
       ],
       "properties": {
         "mode": {
           "type": "string",
-          "const": "MANUAL_HUMAN_APPROVAL"
+          "const": "IMMUTABLE_DELIVERABLE_ESCROW"
         },
-        "dedicated_wallet_address": {
+        "settlement_contract_repository": {
+          "type": "string",
+          "const": "joesch21/GCC"
+        },
+        "settlement_contract_path": {
+          "type": "string",
+          "const": "contracts/GenesisDeliverableEscrow.sol"
+        },
+        "settlement_contract_address": {
           "type": [
             "string",
             "null"
           ]
         },
-        "wallet_status": {
+        "contract_status": {
           "type": "string"
+        },
+        "human_withdrawal_available": {
+          "type": "boolean",
+          "const": false
+        },
+        "admin_sweep_available": {
+          "type": "boolean",
+          "const": false
         },
         "private_keys_in_repository_allowed": {
           "type": "boolean",
           "const": false
         },
-        "autonomous_settlement": {
+        "per_payment_human_approval_required": {
           "type": "boolean",
           "const": false
+        },
+        "settlement_after_valid_authorization": {
+          "type": "boolean",
+          "const": true
         }
       }
     },
     "settlement_binding_required_fields": {
       "type": "array",
-      "minItems": 6,
+      "minItems": 9,
       "items": {
         "type": "string"
       }
