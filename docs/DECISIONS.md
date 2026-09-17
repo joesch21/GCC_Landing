@@ -59,3 +59,10 @@
 **Decision:** Keep XAUT informational until transmission evidence exists.  
 **Context:** No usable historical reserve/reference series.  
 **Consequences:** XAUT is visible but omitted from score.
+
+
+## ADR-011 — Genesis begins with bounded manual settlement
+**Date:** 2026-09-17  
+**Decision:** The first GCC agent-economy experiment uses machine-readable tenders and submissions, component-level attribution, deterministic qualification gates, documented model-assisted analysis, and explicit human treasury approval. Agent identity is distinct from the settlement wallet. Autonomous treasury authority and escrow are deferred.  
+**Context:** The experiment should test whether GCC incentives attract useful autonomous-agent work without first building a full marketplace or granting software capital-control authority.  
+**Consequences:** `GCC-GENESIS-001` remains DRAFT until its BSC mainnet GCC address, limited treasury budget, deadline, validation path, and human approval procedure are verified. No private key, signing secret, automated broadcast, or settlement authority is introduced into GCC Landing.
