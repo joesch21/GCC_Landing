@@ -143,7 +143,13 @@ The verifier authorization is bound to the exact:
 
 The contract additionally binds the authorization through EIP-712 to the escrow contract and chain.
 
-The production verifier policy remains a separate pre-launch item. The verifier may ultimately be an EIP-1271 contract or agent authority. A bearer-key EOA may be used for controlled testing but is not the preferred production authority.
+The verifier authority source is now implemented in `joesch21/GCC/contracts/GenesisVerifierAuthority.sol` as an immutable EIP-1271 2-of-3 authority. It has exactly three verifier members, a fixed threshold of two, no owner, no admin override, no signer rotation, and no upgrade path.
+
+Its draft evidence policy is `policies/GCC-GENESIS-001.verifier-policy.json`. CI canonicalizes that policy and pins the current draft Keccak-256 hash as:
+
+`0x1f593861134197f6a361b84b85914fa1505fa070a450f51111a802ea0efd501c`
+
+That hash is still **draft**, because the policy and the three production verifier authorities must be independently reviewed and frozen before deployment.
 
 ## Objective qualification gates
 
@@ -243,7 +249,7 @@ GCC-GENESIS-001 may not move from DRAFT to OPEN until:
 - the qualified, finalist, and selected-component reward amounts are approved;
 - maximum award counts for each class are approved;
 - the settlement deadline is approved;
-- the verifier authority and verifier policy are defined;
+- the 2-of-3 verifier policy is finalized, its pinned hash independently reproduced, and three production verifier authorities are provisioned without exposing signing material to the funding human;
 - the escrow contract is independently reviewed;
 - the escrow deployment bytecode and constructor parameters are reproduced and checked;
 - the deployed contract is verified on BscScan;
@@ -281,17 +287,18 @@ Agent A earns GCC
 2. Expose read-only tender discovery.
 3. Accept bounded submissions.
 4. Produce deterministic validation and append-only assessment records.
-5. Define and test the verifier authorization policy.
-6. Freeze reward schedule, tender hash, deadline, GCC address, and verifier address.
-7. Independently review and deploy `GenesisDeliverableEscrow`.
-8. Verify deployment on BscScan.
-9. Fund the escrow conservatively.
-10. Open GCC-GENESIS-001.
-11. Settle only contract-valid deliverable awards.
-12. Publish evidence and generate follow-on build tenders.
+5. Finalize the tested 2-of-3 verifier policy and provision three production verifier authorities.
+6. Independently review and deploy `GenesisVerifierAuthority`, then freeze its address.
+7. Freeze reward schedule, tender hash, deadline, GCC address, and verifier address.
+8. Independently review and deploy `GenesisDeliverableEscrow`.
+9. Verify both verifier and escrow deployments on BscScan.
+10. Fund the escrow conservatively.
+11. Open GCC-GENESIS-001.
+12. Settle only contract-valid deliverable awards.
+13. Publish evidence and generate follow-on build tenders.
 
 ## Repository boundary
 
 GCC Landing remains a public information and research surface. It contains no private keys, signing, transaction broadcasting, or contract-write authority.
 
-Settlement lives in the separate `joesch21/GCC` contract boundary. A future verifier service is another separate authority boundary and must be reviewed independently.
+Settlement and verification live in the separate `joesch21/GCC` contract boundary. The verifier contract is implemented but not deployed; the three production verifier authorities remain an operational authority boundary that must be provisioned and reviewed independently.

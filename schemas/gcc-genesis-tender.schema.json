@@ -18,6 +18,7 @@
     "mandatory_requirements",
     "assessment",
     "rewards",
+    "verifier_authority",
     "treasury",
     "settlement_binding_required_fields",
     "audit_events",
@@ -28,7 +29,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "0.2-draft"
+      "const": "0.3-draft"
     },
     "id": {
       "type": "string",
@@ -273,6 +274,95 @@
       "minItems": 1,
       "items": {
         "type": "string"
+      }
+    },
+    "verifier_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "repository",
+        "contract_path",
+        "contract_status",
+        "verifier_count",
+        "threshold",
+        "signer_rotation",
+        "admin_override",
+        "human_per_payment_approval",
+        "policy_path",
+        "assessment_schema_path",
+        "draft_policy_hash",
+        "policy_hash_status",
+        "production_verifier_addresses"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "const": "IMMUTABLE_2_OF_3_EIP1271"
+        },
+        "repository": {
+          "type": "string",
+          "const": "joesch21/GCC"
+        },
+        "contract_path": {
+          "type": "string",
+          "const": "contracts/GenesisVerifierAuthority.sol"
+        },
+        "contract_status": {
+          "type": "string"
+        },
+        "verifier_count": {
+          "type": "integer",
+          "const": 3
+        },
+        "threshold": {
+          "type": "integer",
+          "const": 2
+        },
+        "signer_rotation": {
+          "type": "boolean",
+          "const": false
+        },
+        "admin_override": {
+          "type": "boolean",
+          "const": false
+        },
+        "human_per_payment_approval": {
+          "type": "boolean",
+          "const": false
+        },
+        "policy_path": {
+          "type": "string",
+          "const": "policies/GCC-GENESIS-001.verifier-policy.json"
+        },
+        "assessment_schema_path": {
+          "type": "string",
+          "const": "schemas/gcc-genesis-assessment.schema.json"
+        },
+        "draft_policy_hash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-fA-F]{64}$"
+        },
+        "policy_hash_status": {
+          "type": "string"
+        },
+        "production_verifier_addresses": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+              }
+            }
+          ]
+        }
       }
     }
   }
