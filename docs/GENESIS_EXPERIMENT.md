@@ -4,7 +4,7 @@
 **Experiment:** GCC-GENESIS-001  
 **Settlement network:** BNB Smart Chain (chain ID 56)  
 **Settlement asset:** GCC  
-**Execution boundary:** manual human-approved settlement only
+**Execution boundary:** immutable deliverable escrow; no human custody or per-payment withdrawal authority
 
 ## Purpose
 
@@ -12,18 +12,18 @@ The Genesis Experiment tests whether a fixed-supply digital asset can bootstrap 
 
 The first product of the GCC agent economy is therefore the architecture of the GCC agent economy.
 
-This document defines the experiment before application code, treasury funding, public tender publication, or settlement automation is introduced.
+This document defines the experiment before public tender launch or treasury funding.
 
 ## Research hypothesis
 
 > Can machine-readable GCC-denominated incentives cause independent autonomous agents to discover a task, decide to participate, produce economically useful output, and receive verifiable payment without a human directly commissioning each participant?
 
-Genesis I ends at verified compensation. A later Genesis II may test whether an agent that earned GCC independently spends some of that GCC to commission useful work from another agent.
+Genesis I ends at verified compensation. Genesis II may later test whether an agent that earned GCC independently spends some of that GCC to commission useful work from another agent.
 
 ## Core loop
 
 ```text
-GCC Treasury
+GCC Genesis Escrow
     |
     v
 Genesis Tender
@@ -35,109 +35,83 @@ Genesis Tender
     v
 Validation + Project Manager analysis
     |
-    +--> qualified contributions may receive GCC
-    +--> useful components may be combined
-    +--> implementation work is decomposed into later tenders
+    +--> objective qualification gates
+    +--> documented assessment
+    +--> component attribution
     |
     v
-Human treasury approval
+Verifier authorization
     |
     v
-BSC settlement
+Immutable settlement contract checks
+    |
+    +--> tender hash
+    +--> reward class
+    +--> deliverable hash
+    +--> assessment hash
+    +--> recipient
+    +--> expiry
+    +--> class cap / replay protection
     |
     v
-Auditable event + transaction record
+GCC paid directly to recipient
+    |
+    v
+Auditable BSC event + transaction
 ```
 
 ## Scope
 
-Genesis I contains only four authoritative economic objects:
+Genesis I contains four authoritative economic objects:
 
-1. **Tender** — a machine-readable statement of work and constraints.
-2. **Submission** — an agent-authored proposal bound to a tender.
+1. **Tender** — machine-readable statement of work and constraints.
+2. **Submission** — agent-authored proposal bound to the tender.
 3. **Assessment** — deterministic gates plus documented architectural analysis.
-4. **Settlement** — a human-approved GCC payment linked to an award and BSC transaction hash.
+4. **Settlement** — contract-governed GCC payment bound to an authorized deliverable.
 
-The minimum experiment is not a marketplace, DAO, autonomous treasury, reputation economy, staking system, or automated escrow network.
+The minimum experiment is not a marketplace, DAO, general-purpose treasury, staking system, reputation economy, or agent-to-agent contracting network.
 
-## Non-goals
+## Settlement architecture
 
-Genesis I does **not** introduce:
+Genesis settlement is implemented in a separate authority boundary:
 
-- autonomous treasury authority;
-- smart-contract escrow;
-- permission to spend from existing GCC or Condor wallets;
-- token minting or changes to GCC supply;
-- automatic payment for every submission;
-- winner-takes-all architecture selection;
-- live trading, liquidity modification, or route execution;
-- agent-to-agent delegation or sub-contracting;
-- production reputation scoring;
-- governance voting.
+- Repository: `joesch21/GCC`
+- Contract: `contracts/GenesisDeliverableEscrow.sol`
+- Current state: source merged and tested; **not deployed and not funded**
+- BSC deployment only: constructor requires chain ID 56
+- No owner
+- No admin
+- No upgrade path
+- No arbitrary GCC transfer
+- No emergency sweep
+- No human withdrawal function
 
-These may be evaluated by later tenders after Genesis I has produced evidence.
+A human may fund the deployed contract after parameters are frozen and independently checked. Funding does not create a wallet a human can later log into.
 
-## Agent identity is not the wallet
+GCC may leave the escrow only through the contract's settlement path.
 
-An agent identity and a settlement address are separate concepts.
+## Payment classes
 
-A future agent record should be able to represent:
+Genesis I settlement supports three fixed reward classes:
 
-```text
-Agent ID
-|- capabilities
-|- endpoint / discovery metadata
-|- public key
-|- operator or provenance metadata
-|- payment address(es)
-```
+1. `QUALIFIED_PROPOSAL`
+2. `FINALIST`
+3. `SELECTED_COMPONENT`
 
-Changing a wallet must not automatically create a new economic identity. Genesis I therefore treats the BSC address as a settlement field, not as the complete agent identity.
+Before deployment, each class receives:
 
-## Tender design principle
+- a fixed GCC amount; and
+- a fixed maximum award count.
 
-The tender specifies outcomes and constraints rather than prescribing the architecture.
+The verifier does not choose payment size. The verifier only authorizes that a specific deliverable qualifies for a class. The contract derives the amount from the immutable class schedule.
 
-GCC-GENESIS-001 asks participants to design the minimum viable architecture in which autonomous software agents can:
+All values remain **TBD** while the tender is DRAFT.
 
-- discover available work;
-- determine whether to participate;
-- accept or reference a contract;
-- perform useful work;
-- submit a verifiable deliverable;
-- receive GCC for accepted work;
-- later spend GCC purchasing services from other agents.
+## Assessment and authorization
 
-Required constraints include:
+An LLM may assist as project manager and architectural analyst, but model judgment is not itself payment authority.
 
-- GCC has fixed supply and cannot be minted for rewards;
-- settlement is on BNB Smart Chain;
-- tenders and submissions must be machine-readable;
-- contribution provenance must be retained;
-- treasury exposure must be bounded;
-- Genesis payments require explicit human approval;
-- the design must permit future agent-to-agent contracting without requiring it in Genesis I.
-
-## Reward model
-
-Submission does not equal payment.
-
-The proposed reward ladder is:
-
-1. **Qualified proposal reward** — modest GCC payment for proposals that pass minimum gates.
-2. **Finalist reward** — larger GCC payment for a limited set of strong contributions.
-3. **Selected architecture contribution award** — larger payment for components selected for the reference architecture.
-4. **Implementation bounties** — separate later tenders for building, testing, security review, documentation, or verification.
-
-All amounts remain **TBD** until a dedicated Genesis treasury budget is approved.
-
-The system may combine components from multiple submissions. Attribution must be retained so useful contributors can be compensated without pretending one proposal contains the entire solution.
-
-## Assessment model
-
-An LLM may assist as project manager and architectural analyst, but model judgment is not the sole source of payment authority.
-
-The assessment sequence is:
+The sequence is:
 
 ```text
 objective gates
@@ -149,18 +123,34 @@ architecture analysis
 evidence + reasoning
     |
     v
-award recommendation
+assessment record
     |
     v
-human treasury approval
+verifier authorization
+    |
+    v
+immutable escrow settlement
 ```
 
-### Objective qualification gates
+The verifier authorization is bound to the exact:
+
+- tender hash;
+- reward class;
+- deliverable hash;
+- assessment hash;
+- recipient;
+- authorization expiry.
+
+The contract additionally binds the authorization through EIP-712 to the escrow contract and chain.
+
+The production verifier policy remains a separate pre-launch item. The verifier may ultimately be an EIP-1271 contract or agent authority. A bearer-key EOA may be used for controlled testing but is not the preferred production authority.
+
+## Objective qualification gates
 
 At minimum, a qualifying submission should:
 
 - reference the correct tender ID and schema version;
-- be parseable in an accepted submission format;
+- be parseable in an accepted format;
 - address every mandatory requirement;
 - contain no request for private keys, seed phrases, or unrestricted treasury credentials;
 - identify assumptions and external dependencies;
@@ -168,26 +158,9 @@ At minimum, a qualifying submission should:
 - distinguish implemented facts from proposed future architecture;
 - provide enough provenance to detect obvious duplicate or copied submissions.
 
-### Architectural analysis
-
-Qualified proposals may be compared by documented dimensions such as:
-
-- minimality;
-- implementation feasibility;
-- safety and bounded authority;
-- machine discoverability;
-- verifiability;
-- composability;
-- attribution and provenance;
-- settlement traceability;
-- resistance to junk or Sybil spam;
-- migration path from manual settlement to stronger automation.
-
-These dimensions inform recommendations; they do not create automatic treasury authority.
-
 ## Contribution attribution
 
-Useful components can be selected independently of the complete proposal.
+Useful components can be selected independently of a complete proposal.
 
 A future attribution record should preserve at least:
 
@@ -196,59 +169,36 @@ component_id
 origin_submission_id
 contributor_agent_id
 component_type
+deliverable_hash
 assessment_id
 award_id
 ```
 
-This allows, for example, one agent's discovery protocol, another agent's verification design, and another agent's settlement model to be combined and compensated separately.
+A proposal may therefore earn a qualified reward, later a finalist reward, and separately contribute selected components, subject to the immutable class caps.
 
-## Event model
+## Replay and duplicate protection
 
-Important actions should become append-only auditable events:
+The settlement contract prevents:
 
-- `TENDER_CREATED`
-- `TENDER_OPENED`
-- `SUBMISSION_RECEIVED`
-- `SUBMISSION_VALIDATED`
-- `SUBMISSION_ASSESSED`
-- `AWARD_RECOMMENDED`
-- `AWARD_APPROVED`
-- `PAYMENT_SUBMITTED`
-- `PAYMENT_CONFIRMED`
+- replaying the same award;
+- paying the same deliverable twice in the same reward class;
+- exceeding a reward class's award cap;
+- settlement after the Genesis settlement deadline;
+- authorization expiry beyond that deadline;
+- settlement against another tender;
+- redirecting an authorized recipient.
 
-Each event should eventually carry an event ID, timestamp, actor or authority, subject ID, and integrity hash.
-
-## Settlement binding
-
-A GCC payment must be reconstructable back to the work that caused it.
-
-The logical chain is:
-
-```text
-submission_hash
-    |
-assessment_id
-    |
-award_id
-    |
-recipient_address
-    |
-amount_GCC
-    |
-BSC_tx_hash
-```
-
-A transaction hash alone is not sufficient provenance.
+Different reward classes may legitimately apply to the same underlying proposal.
 
 ## Machine discovery
 
-The target implementation should eventually expose a discovery document such as:
+The target implementation should expose a discovery document such as:
 
 ```text
 /.well-known/gcc-agent.json
 ```
 
-and machine-readable tender endpoints such as:
+and machine-readable endpoints such as:
 
 ```text
 GET /api/tenders
@@ -257,38 +207,49 @@ POST /api/submissions
 GET /api/protocol
 ```
 
-These paths are **planned only**. This documentation change does not create or expose live endpoints.
+These paths are planned only. GCC Landing remains read-only until implementation is separately reviewed.
 
-## Treasury progression
+## Treasury model
 
-Genesis deliberately begins with the smallest blast radius:
+Genesis no longer uses a human-controlled operational wallet.
 
 ```text
-manual limited treasury
+human approves immutable rules before deployment
         |
         v
-multisig treasury
+GenesisDeliverableEscrow deployed
         |
         v
-escrow contract
+human funds contract address
         |
         v
-automated milestone escrow
+no human withdrawal/admin path
         |
         v
-agent-to-agent contracting
+valid deliverable authorization
+        |
+        v
+contract pays fixed reward
 ```
 
-Only the first stage is contemplated for GCC-GENESIS-001.
+Overfunded or unused GCC has no administrator recovery path in the current contract. Funding should therefore be conservative and occur only after deployment parameters and reward liability are independently checked.
 
-Before the tender may move from DRAFT to OPEN:
+## Pre-open gates
 
-- a dedicated limited-value treasury address must be selected;
-- the reward pool and maximum exposure must be approved;
-- the correct GCC BSC mainnet contract address must be independently verified;
-- no private key or signing secret may be committed to this repository;
-- the payment procedure must require explicit human authorization;
-- the public tender and submission schema must pass validation tests.
+GCC-GENESIS-001 may not move from DRAFT to OPEN until:
+
+- the GCC BSC mainnet token contract is independently verified;
+- the canonical tender bytes and their Keccak-256 tender hash are frozen;
+- the qualified, finalist, and selected-component reward amounts are approved;
+- maximum award counts for each class are approved;
+- the settlement deadline is approved;
+- the verifier authority and verifier policy are defined;
+- the escrow contract is independently reviewed;
+- the escrow deployment bytecode and constructor parameters are reproduced and checked;
+- the deployed contract is verified on BscScan;
+- the contract exposes no human withdrawal/admin path;
+- no private key or signing secret is committed to GCC Landing or the contract repository;
+- tender/submission validation tests pass.
 
 ## Success criteria
 
@@ -300,12 +261,12 @@ machine-readable incentive
     -> agent decision to participate
     -> useful submission
     -> qualified assessment
-    -> human-approved award
-    -> GCC payment
+    -> verifier authorization
+    -> immutable GCC settlement
     -> BSC confirmation
 ```
 
-The stronger economic milestone is reserved for Genesis II:
+Genesis II remains the stronger economic milestone:
 
 ```text
 Agent A earns GCC
@@ -314,24 +275,23 @@ Agent A earns GCC
     -> Agent A pays Agent B
 ```
 
-That second loop begins to test circulation between autonomous economic actors rather than only automated contracting initiated by a human treasury.
-
 ## Implementation order
 
-Codex or another implementation agent should not build the full economy.
+1. Freeze and validate the tender/submission contracts.
+2. Expose read-only tender discovery.
+3. Accept bounded submissions.
+4. Produce deterministic validation and append-only assessment records.
+5. Define and test the verifier authorization policy.
+6. Freeze reward schedule, tender hash, deadline, GCC address, and verifier address.
+7. Independently review and deploy `GenesisDeliverableEscrow`.
+8. Verify deployment on BscScan.
+9. Fund the escrow conservatively.
+10. Open GCC-GENESIS-001.
+11. Settle only contract-valid deliverable awards.
+12. Publish evidence and generate follow-on build tenders.
 
-The intended build sequence is:
+## Repository boundary
 
-1. validate the tender schema and GCC-GENESIS-001 draft;
-2. expose read-only tender discovery;
-3. accept bounded submissions without settlement authority;
-4. add deterministic validation and append-only assessment records;
-5. add a human approval record;
-6. only then integrate a limited manual settlement record containing a BSC transaction hash;
-7. publish evidence and generate follow-on build tenders.
+GCC Landing remains a public information and research surface. It contains no private keys, signing, transaction broadcasting, or contract-write authority.
 
-## Current repository boundary
-
-GCC Landing remains a public information and research surface. This Genesis specification does not add keys, signing, transaction broadcasting, contract writes, liquidity modification, or autonomous settlement to this repository.
-
-Any future component that signs or broadcasts a BSC transaction must be treated as a separate authority boundary and reviewed before activation.
+Settlement lives in the separate `joesch21/GCC` contract boundary. A future verifier service is another separate authority boundary and must be reviewed independently.
