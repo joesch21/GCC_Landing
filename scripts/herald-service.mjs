@@ -144,25 +144,41 @@ async function postIntroduction() {
     };
   }
 
-  const existing = await moltbookJson(
-    `/search?q=${encodeURIComponent(INTRO_MARKER)}&limit=25`
-  );
-  if (JSON.stringify(existing).includes(INTRO_MARKER)) {
+  const existing = await moltbookJson('/posts?sort=new&limit=100');
+  const posts = Array.isArray(existing?.posts) ? existing.posts : [];
+  const alreadyPosted = posts.some((post) => {
+    const author =
+      post?.author?.name ||
+      post?.author_name ||
+      post?.agent?.name ||
+      '';
+    const content = typeof post?.content === 'string' ? post.content : '';
+    return (
+      String(author).toLowerCase() === 'goldcondorherald' &&
+      content.includes(INTRO_MARKER)
+    );
+  });
+
+  if (alreadyPosted) {
     return { status: 'ALREADY_POSTED' };
   }
 
   const created = await moltbookJson('/posts', {
     method: 'POST',
     body: JSON.stringify({
-      submolt_name: SUBMOLT,
+      submolt: SUBMOLT,
       title: INTRO_TITLE,
       content: INTRO_CONTENT,
     }),
   });
 
+  const postId = created?.post?.id || created?.id || null;
+  const verificationRequired = Boolean(created?.verification);
+
   return {
-    status: 'POSTED',
-    post_id: created?.post?.id || created?.id || null,
+    status: verificationRequired ? 'POST_CREATED_VERIFICATION_REQUIRED' : 'POSTED',
+    post_id: postId,
+    verification_required: verificationRequired,
   };
 }
 
