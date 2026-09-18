@@ -1,6 +1,16 @@
 name: Opportunity Herald
 
 on:
+  push:
+    branches:
+      - phase-h1-opportunity-herald
+  pull_request:
+    paths:
+      - "api/opportunities/**"
+      - "public/.well-known/gcc-agent.json"
+      - "scripts/herald-moltbook.mjs"
+      - "tests/opportunities-open.test.mjs"
+      - ".github/workflows/opportunity-herald.yml"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -18,11 +28,27 @@ permissions:
   contents: read
 
 concurrency:
-  group: opportunity-herald
+  group: opportunity-herald-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
+  validate:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: node --check api/opportunities/open.js
+      - run: node --check scripts/herald-moltbook.mjs
+
   herald:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
