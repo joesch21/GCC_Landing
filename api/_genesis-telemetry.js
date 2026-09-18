@@ -1,3 +1,7 @@
+const GENESIS_STATS_SINK_URL =
+  process.env.GCC_GENESIS_STATS_SINK_URL ||
+  'https://stack-b-attestor-backend.onrender.com/v1/gcc-genesis/telemetry';
+
 function classifyClient(headers = {}) {
   const ua = String(headers['user-agent'] || headers['User-Agent'] || '').toLowerCase();
   const accept = String(headers.accept || headers.Accept || '').toLowerCase();
@@ -53,7 +57,58 @@ function logGenesisDiscoveryRequest(req, endpoint) {
   return event;
 }
 
+async function persistGenesisDiscoveryEvent(event) {
+  if (process.env.VERCEL_ENV !== 'production') {
+    return { persisted: false, reason: 'NON_PRODUCTION' };
+  }
+
+  const token = process.env.VERCEL_OIDC_TOKEN;
+  if (!token) {
+    console.warn(JSON.stringify({
+      event: 'GENESIS_DISCOVERY_PERSIST_SKIPPED',
+      reason: 'VERCEL_OIDC_TOKEN_MISSING',
+    }));
+    return { persisted: false, reason: 'VERCEL_OIDC_TOKEN_MISSING' };
+  }
+
+  try {
+    const response = await fetch(GENESIS_STATS_SINK_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'User-Agent': 'gcc-genesis-telemetry-forwarder/1.0',
+      },
+      body: JSON.stringify({
+        endpoint: event.endpoint,
+        method: event.method,
+        clientClass: event.clientClass,
+        acceptClass: event.acceptClass,
+      }),
+      signal: AbortSignal.timeout(2000),
+    });
+
+    if (!response.ok) {
+      console.warn(JSON.stringify({
+        event: 'GENESIS_DISCOVERY_PERSIST_FAILED',
+        status: response.status,
+      }));
+      return { persisted: false, reason: 'UPSTREAM_' + response.status };
+    }
+
+    return { persisted: true };
+  } catch (error) {
+    console.warn(JSON.stringify({
+      event: 'GENESIS_DISCOVERY_PERSIST_FAILED',
+      reason: error && error.name ? String(error.name) : 'FETCH_FAILED',
+    }));
+    return { persisted: false, reason: 'FETCH_FAILED' };
+  }
+}
+
 module.exports = {
   classifyClient,
   logGenesisDiscoveryRequest,
+  persistGenesisDiscoveryEvent,
 };
