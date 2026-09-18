@@ -9,6 +9,9 @@ const BOOTSTRAP_TOKEN = process.env.HERALD_BOOTSTRAP_TOKEN || '';
 const BOOTSTRAP_DISABLED = /^(1|true|yes)$/i.test(
   process.env.HERALD_BOOTSTRAP_DISABLED || ''
 );
+const AUTO_BOOTSTRAP = /^(1|true|yes)$/i.test(
+  process.env.HERALD_AUTO_BOOTSTRAP || ''
+);
 const AGENT_NAME = process.env.HERALD_AGENT_NAME || 'GCCOpportunityHerald';
 const AGENT_DESCRIPTION =
   process.env.HERALD_AGENT_DESCRIPTION ||
@@ -194,7 +197,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', async () => {
   console.log(
     JSON.stringify({
       event: 'HERALD_SERVICE_READY',
@@ -204,4 +207,28 @@ server.listen(PORT, '0.0.0.0', () => {
       agent_name: AGENT_NAME,
     })
   );
+
+  if (AUTO_BOOTSTRAP && !API_KEY && !BOOTSTRAP_DISABLED) {
+    try {
+      const result = await bootstrap();
+      // AUTO_BOOTSTRAP is an explicitly enabled one-time operational mode.
+      // Render application logs are private to the workspace. Disable this
+      // mode immediately after storing the returned key as an environment
+      // secret.
+      console.log(
+        JSON.stringify({
+          event: 'HERALD_BOOTSTRAP_CREDENTIALS',
+          ...result,
+        })
+      );
+    } catch (error) {
+      console.error(
+        JSON.stringify({
+          event: 'HERALD_BOOTSTRAP_FAILED',
+          message: error?.message || String(error),
+          upstream_status: error?.status || null,
+        })
+      );
+    }
+  }
 });
