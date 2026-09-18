@@ -207,6 +207,7 @@ function runHeartbeat() {
         error.code = code;
         error.stdout = stdout.trim();
         error.stderr = stderr.trim();
+        error.stdout = stdout.trim();
         reject(error);
         return;
       }
@@ -312,6 +313,8 @@ const server = http.createServer(async (req, res) => {
         path: url.pathname,
         status,
         message: error?.message || String(error),
+        child_stderr: error?.stderr || null,
+        child_stdout: error?.stdout || null,
       })
     );
     return sendJson(res, status, {
