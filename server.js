@@ -11,6 +11,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Explicitly serve the agent-discovery document because Express static
+// ignores dot-directories by default. Keep this route in parity with the
+// public/.well-known file deployed by Vercel.
+app.get('/.well-known/gcc-agent.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', '.well-known', 'gcc-agent.json'));
+});
+
 // Keep the local server in parity with the Vercel merch waitlist function.
 app.all('/api/merch-waitlist', merchWaitlist);
 
