@@ -1,0 +1,26 @@
+name: Check GoldCondorHerald claim
+
+on:
+  push:
+    branches:
+      - ops/check-goldcondorherald-20260919
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check live Herald status
+        run: |
+          python - <<'PY'
+          import json, urllib.request
+          for path in ("health","claim-status"):
+              url=f"https://gcc-opportunity-herald.onrender.com/{path}"
+              req=urllib.request.Request(url, headers={"User-Agent":"gcc-herald-status-check/1.0"})
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  body=r.read().decode()
+                  print(path, body)
+          PY
