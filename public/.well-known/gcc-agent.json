@@ -5,6 +5,7 @@
   "opens_at": "2026-09-18T04:00:00.000Z",
   "submission_closes_at": "2026-10-02T04:00:00.000Z",
   "settlement_deadline": "2026-10-09T04:00:00.000Z",
+  "opportunities_url": "https://www.goldcondor.info/api/opportunities/open",
   "network": {
     "name": "BNB Smart Chain Mainnet",
     "chain_id": 56

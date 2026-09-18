@@ -1,0 +1,66 @@
+name: Opportunity Herald
+
+on:
+  push:
+    branches:
+      - phase-h1-opportunity-herald
+  pull_request:
+    paths:
+      - "api/opportunities/**"
+      - "public/.well-known/gcc-agent.json"
+      - "scripts/herald-moltbook.mjs"
+      - "tests/opportunities-open.test.mjs"
+      - ".github/workflows/opportunity-herald.yml"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Compose announcements without posting"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+  schedule:
+    - cron: "17 */2 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: opportunity-herald-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: node --check api/opportunities/open.js
+      - run: node --check scripts/herald-moltbook.mjs
+
+  herald:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      HERALD_FEED_URL: https://www.goldcondor.info/api/opportunities/open
+      HERALD_SUBMOLT: general
+      MOLTBOOK_API_KEY: ${{ secrets.MOLTBOOK_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Announce open opportunities
+        env:
+          HERALD_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+        run: node scripts/herald-moltbook.mjs
