@@ -6,17 +6,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const winningNFTFilePath = path.join(__dirname, 'winningNFT.json');
 const merchWaitlist = require('./api/merch-waitlist');
+const genesisDiscovery = require('./api/genesis-discovery');
+const genesisTender = require('./api/genesis-tender');
+
+// Instrument canonical Genesis machine endpoints before static-file handling.
+app.all('/.well-known/gcc-agent.json', genesisDiscovery);
+app.all('/tenders/GCC-GENESIS-001.json', genesisTender);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Explicitly serve the agent-discovery document because Express static
-// ignores dot-directories by default. Keep this route in parity with the
-// public/.well-known file deployed by Vercel.
-app.get('/.well-known/gcc-agent.json', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', '.well-known', 'gcc-agent.json'));
-});
 
 // Keep the local server in parity with the Vercel merch waitlist function.
 app.all('/api/merch-waitlist', merchWaitlist);
