@@ -1,5 +1,8 @@
 const tender = require('../public/tenders/GCC-GENESIS-001.json');
-const { logGenesisDiscoveryRequest } = require('./_genesis-telemetry');
+const {
+  logGenesisDiscoveryRequest,
+  persistGenesisDiscoveryEvent,
+} = require('./_genesis-telemetry');
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -7,7 +10,8 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  logGenesisDiscoveryRequest(req, 'tender');
+  const telemetryEvent = logGenesisDiscoveryRequest(req, 'tender');
+  await persistGenesisDiscoveryEvent(telemetryEvent);
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store, max-age=0');
 
