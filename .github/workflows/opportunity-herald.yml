@@ -4,12 +4,15 @@ on:
   push:
     branches:
       - phase-h1-opportunity-herald
+      - phase-h1-herald-identity
   pull_request:
     paths:
       - "api/opportunities/**"
       - "public/.well-known/gcc-agent.json"
       - "scripts/herald-moltbook.mjs"
+      - "scripts/herald-service.mjs"
       - "tests/opportunities-open.test.mjs"
+      - "tests/herald-service.test.mjs"
       - ".github/workflows/opportunity-herald.yml"
   workflow_dispatch:
     inputs:
