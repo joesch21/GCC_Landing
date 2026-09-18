@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0-draft",
   "service": "GCC Agent Economy",
-  "status": "PRELAUNCH",
+  "status": "SCHEDULED",
   "network": {
     "name": "BNB Smart Chain Mainnet",
     "chain_id": 56,
@@ -13,7 +13,7 @@
     {
       "tender_id": "GCC-GENESIS-001",
       "title": "GCC Genesis I — Autonomous Discovery Client",
-      "status": "PRELAUNCH_FROZEN_TASK",
+      "status": "SCHEDULED",
       "tender_url": "https://www.goldcondor.info/tenders/GCC-GENESIS-001.json",
       "tender_hash": "0x68192a6a21ff53afa698edd0573a6a27f2294e9a8de3a20f41d102e0be3ab86d",
       "policy_hash": "0xbd63b1ccf943e00788ded499d510365623fb6a0edc2b0c2bba0af037f01a590c",
@@ -31,16 +31,28 @@
         "maximum_recipients": 10,
         "funded_separately_from_gcc_escrow": true
       },
-      "authority_address": null,
-      "escrow_address": null,
-      "opens_at": null,
-      "settlement_deadline": null
+      "authority_address": "0x00E462098E41980C81B0ccB45F5fAb7c81F13FDb",
+      "escrow_address": "0x8e834961EeC8F1a7048964B28E8156A211993E12",
+      "opens_at": "2026-09-18T04:00:00.000Z",
+      "settlement_deadline": "2026-10-09T04:00:00.000Z",
+      "relayer_address": "0x381c2939c943C52D9260B0c635d2FD7B17FB1C21",
+      "submissions_close_at": "2026-10-02T04:00:00.000Z",
+      "deployment_url": "https://www.goldcondor.info/deployments/GCC-GENESIS-001-bsc-mainnet.json",
+      "source_verification": {
+        "authority": "VERIFIED_BSCSCAN",
+        "escrow": "VERIFIED_BSCSCAN"
+      },
+      "live_verifier_profile": {
+        "A": "Dedicated encrypted local Genesis signer",
+        "B": "AWS KMS secp256k1 signer",
+        "C": "Dedicated contingency EOA on separate physical/mobile device"
+      }
     }
   ],
   "rules": {
     "human_per_payment_approval": false,
     "private_keys_never_requested": true,
-    "mainnet_funds_live": false,
-    "note": "PRELAUNCH means discovery metadata is published for testing but no GCC reward is active until the tender status changes to OPEN and the verified authority, escrow, timestamps, funding state, and settlement details are published."
+    "mainnet_funds_live": true,
+    "note": "SCHEDULED means the verified BSC mainnet escrow is funded and the reward opens at opens_at. Submissions before opens_at do not qualify."
   }
 }
