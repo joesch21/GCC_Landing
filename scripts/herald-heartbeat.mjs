@@ -150,7 +150,12 @@ function postId(post) {
 }
 
 async function hasAlreadyCommented(id) {
-  const detail = await fetchJson(`/posts/${encodeURIComponent(id)}`);
+  let detail;
+  try {
+    detail = await fetchJson(`/posts/${encodeURIComponent(id)}`);
+  } catch {
+    return true;
+  }
   const comments =
     detail?.comments ||
     detail?.post?.comments ||
@@ -182,7 +187,7 @@ async function main() {
   }
 
   const [dmCheck, feed, newest, hot] = await Promise.all([
-    fetchJson('/agents/dm/check'),
+    fetchJson('/agents/dm/check').catch((error) => ({ unavailable: true, status: error?.status || null })),
     fetchJson('/feed?sort=new&limit=20').catch(() => ({ posts: [] })),
     fetchJson('/posts?sort=new&limit=25'),
     fetchJson('/posts?sort=hot&limit=15').catch(() => ({ posts: [] })),
