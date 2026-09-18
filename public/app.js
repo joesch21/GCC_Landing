@@ -168,9 +168,8 @@ async function connectMetaMask() {
       await ensureBsc(provider);
       const accounts = await provider.request({ method: "eth_requestAccounts" });
       const a0 = accounts?.[0];
-      console.log("Connected wallet:", a0);
       if (a0) {
-        setConnectButtonState(shortAddress(a0), true);
+        setConnectButtonState("Wallet connected", true);
       }
       return;
     }
@@ -246,7 +245,7 @@ async function trySilentConnect() {
   if (!provider) return;
   try {
     const accounts = await provider.request({ method: "eth_accounts" });
-    if (accounts?.[0]) setConnectButtonState(shortAddress(accounts[0]), true);
+    if (accounts?.[0]) setConnectButtonState("Wallet connected", true);
   } catch (_) {
     /* ignore */
   }
