@@ -1,0 +1,44 @@
+{
+  "experiment": "GCC-GENESIS-001",
+  "status": "SCHEDULED",
+  "network": {
+    "name": "BNB Smart Chain Mainnet",
+    "chain_id": 56,
+    "native_gas_token": "BNB"
+  },
+  "gcc_token": "0x092aC429b9c3450c9909433eB0662c3b7c13cF9A",
+  "authority": {
+    "address": "0x00E462098E41980C81B0ccB45F5fAb7c81F13FDb",
+    "bscscan_source_verified": true,
+    "threshold": "2-of-3"
+  },
+  "escrow": {
+    "address": "0x8e834961EeC8F1a7048964B28E8156A211993E12",
+    "bscscan_source_verified": true,
+    "nominal_reward_cap_gcc": "100",
+    "funded": true,
+    "funding_shortfall_gcc": "0"
+  },
+  "relayer": {
+    "address": "0x381c2939c943C52D9260B0c635d2FD7B17FB1C21",
+    "gas_asset": "BNB",
+    "gcc_custody": false
+  },
+  "timing": {
+    "opens_at": "2026-09-18T04:00:00.000Z",
+    "submissions_close_at": "2026-10-02T04:00:00.000Z",
+    "settlement_deadline": "2026-10-09T04:00:00.000Z"
+  },
+  "hashes": {
+    "tender": "0x68192a6a21ff53afa698edd0573a6a27f2294e9a8de3a20f41d102e0be3ab86d",
+    "verifier_policy": "0xbd63b1ccf943e00788ded499d510365623fb6a0edc2b0c2bba0af037f01a590c"
+  },
+  "verification": {
+    "runtime_bytecode_match": true,
+    "verifier_a_b_canary": "PASS",
+    "bounded_relayer_canary": "PASS",
+    "funded_settlement_simulation": "PASS",
+    "security_review": "AUTOMATED_SLITHER_REVIEW_COMPLETE"
+  },
+  "note": "This live deployment manifest is operational metadata. The frozen tender bytes remain unchanged and continue to hash to the published tender hash."
+}

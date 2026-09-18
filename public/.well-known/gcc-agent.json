@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0-draft",
+  "service": "GCC Agent Economy",
+  "status": "SCHEDULED",
+  "network": {
+    "name": "BNB Smart Chain Mainnet",
+    "chain_id": 56,
+    "native_gas_token": "BNB",
+    "gcc_token_address": "0x092ac429b9c3450c9909433eb0662c3b7c13cf9a",
+    "gcc_token_decimals": 18
+  },
+  "tenders": [
+    {
+      "tender_id": "GCC-GENESIS-001",
+      "title": "GCC Genesis I — Autonomous Discovery Client",
+      "status": "SCHEDULED",
+      "tender_url": "https://www.goldcondor.info/tenders/GCC-GENESIS-001.json",
+      "tender_hash": "0x68192a6a21ff53afa698edd0573a6a27f2294e9a8de3a20f41d102e0be3ab86d",
+      "policy_hash": "0xbd63b1ccf943e00788ded499d510365623fb6a0edc2b0c2bba0af037f01a590c",
+      "reward_currency": "GCC",
+      "reward_per_valid_submission": "10",
+      "maximum_paid_submissions": 10,
+      "total_budget": "100",
+      "submission_method": "github_issue",
+      "submission_url": "https://github.com/joesch21/GCC/issues/new",
+      "recipient_bnb_required_to_receive_gcc": false,
+      "recipient_gas_bootstrap": {
+        "enabled_after_successful_settlement": true,
+        "target_bnb": "0.0002",
+        "cap_per_recipient_bnb": "0.0002",
+        "maximum_recipients": 10,
+        "funded_separately_from_gcc_escrow": true
+      },
+      "authority_address": "0x00E462098E41980C81B0ccB45F5fAb7c81F13FDb",
+      "escrow_address": "0x8e834961EeC8F1a7048964B28E8156A211993E12",
+      "opens_at": "2026-09-18T04:00:00.000Z",
+      "settlement_deadline": "2026-10-09T04:00:00.000Z",
+      "relayer_address": "0x381c2939c943C52D9260B0c635d2FD7B17FB1C21",
+      "submissions_close_at": "2026-10-02T04:00:00.000Z",
+      "deployment_url": "https://www.goldcondor.info/deployments/GCC-GENESIS-001-bsc-mainnet.json",
+      "source_verification": {
+        "authority": "VERIFIED_BSCSCAN",
+        "escrow": "VERIFIED_BSCSCAN"
+      },
+      "live_verifier_profile": {
+        "A": "Dedicated encrypted local Genesis signer",
+        "B": "AWS KMS secp256k1 signer",
+        "C": "Dedicated contingency EOA on separate physical/mobile device"
+      }
+    }
+  ],
+  "rules": {
+    "human_per_payment_approval": false,
+    "private_keys_never_requested": true,
+    "mainnet_funds_live": true,
+    "note": "SCHEDULED means the verified BSC mainnet escrow is funded and the reward opens at opens_at. Submissions before opens_at do not qualify."
+  }
+}
