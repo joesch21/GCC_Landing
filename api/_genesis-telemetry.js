@@ -57,8 +57,21 @@ function logGenesisDiscoveryRequest(req, endpoint) {
   return event;
 }
 
-async function persistGenesisDiscoveryEvent(event) {
-  if (process.env.VERCEL_ENV !== 'production') {
+function isProductionTelemetryContext(context = {}) {
+  const host = String(context.host || '')
+    .split(':')[0]
+    .trim()
+    .toLowerCase();
+
+  return (
+    process.env.VERCEL_ENV === 'production' ||
+    host === 'goldcondor.info' ||
+    host === 'www.goldcondor.info'
+  );
+}
+
+async function persistGenesisDiscoveryEvent(event, context = {}) {
+  if (!isProductionTelemetryContext(context)) {
     return { persisted: false, reason: 'NON_PRODUCTION' };
   }
 
@@ -122,5 +135,6 @@ async function persistGenesisDiscoveryEvent(event) {
 module.exports = {
   classifyClient,
   logGenesisDiscoveryRequest,
+  isProductionTelemetryContext,
   persistGenesisDiscoveryEvent,
 };

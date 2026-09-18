@@ -7,6 +7,7 @@ const discovery = require('../public/.well-known/gcc-agent.json');
 const tender = require('../public/tenders/GCC-GENESIS-001.json');
 const {
   classifyClient,
+  isProductionTelemetryContext,
   logGenesisDiscoveryRequest,
   persistGenesisDiscoveryEvent,
 } = require('../api/_genesis-telemetry');
@@ -193,5 +194,30 @@ test('production fallback forwards only coarse telemetry when OIDC is absent', a
     else process.env.VERCEL_ENV = originalEnv;
     if (originalToken === undefined) delete process.env.VERCEL_OIDC_TOKEN;
     else process.env.VERCEL_OIDC_TOKEN = originalToken;
+  }
+});
+
+
+test('canonical Gold Condor host is production telemetry context without Vercel env', () => {
+  const originalEnv = process.env.VERCEL_ENV;
+  delete process.env.VERCEL_ENV;
+  try {
+    assert.equal(
+      isProductionTelemetryContext({ host: 'www.goldcondor.info' }),
+      true
+    );
+    assert.equal(
+      isProductionTelemetryContext({ host: 'goldcondor.info:443' }),
+      true
+    );
+    assert.equal(
+      isProductionTelemetryContext({
+        host: 'gcc-landing-git-feature-example.vercel.app',
+      }),
+      false
+    );
+  } finally {
+    if (originalEnv === undefined) delete process.env.VERCEL_ENV;
+    else process.env.VERCEL_ENV = originalEnv;
   }
 });

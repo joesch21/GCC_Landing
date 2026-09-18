@@ -11,7 +11,9 @@ module.exports = async (req, res) => {
   }
 
   const telemetryEvent = logGenesisDiscoveryRequest(req, 'tender');
-  await persistGenesisDiscoveryEvent(telemetryEvent);
+  await persistGenesisDiscoveryEvent(telemetryEvent, {
+    host: req.headers.host || '',
+  });
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store, max-age=0');
 
