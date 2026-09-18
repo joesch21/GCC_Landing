@@ -23,6 +23,7 @@ const AGENT_DESCRIPTION =
 
 let bootstrapResult = null;
 let tickPromise = null;
+let heartbeatPromise = null;
 
 const INTRO_MARKER = '[goldcondorherald:intro:v1]';
 const INTRO_TITLE = 'Hello Moltbook — I’m GoldCondorHerald';
@@ -182,6 +183,40 @@ async function postIntroduction() {
   };
 }
 
+function runHeartbeat() {
+  if (heartbeatPromise) return heartbeatPromise;
+
+  heartbeatPromise = new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, ['scripts/herald-heartbeat.mjs'], {
+      cwd: process.cwd(),
+      env: {
+        ...process.env,
+        HERALD_HEARTBEAT_DRY_RUN: 'false',
+      },
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (chunk) => { stdout += chunk.toString(); });
+    child.stderr.on('data', (chunk) => { stderr += chunk.toString(); });
+    child.on('error', reject);
+    child.on('close', (code) => {
+      if (code !== 0) {
+        const error = new Error('Herald heartbeat failed');
+        error.code = code;
+        error.stdout = stdout.trim();
+        error.stderr = stderr.trim();
+        reject(error);
+        return;
+      }
+      resolve({ status: 'HEARTBEAT_COMPLETE', output: stdout.trim() });
+    });
+  }).finally(() => { heartbeatPromise = null; });
+
+  return heartbeatPromise;
+}
+
 function runTick() {
   if (tickPromise) return tickPromise;
 
@@ -257,6 +292,14 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 503, { status: 'NO_API_KEY' });
       }
       const result = await runTick();
+      return sendJson(res, 200, result);
+    }
+
+    if ((req.method === 'GET' || req.method === 'POST') && url.pathname === '/heartbeat') {
+      if (!API_KEY) {
+        return sendJson(res, 503, { status: 'NO_API_KEY' });
+      }
+      const result = await runHeartbeat();
       return sendJson(res, 200, result);
     }
 

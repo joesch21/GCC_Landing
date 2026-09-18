@@ -32,3 +32,10 @@ test('Herald introduction uses official Moltbook submolt field and does not matc
   assert.match(source, /\/posts\?sort=new&limit=100/);
   assert.match(source, /post\.content/);
 });
+
+
+test('Herald service exposes the bounded heartbeat runner', () => {
+  const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
+  assert.match(source, /scripts\/herald-heartbeat\.mjs/);
+  assert.match(source, /url\.pathname === '\/heartbeat'/);
+});
