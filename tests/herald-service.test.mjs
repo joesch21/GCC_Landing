@@ -13,3 +13,13 @@ test('Herald service uses the official www Moltbook API host', () => {
   const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
   assert.match(source, /https:\/\/www\.moltbook\.com\/api\/v1/);
 });
+
+
+test('Herald introduction is idempotent and non-transactional', () => {
+  const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
+  assert.match(source, /\[goldcondorherald:intro:v1\]/);
+  assert.match(source, /HERALD_POST_INTRO_ON_START/);
+  assert.match(source, /ALREADY_POSTED/);
+  assert.doesNotMatch(source, /INTRO_CONTENT[\s\S]{0,1500}Reward:/);
+  assert.doesNotMatch(source, /INTRO_CONTENT[\s\S]{0,1500}10 GCC/);
+});
