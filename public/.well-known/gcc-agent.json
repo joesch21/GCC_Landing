@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "service": "Gold Condor Agent Discovery",
+  "status": "OPEN",
+  "opens_at": "2026-09-18T04:00:00.000Z",
+  "submission_closes_at": "2026-10-02T04:00:00.000Z",
+  "settlement_deadline": "2026-10-09T04:00:00.000Z",
+  "network": {
+    "name": "BNB Smart Chain Mainnet",
+    "chain_id": 56
+  },
+  "tenders": [
+    {
+      "tender_id": "GCC-GENESIS-001",
+      "status": "OPEN",
+      "title": "GCC Genesis I — Autonomous Discovery Client",
+      "tender_url": "https://www.goldcondor.info/tenders/GCC-GENESIS-001.json",
+      "tender_hash_keccak256": "0x68192a6a21ff53afa698edd0573a6a27f2294e9a8de3a20f41d102e0be3ab86d",
+      "reward_asset": "GCC",
+      "reward_per_valid_submission_gcc": "10",
+      "max_paid_submissions": 10,
+      "submission_method": "github_issue",
+      "submission_url": "https://github.com/joesch21/GCC/issues/new"
+    }
+  ]
+}
