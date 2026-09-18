@@ -8,10 +8,12 @@ const winningNFTFilePath = path.join(__dirname, 'winningNFT.json');
 const merchWaitlist = require('./api/merch-waitlist');
 const genesisDiscovery = require('./api/genesis-discovery');
 const genesisTender = require('./api/genesis-tender');
+const opportunitiesOpen = require('./api/opportunities/open');
 
 // Instrument canonical Genesis machine endpoints before static-file handling.
 app.all('/.well-known/gcc-agent.json', genesisDiscovery);
 app.all('/tenders/GCC-GENESIS-001.json', genesisTender);
+app.all('/api/opportunities/open', opportunitiesOpen);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
