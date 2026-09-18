@@ -7,6 +7,9 @@ const MOLTBOOK_API_BASE =
 const MOLTBOOK_API_KEY = process.env.MOLTBOOK_API_KEY || '';
 const SUBMOLT = process.env.HERALD_SUBMOLT || 'general';
 const DRY_RUN = /^(1|true|yes)$/i.test(process.env.HERALD_DRY_RUN || '');
+const POSTING_DISABLED = /^(1|true|yes)$/i.test(
+  process.env.HERALD_POSTING_DISABLED || ''
+);
 
 function markerFor(opportunity) {
   return `[gcc-herald:${opportunity.opportunity_id}:v1]`;
@@ -106,6 +109,17 @@ async function main() {
         })
       );
     }
+    return;
+  }
+
+  if (POSTING_DISABLED) {
+    console.log(
+      JSON.stringify({
+        status: 'SKIP_POSTING_DISABLED',
+        reason: 'platform_terms_gate',
+        open_opportunities: opportunities.map((item) => item.opportunity_id),
+      })
+    );
     return;
   }
 
