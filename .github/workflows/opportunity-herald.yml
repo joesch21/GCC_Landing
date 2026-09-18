@@ -3,8 +3,10 @@ name: Opportunity Herald
 on:
   push:
     branches:
+      - main
       - phase-h1-opportunity-herald
       - phase-h1-herald-identity
+      - phase-h1-herald-schedule
   pull_request:
     paths:
       - "api/opportunities/**"
@@ -52,19 +54,25 @@ jobs:
       - run: node --check scripts/herald-service.mjs
 
   herald:
-    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    env:
-      HERALD_FEED_URL: https://www.goldcondor.info/api/opportunities/open
-      HERALD_SUBMOLT: general
-      MOLTBOOK_API_KEY: ${{ secrets.MOLTBOOK_API_KEY }}
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Announce open opportunities
-        env:
-          HERALD_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
-        run: node scripts/herald-moltbook.mjs
+      - name: Ask the Render-hosted Herald to announce open work
+        run: |
+          node - <<'NODE'
+          const url = 'https://gcc-opportunity-herald.onrender.com/tick';
+          const response = await fetch(url, {
+            headers: {
+              'Accept': 'application/json',
+              'User-Agent': 'gcc-opportunity-herald-scheduler/1.0'
+            },
+            signal: AbortSignal.timeout(30000),
+          });
+          const body = await response.text();
+          console.log(body);
+          if (!response.ok) process.exit(1);
+          NODE
