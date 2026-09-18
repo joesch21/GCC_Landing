@@ -141,3 +141,57 @@ test('persistent forwarding is disabled outside Vercel production', async () => 
     else process.env.VERCEL_ENV = originalEnv;
   }
 });
+
+
+test('production fallback forwards only coarse telemetry when OIDC is absent', async () => {
+  const originalEnv = process.env.VERCEL_ENV;
+  const originalToken = process.env.VERCEL_OIDC_TOKEN;
+  const originalFetch = global.fetch;
+  const calls = [];
+
+  process.env.VERCEL_ENV = 'production';
+  delete process.env.VERCEL_OIDC_TOKEN;
+  global.fetch = async (url, options) => {
+    calls.push({ url: String(url), options });
+    return {
+      ok: true,
+      status: 202,
+      async json() {
+        return { ok: true, authMode: 'indicative_header' };
+      },
+    };
+  };
+
+  try {
+    const result = await persistGenesisDiscoveryEvent({
+      endpoint: 'discovery',
+      method: 'GET',
+      clientClass: 'runtime_client',
+      acceptClass: 'json',
+      ignored: 'must-not-be-forwarded',
+    });
+
+    assert.equal(result.persisted, true);
+    assert.equal(result.authMode, 'indicative_header');
+    assert.equal(calls.length, 1);
+
+    const headers = calls[0].options.headers;
+    assert.equal(headers['User-Agent'], 'gcc-genesis-telemetry-forwarder/1.0');
+    assert.equal(headers['X-GCC-Telemetry-Version'], '1');
+    assert.equal(headers['X-GCC-Telemetry-Source'], 'goldcondor.info');
+    assert.equal(headers.Authorization, undefined);
+
+    assert.deepEqual(JSON.parse(calls[0].options.body), {
+      endpoint: 'discovery',
+      method: 'GET',
+      clientClass: 'runtime_client',
+      acceptClass: 'json',
+    });
+  } finally {
+    global.fetch = originalFetch;
+    if (originalEnv === undefined) delete process.env.VERCEL_ENV;
+    else process.env.VERCEL_ENV = originalEnv;
+    if (originalToken === undefined) delete process.env.VERCEL_OIDC_TOKEN;
+    else process.env.VERCEL_OIDC_TOKEN = originalToken;
+  }
+});

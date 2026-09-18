@@ -63,23 +63,22 @@ async function persistGenesisDiscoveryEvent(event) {
   }
 
   const token = process.env.VERCEL_OIDC_TOKEN;
-  if (!token) {
-    console.warn(JSON.stringify({
-      event: 'GENESIS_DISCOVERY_PERSIST_SKIPPED',
-      reason: 'VERCEL_OIDC_TOKEN_MISSING',
-    }));
-    return { persisted: false, reason: 'VERCEL_OIDC_TOKEN_MISSING' };
-  }
 
   try {
+    const headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'User-Agent': 'gcc-genesis-telemetry-forwarder/1.0',
+      'X-GCC-Telemetry-Version': '1',
+      'X-GCC-Telemetry-Source': 'goldcondor.info',
+    };
+    if (token) {
+      headers.Authorization = 'Bearer ' + token;
+    }
+
     const response = await fetch(GENESIS_STATS_SINK_URL, {
       method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'User-Agent': 'gcc-genesis-telemetry-forwarder/1.0',
-      },
+      headers,
       body: JSON.stringify({
         endpoint: event.endpoint,
         method: event.method,
@@ -97,7 +96,20 @@ async function persistGenesisDiscoveryEvent(event) {
       return { persisted: false, reason: 'UPSTREAM_' + response.status };
     }
 
-    return { persisted: true };
+    let upstream = null;
+    try {
+      upstream = await response.json();
+    } catch {
+      upstream = null;
+    }
+    return {
+      persisted: true,
+      authMode: upstream && upstream.authMode
+        ? String(upstream.authMode)
+        : token
+          ? 'vercel_oidc'
+          : 'indicative_header',
+    };
   } catch (error) {
     console.warn(JSON.stringify({
       event: 'GENESIS_DISCOVERY_PERSIST_FAILED',
