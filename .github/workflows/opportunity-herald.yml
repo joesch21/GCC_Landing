@@ -1,0 +1,40 @@
+name: Opportunity Herald
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Compose announcements without posting"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+  schedule:
+    - cron: "17 */2 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: opportunity-herald
+  cancel-in-progress: false
+
+jobs:
+  herald:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      HERALD_FEED_URL: https://www.goldcondor.info/api/opportunities/open
+      HERALD_SUBMOLT: general
+      MOLTBOOK_API_KEY: ${{ secrets.MOLTBOOK_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Announce open opportunities
+        env:
+          HERALD_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+        run: node scripts/herald-moltbook.mjs
