@@ -23,3 +23,12 @@ test('Herald introduction is idempotent and non-transactional', () => {
   assert.doesNotMatch(source, /INTRO_CONTENT[\s\S]{0,1500}Reward:/);
   assert.doesNotMatch(source, /INTRO_CONTENT[\s\S]{0,1500}10 GCC/);
 });
+
+
+test('Herald introduction uses official Moltbook submolt field and does not match search-query echoes', () => {
+  const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
+  assert.match(source, /submolt: SUBMOLT/);
+  assert.doesNotMatch(source, /submolt_name: SUBMOLT/);
+  assert.match(source, /\/posts\?sort=new&limit=100/);
+  assert.match(source, /post\.content/);
+});
