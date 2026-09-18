@@ -8,6 +8,7 @@ const tender = require('../public/tenders/GCC-GENESIS-001.json');
 const {
   classifyClient,
   logGenesisDiscoveryRequest,
+  persistGenesisDiscoveryEvent,
 } = require('../api/_genesis-telemetry');
 const discoveryHandler = require('../api/genesis-discovery');
 const tenderHandler = require('../api/genesis-tender');
@@ -120,5 +121,23 @@ test('tender handler returns canonical tender JSON', async () => {
     assert.equal(res.body.network.chain_id, 56);
   } finally {
     console.info = originalInfo;
+  }
+});
+
+
+test('persistent forwarding is disabled outside Vercel production', async () => {
+  const originalEnv = process.env.VERCEL_ENV;
+  delete process.env.VERCEL_ENV;
+  try {
+    const result = await persistGenesisDiscoveryEvent({
+      endpoint: 'discovery',
+      method: 'GET',
+      clientClass: 'runtime_client',
+      acceptClass: 'json',
+    });
+    assert.deepEqual(result, { persisted: false, reason: 'NON_PRODUCTION' });
+  } finally {
+    if (originalEnv === undefined) delete process.env.VERCEL_ENV;
+    else process.env.VERCEL_ENV = originalEnv;
   }
 });
