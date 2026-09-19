@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.goldcondor.info/data/current-gcc-observation-v1.schema.json",
+  "title": "GCC Research Engine V2 Current Observation V1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "observation_cutoff",
+    "research_engine_version",
+    "backup_snapshot",
+    "provenance",
+    "observation_window",
+    "counts",
+    "latest_blocks",
+    "freshness",
+    "external_market_observation",
+    "gcc_network",
+    "dispersion",
+    "price_behaviour",
+    "scarcity",
+    "historical_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "gcc-research-engine-v2.current-observation.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "observation_cutoff": {"type": "string", "format": "date-time"},
+    "research_engine_version": {"type": "string"},
+    "backup_snapshot": {
+      "type": "object",
+      "required": ["id", "timestamp", "verification", "contains_research_root"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-f0-9]{8}$"},
+        "timestamp": {"type": "string", "format": "date-time"},
+        "verification": {"const": "PASS"},
+        "contains_research_root": {"const": true}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["status", "source_cutoff_rule", "source_evidence", "source_hashes", "source_schemas"],
+      "properties": {
+        "status": {"const": "PASS"},
+        "source_hashes": {"type": "object"},
+        "source_schemas": {"type": "object"}
+      }
+    },
+    "observation_window": {
+      "type": "object",
+      "required": ["first_observation", "last_observation", "timezone"],
+      "properties": {
+        "first_observation": {"type": "string", "format": "date-time"},
+        "last_observation": {"type": "string", "format": "date-time"},
+        "timezone": {"const": "UTC"}
+      }
+    },
+    "counts": {"type": "object"},
+    "latest_blocks": {"type": "object"},
+    "freshness": {
+      "type": "object",
+      "required": ["threshold_seconds", "age_basis", "available_states", "ui_rule"],
+      "properties": {
+        "threshold_seconds": {"type": "number", "minimum": 1},
+        "age_basis": {"const": "observation_cutoff"},
+        "available_states": {"type": "array"},
+        "ui_rule": {"type": "string"}
+      }
+    },
+    "external_market_observation": {"type": "object"},
+    "gcc_network": {"type": "object"},
+    "dispersion": {
+      "type": "object",
+      "required": ["latest_bps", "minimum_bps", "median_bps", "maximum_bps", "complete_observation_cycles", "dispersion_observation_count", "interpretation"],
+      "properties": {
+        "latest_bps": {"type": "number", "minimum": 0},
+        "minimum_bps": {"type": "number", "minimum": 0},
+        "median_bps": {"type": "number", "minimum": 0},
+        "maximum_bps": {"type": "number", "minimum": 0},
+        "complete_observation_cycles": {"type": "integer", "minimum": 1},
+        "dispersion_observation_count": {"type": "integer", "minimum": 1},
+        "interpretation": {"type": "string"}
+      }
+    },
+    "price_behaviour": {"type": "object"},
+    "scarcity": {"type": "object"},
+    "historical_boundary": {
+      "type": "object",
+      "required": ["historical_window", "current_window", "raw_source_reproducibility", "historical_archive_changed"],
+      "properties": {
+        "raw_source_reproducibility": {"const": "UNAVAILABLE_SOURCE_LOSS"},
+        "historical_archive_changed": {"const": false}
+      }
+    }
+  }
+}

@@ -41,9 +41,9 @@ test('network page uses the engine adapter and retains compatibility data', () =
   assert.match(html, /opportunity-engine-surface\.mjs/);
   assert.match(html, /data\/opportunity-engine\.json/);
   assert.match(html, /engine-hero/);
-  assert.match(adapter, /Live observation being established/);
+  assert.match(adapter, /CURRENT OBSERVATION · BOUNDED SNAPSHOT/);
   assert.match(adapter, /No contemporaneous observation window exists yet/);
-  assert.match(adapter, /fetch\('\/data\/opportunity-engine\.json'/);
+  assert.match(adapter, /current-gcc-observation-v1\.json/);
   assert.doesNotMatch(adapter, /eth_sendTransaction|personal_sign|privateKey|signer|wallet|swap/i);
   assert.ok(read('public/data/gcc-network-research.json'));
 });

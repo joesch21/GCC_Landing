@@ -1,4 +1,5 @@
 import { EvidenceBadge, Gauge, topology } from './opportunityVisuals.mjs';
+import { renderCurrentObservation } from './current-observation.mjs';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -40,7 +41,7 @@ function scoreView(score) {
 function scoreDetails(environment) {
   const current = environment.current_score;
   const historical = environment.historical_score;
-  return `<div class="engine-score-grid"><div><strong>Historical research score</strong><span>${historical?.value == null ? 'UNAVAILABLE' : esc(historical.value)}</span>${status(historical)}<small>${esc(historical?.confidence_reason || historical?.limitations || 'No explanation available.')}</small></div><div><strong>Current live score</strong><span>${current?.value == null ? 'UNAVAILABLE' : esc(current.value)}</span>${status(current)}<small>${esc(current?.confidence_reason || current?.limitations || 'No live input is connected.')}</small></div></div><details class="research-tooltip"><summary>Inspect score components and weights</summary><div class="engine-component-list">${(environment.components || []).map(component => `<div><span>${esc(component.label)}</span><strong>${component.value == null ? 'UNAVAILABLE' : esc(component.value)}</strong><small>${esc(component.weight == null ? 'weight unavailable' : `${component.weight * 100}% weight`)} · ${esc(component.evidence_status)} · ${esc(component.confidence_reason || '')}</small></div>`).join('')}</div></details>`;
+  return `<div class="engine-score-grid"><div><strong>Historical research score</strong><span>${historical?.value == null ? 'UNAVAILABLE' : esc(historical.value)}</span>${status(historical)}<small>${esc(historical?.confidence_reason || historical?.limitations || 'No explanation available.')}</small></div><div><strong>Current score</strong><span>${current?.value == null ? 'UNAVAILABLE' : esc(current.value)}</span>${status(current)}<small>${esc(current?.confidence_reason || current?.limitations || 'No current input is connected.')}</small></div></div><details class="research-tooltip"><summary>Inspect score components and weights</summary><div class="engine-component-list">${(environment.components || []).map(component => `<div><span>${esc(component.label)}</span><strong>${component.value == null ? 'UNAVAILABLE' : esc(component.value)}</strong><small>${esc(component.weight == null ? 'weight unavailable' : `${component.weight * 100}% weight`)} · ${esc(component.evidence_status)} · ${esc(component.confidence_reason || '')}</small></div>`).join('')}</div></details>`;
 }
 
 function evidenceGroups(engine) {
@@ -57,7 +58,7 @@ function renderHero(metrics, compression) {
   $('#engine-hero').innerHTML = `<section class="hero-evidence" aria-labelledby="hero-evidence-title"><div class="hero-evidence__copy"><p class="eyebrow">ESTABLISHED HISTORICAL EVIDENCE</p><h2 id="hero-evidence-title">A connected market is already observable.</h2><p>Historical research shows recurring cross-pool activity across the GCC liquidity network. The Opportunity Engine converts that evidence into machine-readable economic intelligence for autonomous agents.</p></div><div class="hero-metric-grid"><div><strong>${fmt(metrics.tx?.value, 0)}</strong><span>reconstructed transactions</span>${status(metrics.tx)}</div><div><strong>${fmtPercent(metrics.multiPool?.value, 1)}</strong><span>multi-pool</span>${status(metrics.multiPool)}</div><div><strong>${fmtPercent(compression?.value, 1)}</strong><span>dispersion compression</span>${status(compression)}</div><div><strong>${fmt(metrics.pools?.value, 0)}</strong><span>canonical GCC pools</span>${status(metrics.pools)}</div></div></section>`;
 }
 
-function render(snapshot) {
+function render(snapshot, currentObservation) {
   const engine = snapshot.engine;
   const metrics = metricIndex(engine);
   const get = id => metrics.get(id);
@@ -81,7 +82,7 @@ function render(snapshot) {
     reflection: get('gcc.reflection.mechanics'),
     accumulation: get('gcc.reflection.dead_address_accumulation')
   };
-  const network = {confirmation: 'unavailable', dispersion: `${fmt(get('network.gcc.current_snapshot_dispersion')?.value)} bps (STALE)`, liquidity_health: 'HISTORICAL ONLY', connected_asset_breadth: `${pools?.value ?? 'UNAVAILABLE'} canonical pools`};
+  const network = {confirmation: 'unavailable', dispersion: `${fmt(get('network.gcc.current_snapshot_dispersion')?.value)} bps (HISTORICAL)`, liquidity_health: 'HISTORICAL ONLY', connected_asset_breadth: `${pools?.value ?? 'UNAVAILABLE'} canonical pools`};
 
   renderHero({tx, multiPool, pools}, compression);
   panelData = {
@@ -100,17 +101,18 @@ function render(snapshot) {
   };
 
   const history = card('history', 'Historical network activity', 'TA-1I / LE-1B2 EVIDENCE', `<div class="engine-metric-grid"><div><strong>${fmt(tx?.value, 0)}</strong><span>reconstructed treasury transactions</span>${status(tx)}</div><div><strong>${fmtPercent(multiPool?.value)}</strong><span>receipt-visible multi-pool share</span>${status(multiPool)}</div><div><strong>${fmt(pools?.value, 0)}</strong><span>canonical GCC pools</span>${status(pools)}</div><div><strong>${fmt(corrective?.value, 0)}</strong><span>corrective-flow observations</span>${status(corrective)}</div></div><p class="metric-caption">All values are historical evidence, not live network state. Corrective classification does not establish intent, causality, or profit.</p>`, 'history-card');
-  const networkCard = card('network-state', 'GCC Network State', 'PROVENANCE-BACKED RESEARCH', `${topology(network)}<div class="network-states"><span>Current live state: ${esc(currentStatus)}</span><span>Dispersion: ${esc(network.dispersion)}</span><span>Liquidity: ${esc(network.liquidity_health)}</span><span>Breadth: ${esc(network.connected_asset_breadth)}</span></div><p class="metric-caption">The diagram is conceptual. Historical pool identity and activity are sourced from the engine; no live pool feed is connected.</p>`, 'network-card');
+  const networkCard = card('network-state', 'GCC Network State', 'PROVENANCE-BACKED RESEARCH', `${topology(network)}<div class="network-states"><span>Current observation state: ${esc(currentStatus)}</span><span>Dispersion: ${esc(network.dispersion)}</span><span>Liquidity: ${esc(network.liquidity_health)}</span><span>Breadth: ${esc(network.connected_asset_breadth)}</span></div><p class="metric-caption">The diagram is conceptual. Historical pool identity and activity are sourced from the engine; bounded current evidence is shown above and no live pool feed is connected.</p>`, 'network-card');
   const dispersionCard = card('dispersion', 'Dispersion and compression', 'LE-1B2 / HISTORICAL', dispersion.map(metric => line(metric, 2)).join('') + `<p class="metric-caption">Observed normalized pre/post dispersion and compression are descriptive historical evidence, not executable profit.</p>`, 'liquidity-card');
   const leadershipCard = card('leadership', 'Pool leadership and bias', 'LE-1B2 / HISTORICAL', leadership.map(metric => line(metric, 2)).join('') + bias.map(metric => line(metric, 2)).join('') + '<p class="metric-caption">Leader/follower and signed bias are descriptive historical profiles, not causal price discovery.</p>', 'transmission-card');
   const scarcityCard = card('scarcity', 'Effective scarcity', 'CURRENT BSC READ-ONLY OBSERVATION', `<div class="scarcity-highlight"><strong>${fmt(scarcity.balance?.value, 2)} GCC</strong><span>ECONOMICALLY INACCESSIBLE</span>${status(scarcity.balance)}</div><div class="engine-metric-grid"><div><strong>${fmtPercent(scarcity.share?.value)}</strong><span>of nominal supply</span>${status(scarcity.share)}</div><div><strong>${fmt(scarcity.supply?.value, 0)}</strong><span>nominal GCC supply</span>${status(scarcity.supply)}</div></div>${line(scarcity.inaccessible)}${line(scarcity.reflection)}<div class="engine-status-block"><strong>Reflection accumulation</strong>${status(scarcity.accumulation)}<p>Current contract mechanics and reward eligibility are established; a historical dead-address balance increase is not claimed without an archive observation.</p></div><p class="metric-caption">This is economically inaccessible supply at the recorded block. It does not reduce <code>totalSupply()</code> and is not described as a formal burn.</p>`, 'scarcity-card');
   const macroCard = card('macro', 'External market regime', 'SCOUT / MACRO EVIDENCE', `<div class="engine-status-block"><strong>Scout → GCC alignment</strong>${EvidenceBadge(engine.scout_alignment.status)}<p>No contemporaneous observation window exists yet.</p><small>SCOUT_GCC_ALIGNMENT = ${esc(engine.scout_alignment.status)}</small></div><div class="engine-status-block"><strong>Macro → GCC alignment</strong>${EvidenceBadge(engine.macro_alignment.status)}<p>${esc(engine.macro_alignment.reason)}</p></div><p class="metric-caption">External Scout and XAUT observations remain historical and are not presented as live market signals.</p>`, 'macro-card');
   const evidence = card('evidence', 'What the research supports', 'ENGINE EVIDENCE MATRIX', Object.entries(groups).map(([key, claims]) => `<section class="engine-evidence-group">${EvidenceBadge(key)}${claims.length ? `<ul>${claims.slice(0, key === 'ESTABLISHED' ? 8 : 5).map(claim => `<li>${esc(claim)}</li>`).join('')}</ul>` : '<p class="metric-caption">No public claim in this category.</p>'}</section>`).join('') + `<p class="metric-caption">The complete machine-readable matrix is available at <a href="/data/opportunity-engine.json">/data/opportunity-engine.json</a>.</p>`, 'evidence-card');
-  const price = card('price', 'GCC Price Environment', 'ENGINE SCORE / FAIL-CLOSED', `<div class="gauge-meta">${EvidenceBadge(engine.gcc_price_environment.current_score.evidence_status)}<span class="badge">LIVE OBSERVATION · ${esc(currentStatus)}</span></div><div class="gauge-layout">${Gauge(scoreView(engine.gcc_price_environment.current_score), 'GCC Price Environment')}<div class="gauge-description"><p>Composite scoring activates only when the required evidence is available. The production surface does not calculate or infer a live opportunity.</p>${scoreDetails(engine.gcc_price_environment)}</div></div>`, 'price-card');
-  const lp = card('lp', 'GCC LP Environment', 'ENGINE SCORE / FAIL-CLOSED', `<div class="gauge-meta">${EvidenceBadge(engine.gcc_lp_environment.current_score.evidence_status)}<span class="badge">LIVE OBSERVATION · ${esc(currentStatus)}</span></div><div class="gauge-layout">${Gauge(scoreView(engine.gcc_lp_environment.current_score), 'GCC LP Environment')}<div class="gauge-description"><p>Composite scoring activates only when the required evidence is available. Historical LP evidence remains visible while fee, depth, and adverse-selection inputs are unresolved.</p>${scoreDetails(engine.gcc_lp_environment)}</div></div>`, 'lp-card');
+  const price = card('price', 'GCC Price Environment', 'ENGINE SCORE / FAIL-CLOSED', `<div class="gauge-meta">${EvidenceBadge(engine.gcc_price_environment.current_score.evidence_status)}<span class="badge">CURRENT INPUT · ${esc(currentStatus)}</span></div><div class="gauge-layout">${Gauge(scoreView(engine.gcc_price_environment.current_score), 'GCC Price Environment')}<div class="gauge-description"><p>Composite scoring activates only when the required evidence is available. The production surface does not calculate or infer a trading opportunity.</p>${scoreDetails(engine.gcc_price_environment)}</div></div>`, 'price-card');
+  const lp = card('lp', 'GCC LP Environment', 'ENGINE SCORE / FAIL-CLOSED', `<div class="gauge-meta">${EvidenceBadge(engine.gcc_lp_environment.current_score.evidence_status)}<span class="badge">CURRENT INPUT · ${esc(currentStatus)}</span></div><div class="gauge-layout">${Gauge(scoreView(engine.gcc_lp_environment.current_score), 'GCC LP Environment')}<div class="gauge-description"><p>Composite scoring activates only when the required evidence is available. Historical LP evidence remains visible while fee, depth, and adverse-selection inputs are unresolved.</p>${scoreDetails(engine.gcc_lp_environment)}</div></div>`, 'lp-card');
   const solver = card('solver', 'Direct WBNB Solver', 'ENGINE EVIDENCE', (engine.solver_economics.metrics || []).map(metric => line(metric, 2)).join('') + '<p class="metric-caption">Direct WBNB solver profitability remains NOT_SUPPORTED where the engine records it.</p>', 'solver-card');
   const provenance = card('provenance', 'Evidence provenance', 'CONTROLLED SNAPSHOT', `<div class="engine-status-block"><strong>Source commit</strong><code>${esc(snapshot.provenance.source_commit)}</code></div><div class="engine-status-block"><strong>Source file</strong><code>${esc(snapshot.provenance.source_file)}</code></div><div class="engine-status-block"><strong>Source SHA-256</strong><code>${esc(snapshot.provenance.source_sha256)}</code></div><div class="engine-status-block"><strong>Generated</strong><span>${esc(snapshot.provenance.generated_at)}</span></div>${(snapshot.provenance.enrichments || []).map(item => `<div class="engine-status-block"><strong>Enrichment</strong><span>${esc(item.source_file)} · ${esc(item.observation_block)} · ${esc(item.source_sha256)}</span></div>`).join('')}<p class="metric-caption">This production snapshot is generated from the canonical Opportunity Engine output and a separately recorded read-only chain observation. The Surface is presentation-only.</p>`, 'roadmap-card');
-  $('#data-notice').textContent = 'CURRENT NETWORK INTELLIGENCE · Live observation being established';
+  $('#current-observation-content').innerHTML = renderCurrentObservation(currentObservation);
+  $('#data-notice').textContent = 'CURRENT OBSERVATION · BOUNDED SNAPSHOT · HISTORICAL RESEARCH BELOW';
   $('#panels').innerHTML = history + networkCard + dispersionCard + leadershipCard + scarcityCard + macroCard + evidence + price + lp + solver + provenance;
   $('#panels').setAttribute('aria-busy', 'false');
   document.documentElement.dataset.researchReady = 'true';
@@ -132,13 +134,19 @@ $('#panels').addEventListener('click', event => {
 $('#close-json').addEventListener('click', () => $('#json-dialog').close());
 
 try {
-  const response = await fetch('/data/opportunity-engine.json', {cache: 'no-store'});
-  if (!response.ok) throw new Error(`Could not load Opportunity Engine JSON (${response.status})`);
-  const snapshot = await response.json();
+  const responses = await Promise.all([
+    fetch('/data/opportunity-engine.json', {cache: 'no-store'}),
+    fetch('/data/current-gcc-observation-v1.json', {cache: 'no-store'})
+  ]);
+  if (!responses[0].ok) throw new Error(`Could not load Opportunity Engine JSON (${responses[0].status})`);
+  if (!responses[1].ok) throw new Error(`Could not load current observation JSON (${responses[1].status})`);
+  const snapshot = await responses[0].json();
+  const currentObservation = await responses[1].json();
   if (!snapshot?.provenance?.source_sha256 || !snapshot?.engine?.research_status) throw new Error('Opportunity Engine snapshot is missing provenance or research status.');
-  render(snapshot);
+  if (currentObservation?.schema_version !== 'gcc-research-engine-v2.current-observation.v1' || currentObservation?.provenance?.status !== 'PASS' || currentObservation?.backup_snapshot?.id !== '9f80f84f') throw new Error('Current observation snapshot is missing publication provenance.');
+  render(snapshot, currentObservation);
 } catch (error) {
-  $('#data-notice').textContent = 'Opportunity Engine evidence could not be loaded. Research panels are unavailable.';
+  $('#data-notice').textContent = 'Publication evidence could not be loaded. Research panels are unavailable.';
   $('#panels').setAttribute('aria-busy', 'false');
   console.error(error);
 }

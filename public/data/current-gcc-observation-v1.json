@@ -1,0 +1,344 @@
+{
+  "schema_version": "gcc-research-engine-v2.current-observation.v1",
+  "generated_at": "2026-09-19T00:31:33Z",
+  "observation_cutoff": "2026-09-18T23:31:39.523Z",
+  "research_engine_version": "gcc-research-engine-v2",
+  "runtime_engine_version": "re-1.0.0",
+  "publication_status": "BOUNDED_IMMUTABLE_OBSERVATION",
+  "backup_snapshot": {
+    "id": "9f80f84f",
+    "timestamp": "2026-09-18T23:33:26Z",
+    "verification": "PASS",
+    "contains_research_root": true
+  },
+  "provenance": {
+    "status": "PASS",
+    "source_cutoff_rule": "Latest complete synchronized five-minute sensor window at or before the verified Restic backup cutoff; source timestamps may differ within that window.",
+    "source_evidence": "Restic snapshot 9f80f84f streamed read-only; no live collector files were used.",
+    "reproduction_method": "Parse the listed V2 JSONL streams, retain records at or before observation_cutoff, group Macro records by complete instrument cycle, group CO-1 records by complete five-pool cycle, and use the collector pairwise dispersion field where present.",
+    "source_hashes": {
+      "raw": {
+        "data/raw/scout/scout-observations-202609.jsonl": "b9a09b1b98a8caadf000b8f9a2e2f36fb1a71e6bf0e6418e58c64736cb62c647",
+        "data/raw/macro/macro-observations-202609.jsonl": "775a7c2e4e1d9bc906ab4add9959fe52b1af1f835e17a932aeca979dea95d079",
+        "data/raw/co1/co1-observations-202609.jsonl": "c90b8eaab08bdfd86becddd848716191a1388c838230ae854e3bfc2c808c618b",
+        "data/raw/scarcity/scarcity-observations-202609.jsonl": "56224e0829d5b06c58d61f3daacf4683234992484815b6951034602425d87955"
+      },
+      "checkpoints": {
+        "checkpoints/scout.json": "dab58df75cbf374f6bfbf8b18fb6ce6ddb043ea30a497d5e40b764a05e72cbee",
+        "checkpoints/macro.json": "780f6bd48e28bdda8a7252bc97d41c3caea6a454ff299e67387cf63513adc972",
+        "checkpoints/co1.json": "717de1b57fbcc9beab7ac27322780530a114a3131bb0647e557cda6569436633",
+        "checkpoints/scarcity.json": "ceeee78b38eae4c7060ead147391430253d4f9cf0526922efe43a6b669445647"
+      },
+      "manifests": {
+        "manifests/runtime/scout.json": "c8033a481eaa18fad6396c61b64149c7396b411e5cc36e6482f0658e5c2eee02",
+        "manifests/runtime/macro.json": "eabb0ebc368d85abc736a5497e140b8ca1c9a4642afb341fa3f0c25f2d6f5254",
+        "manifests/runtime/co1.json": "3c786f7954ee42f927342b5c651e91840d837a39c32e6c350424d05c548da8ed",
+        "manifests/runtime/scarcity.json": "98157d48a7647020040de7d2b4aa3816c2e1b068f487def7e34bb79475882a1b"
+      },
+      "health": {
+        "health/scout-v2.json": "cf51e9d181d4c4ddc5452ab1cfef84788856b7dc43d2e1f92f4e040c5969683a",
+        "health/macro-v2.json": "d7250086fbe9b33497dfb7c0af577de021499cab3bbb83936bbdcffa4604952e",
+        "health/co1-v2.json": "4bfae6a16ba404b332bb6d019602232b3f1256a254776a35883b5389a9aaa069",
+        "health/scarcity-v2.json": "c0b01a0f884dd3fcfc6f274476ca519a2fab71a88c112c154f6e20e20cb910d5",
+        "health/live-read-check.json": "e2878de214650138ec79af9face9dcd4f7445b6ab962d6ea09001db62faad634"
+      },
+      "schemas": {
+        "schemas/observation-contract.json": "50c01fab599490dd43ff8ef7674c3f27fbcfe96a799694d942672b0dd37f311d",
+        "schemas/health-contract.json": "f66b96164a361450cfc10453893cda6fe1e2d4874eb57b9b2c0c2cc6b68d4c20"
+      },
+      "archive": {
+        "archive/historical-evidence-v1.json": "2366bfca4953d29e9917f7b96d898d2692936dd2719d305285e49b6c83b74053"
+      }
+    },
+    "source_schemas": {
+      "raw_observations": "gcc-research-engine-v2.observation.v1",
+      "collector_health": "gcc-research-engine-v2.health.v1",
+      "checkpoints": "gcc-research-engine-v2.checkpoint.v1",
+      "runtime_manifests": "gcc-research-engine-v2.runtime-manifest.v1"
+    }
+  },
+  "observation_window": {
+    "first_observation": "2026-09-16T04:23:33.261Z",
+    "last_observation": "2026-09-18T23:31:39.523Z",
+    "synchronized_window_start": "2026-09-18T23:30:18.259Z",
+    "synchronized_window_end": "2026-09-18T23:31:39.523Z",
+    "timezone": "UTC",
+    "synchronization_note": "Scout, Macro, and CO-1 terminal observations are within 82 seconds; Scarcity is lower cadence and its latest observation is reported separately."
+  },
+  "status": {
+    "research_engine": "OBSERVATION_ACTIVE_WITH_PARTIAL_COVERAGE",
+    "scout": "ACTIVE",
+    "macro": "ACTIVE",
+    "co1": "DEGRADED_PARTIAL_ICC",
+    "scarcity": "ACTIVE",
+    "opportunity_engine_connected": false,
+    "production_write": false
+  },
+  "counts": {
+    "scout": {
+      "observations": 616,
+      "baseline_required": 50,
+      "baseline_history_count_at_cutoff": 615,
+      "baseline_established": true,
+      "z_score_available": 565,
+      "unusual_absolute_z_at_least_2": 29
+    },
+    "macro": {
+      "records": 2464,
+      "complete_cycles": 616,
+      "per_instrument": {
+        "BNBUSDT": 616,
+        "BTCUSDT": 616,
+        "SOLUSDT": 616,
+        "XAUTUSDT": 616
+      }
+    },
+    "co1": {
+      "records": 2965,
+      "complete_five_pool_cycles": 593,
+      "configured_pools": 5,
+      "normalized_pools": 4,
+      "dispersion_observations": 592
+    },
+    "scarcity": {
+      "observations": 53
+    }
+  },
+  "latest_blocks": {
+    "co1": 122693727,
+    "scarcity": 122692472
+  },
+  "freshness": {
+    "threshold_seconds": 7200,
+    "age_basis": "observation_cutoff",
+    "state_at_generation": "CURRENT",
+    "available_states": ["CURRENT", "STALE", "PARTIAL", "UNAVAILABLE", "HISTORICAL"],
+    "ages_seconds_at_generation": {
+      "scout": 3593.477,
+      "macro": 3674.741,
+      "co1": 3634.917,
+      "scarcity": 4200.512
+    },
+    "ui_rule": "The presentation calculates age from observation_cutoff at render time; any snapshot older than threshold_seconds is shown as STALE."
+  },
+  "scout": {
+    "status": "ACTIVE",
+    "observation_count": 616,
+    "baseline_established": true,
+    "unusual_observations_absolute_z_at_least_2": 29,
+    "latest": {
+      "timestamp": "2026-09-18T23:31:39.523Z",
+      "source": "binance_public_rest",
+      "evidence_status": "CURRENT",
+      "divergence": 0.00027008530930426535,
+      "z_score": 1.2805225673049883,
+      "signal_status": "OBSERVATION_ONLY",
+      "freshness_age_seconds": 3593.477,
+      "freshness_state": "CURRENT"
+    },
+    "publication_note": "No latest z-score is presented as a trading signal."
+  },
+  "external_market_observation": {
+    "source": "binance_public_rest",
+    "evidence_status": "CURRENT",
+    "instruments": {
+      "BNBUSDT": {"value_usd": 762.37, "timestamp": "2026-09-18T23:30:18.259Z", "source": "binance_public_rest", "evidence_status": "CURRENT", "freshness_age_seconds": 3674.741, "freshness_state": "CURRENT"},
+      "BTCUSDT": {"value_usd": 80996.0, "timestamp": "2026-09-18T23:30:18.259Z", "source": "binance_public_rest", "evidence_status": "CURRENT", "freshness_age_seconds": 3674.741, "freshness_state": "CURRENT"},
+      "SOLUSDT": {"value_usd": 113.11, "timestamp": "2026-09-18T23:30:18.259Z", "source": "binance_public_rest", "evidence_status": "CURRENT", "freshness_age_seconds": 3674.741, "freshness_state": "CURRENT"},
+      "XAUTUSDT": {"value_usd": 4380.68, "timestamp": "2026-09-18T23:30:18.259Z", "source": "binance_public_rest", "evidence_status": "CURRENT", "freshness_age_seconds": 3674.741, "freshness_state": "CURRENT"}
+    }
+  },
+  "gcc_network": {
+    "source": "bsc_json_rpc_read_only",
+    "latest_block": 122693727,
+    "pools": {
+      "gcc-wbnb-pancakeswap": {
+        "label": "PancakeSwap GCC/WBNB",
+        "dex": "PancakeSwap",
+        "paired_asset": "WBNB",
+        "latest_timestamp": "2026-09-18T23:30:58.083Z",
+        "source": "bsc_json_rpc_read_only",
+        "data_quality": "GOOD",
+        "evidence_status": "CURRENT",
+        "freshness_age_seconds": 3634.917,
+        "freshness_state": "CURRENT",
+        "gcc_relative_price": 0.000028812602831435552,
+        "normalized_gcc_usd_price": 0.021958372743865348,
+        "liquidity_depth_proxy": 604.3685651131924
+      },
+      "gcc-btcb-pancakeswap": {
+        "label": "GCC/BTCB",
+        "dex": "PancakeSwap",
+        "paired_asset": "BTCB",
+        "latest_timestamp": "2026-09-18T23:30:58.083Z",
+        "source": "bsc_json_rpc_read_only",
+        "data_quality": "GOOD",
+        "evidence_status": "CURRENT",
+        "freshness_age_seconds": 3634.917,
+        "freshness_state": "CURRENT",
+        "gcc_relative_price": 0.00000027240396759830534,
+        "normalized_gcc_usd_price": 0.022058183680240373,
+        "liquidity_depth_proxy": 14.596965696977728
+      },
+      "gcc-wbnb-apeswap": {
+        "label": "ApeSwap GCC/WBNB",
+        "dex": "ApeSwap",
+        "paired_asset": "WBNB",
+        "latest_timestamp": "2026-09-18T23:30:58.083Z",
+        "source": "bsc_json_rpc_read_only",
+        "data_quality": "GOOD",
+        "evidence_status": "CURRENT",
+        "freshness_age_seconds": 3634.917,
+        "freshness_state": "CURRENT",
+        "gcc_relative_price": 0.000028776308644420572,
+        "normalized_gcc_usd_price": 0.02193071258099936,
+        "liquidity_depth_proxy": 40.331144198414655
+      },
+      "gcc-sol": {
+        "label": "GCC/SOL",
+        "dex": "UNKNOWN_DEX",
+        "paired_asset": "SOL",
+        "latest_timestamp": "2026-09-18T23:30:58.083Z",
+        "source": "bsc_json_rpc_read_only",
+        "data_quality": "GOOD",
+        "evidence_status": "CURRENT",
+        "freshness_age_seconds": 3634.917,
+        "freshness_state": "CURRENT",
+        "gcc_relative_price": 0.00020016261208116525,
+        "normalized_gcc_usd_price": 0.022632386548017355,
+        "liquidity_depth_proxy": 218.38346415317918
+      },
+      "gcc-icc": {
+        "label": "GCC/ICC",
+        "dex": "UNKNOWN_DEX",
+        "paired_asset": "ICC",
+        "latest_timestamp": "2026-09-18T23:30:58.083Z",
+        "source": "bsc_json_rpc_read_only",
+        "data_quality": "PARTIAL",
+        "evidence_status": "PARTIAL",
+        "freshness_age_seconds": 3634.917,
+        "freshness_state": "CURRENT",
+        "gcc_relative_price": 0.22915847336457199,
+        "normalized_gcc_usd_price": null,
+        "liquidity_depth_proxy": 70435.11754321848,
+        "icc_usd_normalization": "UNAVAILABLE"
+      }
+    }
+  },
+  "dispersion": {
+    "definition": "Collector pairwise_gcc_price_dispersion_bps across four defensibly USD-normalized pools; ICC excluded.",
+    "source": "co1-v2 collector pairwise field",
+    "evidence_status": "CURRENT",
+    "freshness_age_seconds": 3634.917,
+    "freshness_state": "CURRENT",
+    "latest_bps": 318.82274490410646,
+    "latest_percent": 3.1882274490410465,
+    "minimum_bps": 60.933521720968415,
+    "minimum_percent": 0.6093352172096842,
+    "median_bps": 211.37363504557428,
+    "median_percent": 2.1137363504557427,
+    "maximum_bps": 379.9462817417678,
+    "maximum_percent": 3.799462817417678,
+    "complete_observation_cycles": 593,
+    "dispersion_observation_count": 592,
+    "observation_window_start": "2026-09-16T04:23:34.214Z",
+    "observation_window_end": "2026-09-18T23:30:58.083Z",
+    "maximum_event": {
+      "timestamp": "2026-09-18T19:21:10.635Z",
+      "lowest_pool": "gcc-wbnb-apeswap",
+      "highest_pool": "gcc-sol"
+    },
+    "subsequently_declined": true,
+    "first_observed_decline_timestamp": "2026-09-18T19:26:23.023Z",
+    "approximate_time_to_decline_minutes": 5.206466666666667,
+    "interpretation": "Observed price dispersion is descriptive and does not establish arbitrage, profitability, or trading intent."
+  },
+  "price_behaviour": {
+    "source": "derived from frozen V2 raw observations",
+    "evidence_status": "CURRENT",
+    "freshness_state": "CURRENT",
+    "gcc-wbnb-pancakeswap-normalized-usd": {
+      "first": 0.02064237056360538,
+      "latest": 0.021958372743865348,
+      "percentage_change": 6.375247339955292,
+      "first_timestamp": "2026-09-16T04:23:34.214Z",
+      "latest_timestamp": "2026-09-18T23:30:58.083Z"
+    },
+    "bnb-usd": {
+      "first": 716.01,
+      "latest": 762.37,
+      "percentage_change": 6.474769905448241,
+      "first_timestamp": "2026-09-16T04:23:33.697Z",
+      "latest_timestamp": "2026-09-18T23:30:18.259Z"
+    },
+    "gcc-btcb": {
+      "first": 0.020603463548915166,
+      "latest": 0.022058183680240373,
+      "percentage_change": 7.060561093873963,
+      "first_timestamp": "2026-09-16T04:23:34.214Z",
+      "latest_timestamp": "2026-09-18T23:30:58.083Z"
+    },
+    "gcc-sol": {
+      "first": 0.02020500359223755,
+      "latest": 0.022632386548017355,
+      "percentage_change": 12.013771463581268,
+      "first_timestamp": "2026-09-16T04:23:34.214Z",
+      "latest_timestamp": "2026-09-18T23:30:58.083Z"
+    },
+    "gcc-wbnb-apeswap": {
+      "first": 0.020604124752491574,
+      "latest": 0.02193071258099936,
+      "percentage_change": 6.438457563441835,
+      "first_timestamp": "2026-09-16T04:23:34.214Z",
+      "latest_timestamp": "2026-09-18T23:30:58.083Z"
+    },
+    "descriptive_comparison": "During this observation window, Pancake GCC/WBNB normalized USD value rose approximately 6.38%, while BNB/USD rose approximately 6.47%.",
+    "causation_qualification": "The similarity does not establish causation. Reserve-ratio and cross-pool attribution remain under analysis."
+  },
+  "pool_position": {
+    "basis": "592 cycles with four normalized pool values and collector dispersion present",
+    "source": "derived from frozen co1-v2 normalized observations",
+    "evidence_status": "CURRENT",
+    "freshness_state": "CURRENT",
+    "most_frequent_highest_normalized_pool": {"pool": "gcc-wbnb-pancakeswap", "count": 328},
+    "most_frequent_lowest_normalized_pool": {"pool": "gcc-btcb-pancakeswap", "count": 328},
+    "highest_counts": {"gcc-wbnb-pancakeswap": 328, "gcc-sol": 248, "gcc-wbnb-apeswap": 16},
+    "lowest_counts": {"gcc-btcb-pancakeswap": 328, "gcc-sol": 152, "gcc-wbnb-apeswap": 88, "gcc-wbnb-pancakeswap": 24},
+    "interpretation": "These are observed relative-price positions only; they are not labels of quality, profitability, or execution preference."
+  },
+  "scarcity": {
+    "interpretation": "ECONOMICALLY INACCESSIBLE BALANCE",
+    "dead_address_balance_unit": "GCC",
+    "first_observed_balance": 50775.2156550755,
+    "latest_observed_balance": 50775.81812858609,
+    "observed_change": 0.6024735105893342,
+    "observed_change_percentage": 0.0011865503726893323,
+    "first_block": 122156987,
+    "latest_block": 122692472,
+    "observation_count": 53,
+    "observation_window_start": "2026-09-16T04:23:46.468Z",
+    "observation_window_end": "2026-09-18T23:21:33.488Z",
+    "source": "bsc_json_rpc_read_only",
+    "evidence_status": "CURRENT",
+    "freshness_age_seconds": 4200.512,
+    "freshness_state": "CURRENT",
+    "formal_burn_claim": false,
+    "mechanism_statement": "The balance increased during the observation window. The mechanism has not yet been transaction-level attributed."
+  },
+  "historical_boundary": {
+    "historical_label": "HISTORICAL RESEARCH",
+    "historical_window": "2024-08-01 → 2025-06-17",
+    "current_label": "CURRENT OBSERVATION",
+    "current_window": "Research Engine V2: 2026-09-16T04:23:33Z → publication cutoff",
+    "raw_source_reproducibility": "UNAVAILABLE_SOURCE_LOSS",
+    "historical_archive_changed": false,
+    "note": "The original historical TA-1/LE-1 raw datasets are not represented as recovered by this snapshot."
+  },
+  "limitations": [
+    "ICC/USD normalization is unavailable; GCC/ICC remains native-pool PARTIAL.",
+    "CO-1 is degraded only because the ICC reference is not defensibly normalized; four pools support USD-normalized comparisons.",
+    "Dispersion is descriptive and does not establish arbitrage, profitability, or trading intent.",
+    "No transaction-level mechanism attribution is made for the economically inaccessible balance.",
+    "This artifact is a bounded publication snapshot, not a live collector feed or execution input."
+  ]
+}

@@ -104,6 +104,14 @@
       "schema": null,
       "generated": true,
       "consumer": ["opportunity-engine-surface.mjs", "agents", "research inspection"]
+    },
+    {
+      "id": "current-gcc-observation-v1",
+      "path": "public/data/current-gcc-observation-v1.json",
+      "authority": "immutable GCC Research Engine V2 publication snapshot from verified Restic evidence",
+      "schema": "public/data/current-gcc-observation-v1.schema.json",
+      "generated": false,
+      "consumer": ["opportunity-engine-surface.mjs", "network presentation", "research inspection"]
     }
   ]
 }
