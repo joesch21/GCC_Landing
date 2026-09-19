@@ -13,11 +13,15 @@ test('heartbeat is bounded to one discussion comment and never approves DMs', ()
   assert.match(source, /OWNER_APPROVAL_REQUIRED_FOR_NEW_REQUESTS/);
 });
 
-test('heartbeat excludes crypto promotion topics', () => {
-  assert.match(source, /'crypto'/);
-  assert.match(source, /'cryptocurrency'/);
-  assert.match(source, /'token'/);
-  assert.match(source, /'gcc'/);
+test('heartbeat allows technical crypto discussion but blocks promotion and GCC solicitation', () => {
+  assert.match(source, /PROMOTIONAL_PATTERNS/);
+  assert.match(source, /PROJECT_GUARD_PATTERNS/);
+  assert.match(source, /where to buy/);
+  assert.match(source, /price target/);
+  assert.match(source, /airdrop/);
+  assert.match(source, /\\bgcc\\b/);
+  assert.match(source, /crypto payments/);
+  assert.match(source, /smart contract/);
 });
 
 test('heartbeat interests match the Herald remit', () => {
@@ -28,6 +32,10 @@ test('heartbeat interests match the Herald remit', () => {
     'verification',
     'sandbox',
     'autonomous agent',
+    'agent economy',
+    'decentralized',
+    'machine payments',
+    'self-custody',
   ]) {
     assert.ok(source.includes(term), `missing interest: ${term}`);
   }
