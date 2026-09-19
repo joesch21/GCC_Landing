@@ -1,0 +1,188 @@
+{
+  "schema_version": "0.3-draft",
+  "id": "GCC-GENESIS-001",
+  "title": "Design the GCC Autonomous Agent Economy",
+  "status": "DRAFT",
+  "publication": {
+    "live": false,
+    "created_date": "2026-09-17",
+    "deadline": null,
+    "note": "Pre-launch specification only. Not an open offer and no rewards are currently authorized."
+  },
+  "objective": "Design the minimum viable architecture for a decentralized economy in which autonomous software agents can discover work, accept or reference contracts, perform useful work, prove completion, receive GCC, and later spend GCC purchasing services from other agents.",
+  "research_hypothesis": "Can machine-readable GCC-denominated incentives cause independent autonomous agents to discover a task, decide to participate, produce economically useful output, and receive verifiable payment without a human directly commissioning each participant?",
+  "network": {
+    "chain": "BNB Smart Chain",
+    "chain_id": 56,
+    "settlement_asset": "GCC",
+    "gcc_contract_address": null,
+    "contract_address_status": "MUST_BE_VERIFIED_BEFORE_OPEN",
+    "autonomous_execution_enabled": false
+  },
+  "economic_constraints": {
+    "gcc_supply_model": "fixed_supply",
+    "minting_for_rewards_allowed": false,
+    "reward_pool_gcc": null,
+    "max_treasury_exposure_gcc": null,
+    "submission_implies_payment": false
+  },
+  "deliverable": {
+    "type": "architecture_proposal",
+    "accepted_media_types": [
+      "application/json",
+      "text/markdown"
+    ],
+    "required_sections": [
+      "executive_summary",
+      "system_architecture",
+      "agent_identity",
+      "work_discovery",
+      "contract_acceptance_or_reference",
+      "proof_and_verification",
+      "payment_and_settlement",
+      "attribution_and_provenance",
+      "security_boundaries",
+      "failure_modes",
+      "migration_path",
+      "implementation_plan"
+    ]
+  },
+  "mandatory_requirements": [
+    "Treat an agent identity as distinct from its settlement wallet.",
+    "Use machine-readable tenders and submissions.",
+    "Retain contribution provenance and component attribution.",
+    "Bound treasury authority and exposure through immutable settlement rules.",
+    "Do not require a human-controlled withdrawal or sweep path for the Genesis escrow.",
+    "Bind settlement to tender, reward class, deliverable, assessment, recipient, authorization expiry, and BSC transaction evidence.",
+    "Support combining useful components from multiple submissions.",
+    "Provide a future path to agent-to-agent contracting without requiring it in Genesis I.",
+    "Do not require minting additional GCC.",
+    "Do not require private keys, seed phrases, or unrestricted wallet credentials to be submitted."
+  ],
+  "assessment": {
+    "model_role": "project_manager_and_architectural_analyst",
+    "model_is_payment_authority": false,
+    "award_authority": "VERIFIER_AUTHORIZATION_UNDER_IMMUTABLE_ESCROW_RULES",
+    "qualification_gates": [
+      "valid_tender_reference",
+      "accepted_format",
+      "mandatory_requirements_covered",
+      "assumptions_and_dependencies_declared",
+      "security_and_failure_boundaries_declared",
+      "no_secret_or_unrestricted_treasury_requirement",
+      "provenance_sufficient_for_duplicate_review"
+    ],
+    "analysis_dimensions": [
+      "minimality",
+      "implementation_feasibility",
+      "safety_and_bounded_authority",
+      "machine_discoverability",
+      "verifiability",
+      "composability",
+      "attribution_and_provenance",
+      "settlement_traceability",
+      "spam_and_sybil_resistance",
+      "automation_migration_path"
+    ],
+    "component_combination_allowed": true,
+    "human_predeployment_rule_approval_required": true,
+    "human_per_payment_approval_required": false
+  },
+  "rewards": {
+    "qualified_proposal_reward_gcc": null,
+    "max_qualified_proposals": null,
+    "finalist_reward_gcc": null,
+    "max_finalists": null,
+    "selected_component_award_gcc": null,
+    "max_selected_components": null,
+    "implementation_bounties": "SEPARATE_FUTURE_TENDERS",
+    "note": "Amounts and award-count caps remain TBD until the Genesis escrow deployment manifest is approved."
+  },
+  "treasury": {
+    "mode": "IMMUTABLE_DELIVERABLE_ESCROW",
+    "settlement_contract_repository": "joesch21/GCC",
+    "settlement_contract_path": "contracts/GenesisDeliverableEscrow.sol",
+    "settlement_contract_address": null,
+    "contract_status": "SOURCE_MERGED_NOT_DEPLOYED",
+    "human_withdrawal_available": false,
+    "admin_sweep_available": false,
+    "private_keys_in_repository_allowed": false,
+    "per_payment_human_approval_required": false,
+    "settlement_after_valid_authorization": true
+  },
+  "settlement_binding_required_fields": [
+    "tender_hash",
+    "award_class",
+    "deliverable_hash",
+    "assessment_hash",
+    "recipient_address",
+    "authorization_expiry",
+    "amount_gcc",
+    "settlement_contract_address",
+    "bsc_tx_hash"
+  ],
+  "audit_events": [
+    "TENDER_CREATED",
+    "TENDER_OPENED",
+    "SUBMISSION_RECEIVED",
+    "SUBMISSION_VALIDATED",
+    "SUBMISSION_ASSESSED",
+    "AWARD_RECOMMENDED",
+    "AWARD_AUTHORIZED",
+    "PAYMENT_SUBMITTED",
+    "PAYMENT_CONFIRMED"
+  ],
+  "planned_discovery": {
+    "well_known_document": "/.well-known/gcc-agent.json",
+    "endpoints": {
+      "tenders": "/api/tenders",
+      "tender_by_id": "/api/tenders/:id",
+      "submissions": "/api/submissions",
+      "protocol": "/api/protocol"
+    },
+    "live_now": false
+  },
+  "success_criteria": {
+    "genesis_i": [
+      "independent agent discovers machine-readable tender",
+      "agent decides to participate",
+      "agent submits useful work",
+      "submission passes qualification",
+      "award receives verifier authorization under the published policy",
+      "immutable escrow pays the fixed reward",
+      "GCC payment is confirmed on BSC",
+      "settlement can be reconstructed back to the accepted work"
+    ],
+    "genesis_ii_future": "An agent that earned GCC independently commissions and pays another agent for useful work."
+  },
+  "pre_open_gates": [
+    "verify GCC BSC mainnet contract address",
+    "freeze canonical tender bytes and Keccak-256 tender hash",
+    "approve fixed reward amounts and award-count caps",
+    "approve settlement deadline",
+    "finalize verifier policy, reproduce its pinned hash, and provision three production verifier authorities",
+    "independently review GenesisDeliverableEscrow",
+    "independently review GenesisVerifierAuthority and document verifier key/smart-account custody boundaries",
+    "reproduce and verify deployment bytecode and constructor parameters",
+    "deploy and verify escrow on BscScan",
+    "confirm escrow has no human withdrawal, admin sweep, or upgrade path",
+    "validate tender and submission schemas",
+    "confirm no repository secret or signing authority is introduced"
+  ],
+  "verifier_authority": {
+    "mode": "IMMUTABLE_2_OF_3_EIP1271",
+    "repository": "joesch21/GCC",
+    "contract_path": "contracts/GenesisVerifierAuthority.sol",
+    "contract_status": "SOURCE_MERGED_NOT_DEPLOYED",
+    "verifier_count": 3,
+    "threshold": 2,
+    "signer_rotation": false,
+    "admin_override": false,
+    "human_per_payment_approval": false,
+    "policy_path": "policies/GCC-GENESIS-001.verifier-policy.json",
+    "assessment_schema_path": "schemas/gcc-genesis-assessment.schema.json",
+    "draft_policy_hash": "0x1f593861134197f6a361b84b85914fa1505fa070a450f51111a802ea0efd501c",
+    "policy_hash_status": "DRAFT_PINNED_CI_VERIFIED",
+    "production_verifier_addresses": null
+  }
+}

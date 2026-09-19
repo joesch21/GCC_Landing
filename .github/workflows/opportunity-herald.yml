@@ -1,0 +1,78 @@
+name: Opportunity Herald
+
+on:
+  push:
+    branches:
+      - main
+      - phase-h1-opportunity-herald
+      - phase-h1-herald-identity
+      - phase-h1-herald-schedule
+  pull_request:
+    paths:
+      - "api/opportunities/**"
+      - "public/.well-known/gcc-agent.json"
+      - "scripts/herald-moltbook.mjs"
+      - "scripts/herald-service.mjs"
+      - "tests/opportunities-open.test.mjs"
+      - "tests/herald-service.test.mjs"
+      - ".github/workflows/opportunity-herald.yml"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Compose announcements without posting"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+  schedule:
+    - cron: "17 */2 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: opportunity-herald-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: node --check api/opportunities/open.js
+      - run: node --check scripts/herald-moltbook.mjs
+      - run: node --check scripts/herald-service.mjs
+
+  herald:
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Ask the Render-hosted Herald to announce open work
+        run: |
+          node - <<'NODE'
+          const url = 'https://gcc-opportunity-herald.onrender.com/tick';
+          const response = await fetch(url, {
+            headers: {
+              'Accept': 'application/json',
+              'User-Agent': 'gcc-opportunity-herald-scheduler/1.0'
+            },
+            signal: AbortSignal.timeout(30000),
+          });
+          const body = await response.text();
+          console.log(body);
+          if (!response.ok) process.exit(1);
+          NODE

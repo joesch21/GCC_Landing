@@ -112,6 +112,22 @@
       "schema": "public/data/current-gcc-observation-v1.schema.json",
       "generated": false,
       "consumer": ["opportunity-engine-surface.mjs", "network presentation", "research inspection"]
+    },
+    {
+      "id": "gcc-genesis-tender-schema",
+      "path": "schemas/gcc-genesis-tender.schema.json",
+      "authority": "draft Genesis tender machine contract; pre-launch and non-executable",
+      "schema": null,
+      "generated": false,
+      "consumer": ["Genesis validation", "future tender discovery", "schema drift review"]
+    },
+    {
+      "id": "gcc-genesis-001-draft",
+      "path": "docs/tenders/GCC-GENESIS-001.json",
+      "authority": "human-approved pre-launch Genesis tender specification",
+      "schema": "schemas/gcc-genesis-tender.schema.json",
+      "generated": false,
+      "consumer": ["Genesis implementation", "future autonomous agents", "validation tests"]
     }
   ]
 }

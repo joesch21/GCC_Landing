@@ -1,0 +1,369 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.goldcondor.info/schemas/gcc-genesis-tender.schema.json",
+  "title": "GCC Genesis Tender",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "status",
+    "publication",
+    "objective",
+    "research_hypothesis",
+    "network",
+    "economic_constraints",
+    "deliverable",
+    "mandatory_requirements",
+    "assessment",
+    "rewards",
+    "verifier_authority",
+    "treasury",
+    "settlement_binding_required_fields",
+    "audit_events",
+    "planned_discovery",
+    "success_criteria",
+    "pre_open_gates"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.3-draft"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^GCC-GENESIS-[0-9]{3}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "OPEN",
+        "CLOSED",
+        "AWARDED"
+      ]
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "live",
+        "created_date",
+        "deadline",
+        "note"
+      ],
+      "properties": {
+        "live": {
+          "type": "boolean"
+        },
+        "created_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "deadline": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_hypothesis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chain",
+        "chain_id",
+        "settlement_asset",
+        "gcc_contract_address",
+        "contract_address_status",
+        "autonomous_execution_enabled"
+      ],
+      "properties": {
+        "chain": {
+          "type": "string",
+          "const": "BNB Smart Chain"
+        },
+        "chain_id": {
+          "type": "integer",
+          "const": 56
+        },
+        "settlement_asset": {
+          "type": "string",
+          "const": "GCC"
+        },
+        "gcc_contract_address": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "contract_address_status": {
+          "type": "string"
+        },
+        "autonomous_execution_enabled": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "economic_constraints": {
+      "type": "object"
+    },
+    "deliverable": {
+      "type": "object"
+    },
+    "mandatory_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_role",
+        "model_is_payment_authority",
+        "award_authority",
+        "qualification_gates",
+        "analysis_dimensions",
+        "component_combination_allowed",
+        "human_predeployment_rule_approval_required",
+        "human_per_payment_approval_required"
+      ],
+      "properties": {
+        "model_role": {
+          "type": "string"
+        },
+        "model_is_payment_authority": {
+          "type": "boolean",
+          "const": false
+        },
+        "award_authority": {
+          "type": "string",
+          "const": "VERIFIER_AUTHORIZATION_UNDER_IMMUTABLE_ESCROW_RULES"
+        },
+        "qualification_gates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "analysis_dimensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "component_combination_allowed": {
+          "type": "boolean"
+        },
+        "human_predeployment_rule_approval_required": {
+          "type": "boolean",
+          "const": true
+        },
+        "human_per_payment_approval_required": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "rewards": {
+      "type": "object"
+    },
+    "treasury": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "settlement_contract_repository",
+        "settlement_contract_path",
+        "settlement_contract_address",
+        "contract_status",
+        "human_withdrawal_available",
+        "admin_sweep_available",
+        "private_keys_in_repository_allowed",
+        "per_payment_human_approval_required",
+        "settlement_after_valid_authorization"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "const": "IMMUTABLE_DELIVERABLE_ESCROW"
+        },
+        "settlement_contract_repository": {
+          "type": "string",
+          "const": "joesch21/GCC"
+        },
+        "settlement_contract_path": {
+          "type": "string",
+          "const": "contracts/GenesisDeliverableEscrow.sol"
+        },
+        "settlement_contract_address": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "contract_status": {
+          "type": "string"
+        },
+        "human_withdrawal_available": {
+          "type": "boolean",
+          "const": false
+        },
+        "admin_sweep_available": {
+          "type": "boolean",
+          "const": false
+        },
+        "private_keys_in_repository_allowed": {
+          "type": "boolean",
+          "const": false
+        },
+        "per_payment_human_approval_required": {
+          "type": "boolean",
+          "const": false
+        },
+        "settlement_after_valid_authorization": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "settlement_binding_required_fields": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "string"
+      }
+    },
+    "audit_events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "planned_discovery": {
+      "type": "object"
+    },
+    "success_criteria": {
+      "type": "object"
+    },
+    "pre_open_gates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "verifier_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "repository",
+        "contract_path",
+        "contract_status",
+        "verifier_count",
+        "threshold",
+        "signer_rotation",
+        "admin_override",
+        "human_per_payment_approval",
+        "policy_path",
+        "assessment_schema_path",
+        "draft_policy_hash",
+        "policy_hash_status",
+        "production_verifier_addresses"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "const": "IMMUTABLE_2_OF_3_EIP1271"
+        },
+        "repository": {
+          "type": "string",
+          "const": "joesch21/GCC"
+        },
+        "contract_path": {
+          "type": "string",
+          "const": "contracts/GenesisVerifierAuthority.sol"
+        },
+        "contract_status": {
+          "type": "string"
+        },
+        "verifier_count": {
+          "type": "integer",
+          "const": 3
+        },
+        "threshold": {
+          "type": "integer",
+          "const": 2
+        },
+        "signer_rotation": {
+          "type": "boolean",
+          "const": false
+        },
+        "admin_override": {
+          "type": "boolean",
+          "const": false
+        },
+        "human_per_payment_approval": {
+          "type": "boolean",
+          "const": false
+        },
+        "policy_path": {
+          "type": "string",
+          "const": "policies/GCC-GENESIS-001.verifier-policy.json"
+        },
+        "assessment_schema_path": {
+          "type": "string",
+          "const": "schemas/gcc-genesis-assessment.schema.json"
+        },
+        "draft_policy_hash": {
+          "type": "string",
+          "pattern": "^0x[0-9a-fA-F]{64}$"
+        },
+        "policy_hash_status": {
+          "type": "string"
+        },
+        "production_verifier_addresses": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]{40}$"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
