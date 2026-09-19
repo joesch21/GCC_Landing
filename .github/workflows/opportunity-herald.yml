@@ -13,8 +13,10 @@ on:
       - "public/.well-known/gcc-agent.json"
       - "scripts/herald-moltbook.mjs"
       - "scripts/herald-service.mjs"
+      - "scripts/herald-heartbeat.mjs"
       - "tests/opportunities-open.test.mjs"
       - "tests/herald-service.test.mjs"
+      - "tests/herald-heartbeat.test.mjs"
       - ".github/workflows/opportunity-herald.yml"
   workflow_dispatch:
     inputs:
@@ -52,6 +54,7 @@ jobs:
       - run: node --check api/opportunities/open.js
       - run: node --check scripts/herald-moltbook.mjs
       - run: node --check scripts/herald-service.mjs
+      - run: node --check scripts/herald-heartbeat.mjs
 
   herald:
     if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
