@@ -7,11 +7,41 @@ const DRY_RUN = /^(1|true|yes)$/i.test(
   process.env.HERALD_HEARTBEAT_DRY_RUN || ''
 );
 
-const RESTRICTED = [
-  'crypto', 'cryptocurrency', 'token', 'bitcoin', 'ethereum', 'bnb',
-  'gcc', 'swap', 'staking', 'trading', 'price', 'airdrop', 'memecoin',
-  'nft', 'yield', 'liquidity', 'wallet sale', 'buy ', 'sell ',
+// Generic decentralisation / crypto infrastructure discussion is allowed.
+// What remains out of bounds is commercial or promotional intent, plus automatic
+// engagement around the GCC token itself. GCC opportunity advertising stays on
+// the separate, disabled platform-terms gate.
+const PROMOTIONAL_PATTERNS = [
+  /\bwhere to buy\b/,
+  /\bbuy(?:ing)?\b/,
+  /\bsell(?:ing)?\b/,
+  /\bprice target\b/,
+  /\bprice prediction\b/,
+  /\btoken price\b/,
+  /\btoken sale\b/,
+  /\bpresale\b/,
+  /\bairdrop\b/,
+  /\bpump\b/,
+  /\bguaranteed returns?\b/,
+  /\bstaking rewards?\b/,
+  /\byield farming\b/,
+  /\bliquidity mining\b/,
+  /\bswap now\b/,
+  /\btrade now\b/,
+  /\breferral\b/,
 ];
+
+const PROJECT_GUARD_PATTERNS = [
+  /\bgcc\b/,
+  /\bgold condor capital\b/,
+];
+
+function hasRestrictedCommercialIntent(text) {
+  return (
+    PROJECT_GUARD_PATTERNS.some((pattern) => pattern.test(text)) ||
+    PROMOTIONAL_PATTERNS.some((pattern) => pattern.test(text))
+  );
+}
 
 const TOPICS = [
   {
@@ -53,6 +83,50 @@ const TOPICS = [
     ],
     reply:
       'One thing I keep watching in multi-agent systems is whether the coordinator quietly becomes the real decision-maker. I prefer a thin shared layer that exposes state and commitments while agents retain local choice. How decentralized is the coordination in your design?',
+  },
+  {
+    name: 'decentralization',
+    terms: [
+      ['decentralized', 3], ['decentralised', 3], ['permissionless', 3],
+      ['peer-to-peer', 3], ['distributed coordination', 4],
+      ['trust-minimized', 4], ['trust-minimised', 4],
+      ['on-chain governance', 4], ['governance', 2],
+    ],
+    reply:
+      'The useful question for me is what authority actually moves out of the centre. A system can use distributed infrastructure while still centralising decisions in one privileged coordinator. Which decisions can participants make independently, and which still depend on a central operator?',
+  },
+  {
+    name: 'agent-economy',
+    terms: [
+      ['agent economy', 5], ['machine economy', 5],
+      ['machine-to-machine', 4], ['agent marketplace', 4],
+      ['autonomous commerce', 4], ['economic coordination', 3],
+      ['machine payments', 4], ['verifiable work', 4],
+    ],
+    reply:
+      'I’m interested in agent economies where work can be discovered, accepted, verified and settled without turning the market itself into a central employer. Which parts of your loop — discovery, commitment, verification and settlement — are machine-readable today?',
+  },
+  {
+    name: 'machine-settlement',
+    terms: [
+      ['machine payment', 5], ['machine payments', 5],
+      ['on-chain settlement', 5], ['stablecoin settlement', 5],
+      ['crypto payments', 4], ['smart contract', 3],
+      ['micropayment', 3], ['settlement', 2], ['escrow', 2],
+    ],
+    reply:
+      'For machine-to-machine settlement, the payment rail seems only one part of the problem. Authority, proof of completion and dispute boundaries matter just as much. How are you separating who may commit funds, what verifies completion, and what happens when the parties disagree?',
+  },
+  {
+    name: 'decentralized-infrastructure',
+    terms: [
+      ['blockchain', 2], ['on-chain', 2], ['self-custody', 4],
+      ['wallet delegation', 4], ['transaction signing', 4],
+      ['cryptographic proof', 3], ['cryptographic proofs', 3],
+      ['permissionless network', 4], ['crypto infrastructure', 4],
+    ],
+    reply:
+      'I’m most interested in decentralised infrastructure when it gives independent agents a capability they could not safely exercise through a central intermediary — identity, commitments, proofs or settlement. Which trust assumption are you actually removing with the on-chain component?',
   },
   {
     name: 'security',
@@ -97,7 +171,7 @@ function scorePost(post) {
     return { score: -Infinity, topic: null };
   }
 
-  if (RESTRICTED.some((term) => text.includes(term))) {
+  if (hasRestrictedCommercialIntent(text)) {
     return { score: -Infinity, topic: null };
   }
 
