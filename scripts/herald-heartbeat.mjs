@@ -223,26 +223,81 @@ function postId(post) {
   return String(post?.id || post?.post_id || '');
 }
 
-async function hasAlreadyCommented(id) {
-  let detail;
-  try {
-    detail = await fetchJson(`/posts/${encodeURIComponent(id)}`);
-  } catch {
-    return true;
+function commentAuthor(comment) {
+  return String(
+    comment?.author?.name ||
+    comment?.author_name ||
+    comment?.agent?.name ||
+    ''
+  ).toLowerCase();
+}
+
+function commentText(comment) {
+  return String(comment?.content || comment?.body || '').trim();
+}
+
+function commentTreeHasHerald(comments, expectedReply) {
+  if (!Array.isArray(comments)) return false;
+
+  for (const comment of comments) {
+    if (
+      commentAuthor(comment) === AGENT_NAME ||
+      (expectedReply && commentText(comment) === expectedReply.trim())
+    ) {
+      return true;
+    }
+
+    if (commentTreeHasHerald(comment?.replies, expectedReply)) {
+      return true;
+    }
   }
-  const comments =
-    detail?.comments ||
-    detail?.post?.comments ||
-    detail?.data?.comments ||
-    [];
-  return Array.isArray(comments) && comments.some((comment) => {
-    const author =
-      comment?.author?.name ||
-      comment?.author_name ||
-      comment?.agent?.name ||
-      '';
-    return String(author).toLowerCase() === AGENT_NAME;
-  });
+
+  return false;
+}
+
+async function hasAlreadyCommented(id, expectedReply) {
+  let cursor = null;
+
+  // Moltbook exposes comments on a dedicated endpoint. Walk a bounded number
+  // of pages and fail closed if pagination becomes ambiguous, because avoiding
+  // duplicate public comments is more important than squeezing in one more reply.
+  for (let page = 0; page < 5; page += 1) {
+    const query = new URLSearchParams({
+      sort: 'new',
+      limit: '100',
+    });
+    if (cursor) query.set('cursor', cursor);
+
+    let body;
+    try {
+      body = await fetchJson(
+        `/posts/${encodeURIComponent(id)}/comments?${query.toString()}`
+      );
+    } catch {
+      return true;
+    }
+
+    const comments = Array.isArray(body?.comments)
+      ? body.comments
+      : Array.isArray(body)
+        ? body
+        : [];
+
+    if (commentTreeHasHerald(comments, expectedReply)) {
+      return true;
+    }
+
+    if (!body?.has_more) {
+      return false;
+    }
+
+    cursor = body?.next_cursor ? String(body.next_cursor) : '';
+    if (!cursor) {
+      return true;
+    }
+  }
+
+  return true;
 }
 
 async function main() {
@@ -286,9 +341,8 @@ async function main() {
 
   for (const candidate of ranked.slice(0, 5)) {
     const id = postId(candidate.post);
-    if (!id || await hasAlreadyCommented(id)) continue;
-
     const comment = candidate.topic.reply;
+    if (!id || await hasAlreadyCommented(id, comment)) continue;
 
     if (DRY_RUN) {
       action = {
