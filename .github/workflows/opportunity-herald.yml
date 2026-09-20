@@ -15,10 +15,12 @@ on:
       - "scripts/herald-service.mjs"
       - "scripts/herald-heartbeat.mjs"
       - "scripts/herald-x.mjs"
+      - "scripts/herald-x-oauth.mjs"
       - "tests/opportunities-open.test.mjs"
       - "tests/herald-service.test.mjs"
       - "tests/herald-heartbeat.test.mjs"
       - "tests/herald-x.test.mjs"
+      - "tests/herald-x-oauth.test.mjs"
       - ".github/workflows/opportunity-herald.yml"
   workflow_dispatch:
     inputs:
@@ -58,6 +60,7 @@ jobs:
       - run: node --check scripts/herald-service.mjs
       - run: node --check scripts/herald-heartbeat.mjs
       - run: node --check scripts/herald-x.mjs
+      - run: node --check scripts/herald-x-oauth.mjs
 
   herald:
     if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
