@@ -260,6 +260,18 @@ test('Stage 3 executes exactly the approved deterministic two-post thread and au
     '1111111111111111111',
     '2222222222222222222',
   ]);
+
+  const replay = await executeApprovedDraft({
+    approvalToken: approval.token,
+    env: ENV,
+    fetchImpl,
+  });
+  assert.equal(replay.status, 'X_STAGE3_ALREADY_COMPLETE');
+  assert.deepEqual(replay.x_post_ids, [
+    '1111111111111111111',
+    '2222222222222222222',
+  ]);
+  assert.equal(xCreateCount, 2);
 });
 
 test('Stage 3 fails closed before any network access when posting is disabled', async () => {
