@@ -41,6 +41,20 @@ test('Herald service exposes the bounded heartbeat runner', () => {
 });
 
 
+test('Herald Stage 3 one-shot startup path is explicit and never logs the approval token', () => {
+  const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
+  assert.match(source, /X_STAGE3_ONE_SHOT_ENABLED/);
+  assert.match(source, /X_STAGE3_ONE_SHOT_APPROVAL_TOKEN/);
+  assert.match(source, /HERALD_X_STAGE3_ONE_SHOT_COMPLETE/);
+  assert.match(source, /executeApprovedDraft/);
+  const completeLog = source.slice(
+    source.indexOf("event: 'HERALD_X_STAGE3_ONE_SHOT_COMPLETE'"),
+    source.indexOf("event: 'HERALD_X_STAGE3_ONE_SHOT_FAILED'")
+  );
+  assert.doesNotMatch(completeLog, /X_STAGE3_ONE_SHOT_APPROVAL_TOKEN/);
+  assert.doesNotMatch(completeLog, /approvalToken/);
+});
+
 test('Herald service exposes bounded X Stage 3 while gates remain explicit', () => {
   const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
   assert.match(source, /scripts\/herald-x\.mjs/);
