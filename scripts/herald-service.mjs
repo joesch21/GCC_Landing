@@ -38,6 +38,11 @@ const AUTO_BOOTSTRAP = /^(1|true|yes)$/i.test(
 const AUTO_INTRO = /^(1|true|yes)$/i.test(
   process.env.HERALD_POST_INTRO_ON_START || ''
 );
+const X_STAGE3_ONE_SHOT_ENABLED = /^(1|true|yes)$/i.test(
+  process.env.X_STAGE3_ONE_SHOT_ENABLED || ''
+);
+const X_STAGE3_ONE_SHOT_APPROVAL_TOKEN =
+  process.env.X_STAGE3_ONE_SHOT_APPROVAL_TOKEN || '';
 const SUBMOLT = process.env.HERALD_SUBMOLT || 'general';
 const AGENT_NAME = process.env.HERALD_AGENT_NAME || 'GCCOpportunityHerald';
 const AGENT_DESCRIPTION =
@@ -659,6 +664,34 @@ server.listen(PORT, '0.0.0.0', async () => {
       agent_name: AGENT_NAME,
     })
   );
+
+  if (X_STAGE3_ONE_SHOT_ENABLED && X_STAGE3_ONE_SHOT_APPROVAL_TOKEN) {
+    try {
+      const result = await executeApprovedDraft({
+        approvalToken: X_STAGE3_ONE_SHOT_APPROVAL_TOKEN,
+      });
+      console.log(
+        JSON.stringify({
+          event: 'HERALD_X_STAGE3_ONE_SHOT_COMPLETE',
+          status: result.status,
+          operation_id: result.operation_id || null,
+          approval_id: result.approval_id || null,
+          draft_hash: result.draft_hash || null,
+          x_post_ids: result.x_post_ids || [],
+          account: result.account || null,
+          posting_enabled: result.posting_enabled === true,
+        })
+      );
+    } catch (error) {
+      console.error(
+        JSON.stringify({
+          event: 'HERALD_X_STAGE3_ONE_SHOT_FAILED',
+          message: error?.message || String(error),
+          upstream_status: error?.status || null,
+        })
+      );
+    }
+  }
 
   if (AUTO_INTRO && API_KEY) {
     try {
