@@ -10,6 +10,12 @@ import {
   publicOAuthStatus,
   safeEqualText,
 } from './herald-x-oauth.mjs';
+import {
+  loadTokenBundle,
+  persistTokenBundle,
+  tokenStoreConfig,
+  tokenStoreStatus,
+} from './herald-x-token-store.mjs';
 
 const PORT = Number(process.env.PORT || 10000);
 const MOLTBOOK_API_BASE =
@@ -233,6 +239,10 @@ function startXOAuth() {
   if (!config.expectedUsername) {
     throw Object.assign(new Error('Expected X username not configured'), { status: 503 });
   }
+  const storeConfig = tokenStoreConfig();
+  if (!storeConfig.enabled || !storeConfig.configured) {
+    throw Object.assign(new Error('X token store not ready'), { status: 503 });
+  }
 
   pruneXOAuthPending();
   const state = createState();
@@ -296,21 +306,50 @@ async function completeXOAuth(url) {
     );
   }
 
-  // Do not persist or return access_token / refresh_token in Stage 2.
+  if (!token?.refresh_token) {
+    throw Object.assign(new Error('X OAuth refresh token missing'), { status: 502 });
+  }
+
+  const account = {
+    id: user?.id ? String(user.id) : '',
+    username,
+    name: user?.name ? String(user.name) : null,
+  };
+  if (!account.id) {
+    throw Object.assign(new Error('X account id missing'), { status: 502 });
+  }
+
+  const persisted = await persistTokenBundle({
+    token,
+    account,
+  });
+  const verified = await loadTokenBundle();
+
+  if (
+    !safeEqualText(
+      String(verified.bundle.account.username).toLowerCase(),
+      config.expectedUsername.toLowerCase()
+    ) ||
+    String(verified.bundle.account.id) !== account.id
+  ) {
+    throw Object.assign(new Error('Persisted X token identity mismatch'), {
+      status: 502,
+    });
+  }
+
   return {
-    status: 'X_OAUTH_VERIFIED',
-    stage: 2,
-    account: {
-      id: user?.id ? String(user.id) : null,
-      username,
-      name: user?.name ? String(user.name) : null,
-    },
+    status: 'X_OAUTH_PERSISTED',
+    stage: 2.5,
+    account,
     granted_scope: token?.scope ? String(token.scope) : null,
-    refresh_token_received: Boolean(token?.refresh_token),
-    token_persistence_enabled: false,
+    refresh_token_received: true,
+    token_persistence_enabled: true,
+    token_store_verified: true,
+    persistence: persisted.persistence,
+    persisted_at: persisted.updated_at,
     posting_enabled: false,
     next:
-      'Configure an approved durable token store before enabling any long-lived X capability.',
+      'Keep posting disabled and validate token reload across a Herald redeploy before building any X write capability.',
   };
 }
 
@@ -447,9 +486,10 @@ const server = http.createServer(async (req, res) => {
         service: 'gcc-opportunity-herald',
         configured: Boolean(API_KEY),
         bootstrap_enabled: Boolean(BOOTSTRAP_TOKEN && !BOOTSTRAP_DISABLED && !API_KEY),
-        x_stage: 2,
+        x_stage: 2.5,
         x_posting_enabled: false,
         x_oauth: publicOAuthStatus(),
+        x_token_store: tokenStoreConfig(),
       });
     }
 
@@ -472,7 +512,19 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (req.method === 'GET' && url.pathname === '/x/auth/status') {
-      return sendJson(res, 200, publicOAuthStatus());
+      const base = publicOAuthStatus();
+      let store = null;
+      try {
+        store = await tokenStoreStatus();
+      } catch (error) {
+        store = {
+          ...tokenStoreConfig(),
+          reachable: false,
+          token_present: false,
+          error: error?.message || 'token_store_status_failed',
+        };
+      }
+      return sendJson(res, 200, { ...base, token_store: store });
     }
 
     if (req.method === 'GET' && url.pathname === '/x/auth/start') {
