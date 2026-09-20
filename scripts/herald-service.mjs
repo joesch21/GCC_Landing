@@ -1,5 +1,15 @@
 import http from 'node:http';
 import { spawn } from 'node:child_process';
+import {
+  buildAuthorizationUrl,
+  createPkcePair,
+  createState,
+  exchangeCode,
+  getAuthenticatedUser,
+  normalizeScopes,
+  publicOAuthStatus,
+  safeEqualText,
+} from './herald-x-oauth.mjs';
 
 const PORT = Number(process.env.PORT || 10000);
 const MOLTBOOK_API_BASE =
@@ -25,6 +35,8 @@ let bootstrapResult = null;
 let tickPromise = null;
 let heartbeatPromise = null;
 let xDraftPromise = null;
+const xOAuthPending = new Map();
+const X_OAUTH_STATE_TTL_MS = 10 * 60 * 1000;
 
 const INTRO_MARKER = '[goldcondorherald:intro:v1]';
 const INTRO_TITLE = 'Hello Moltbook — I’m GoldCondorHerald';
@@ -184,6 +196,124 @@ async function postIntroduction() {
   };
 }
 
+function xOAuthConfig() {
+  return {
+    clientId: process.env.X_CLIENT_ID || '',
+    clientSecret: process.env.X_CLIENT_SECRET || '',
+    redirectUri:
+      process.env.X_OAUTH_CALLBACK_URL ||
+      'https://gcc-opportunity-herald.onrender.com/x/callback',
+    scopes: normalizeScopes(process.env.X_OAUTH_SCOPES || ''),
+    expectedUsername: String(process.env.X_EXPECTED_USERNAME || '')
+      .replace(/^@/, '')
+      .trim(),
+    setupEnabled: /^(1|true|yes)$/i.test(
+      process.env.X_OAUTH_SETUP_ENABLED || ''
+    ),
+  };
+}
+
+function pruneXOAuthPending() {
+  const now = Date.now();
+  for (const [state, pending] of xOAuthPending.entries()) {
+    if (!pending || pending.expiresAt <= now) {
+      xOAuthPending.delete(state);
+    }
+  }
+}
+
+function startXOAuth() {
+  const config = xOAuthConfig();
+  if (!config.setupEnabled) {
+    throw Object.assign(new Error('X OAuth setup disabled'), { status: 403 });
+  }
+  if (!config.clientId || !config.clientSecret) {
+    throw Object.assign(new Error('X OAuth client not configured'), { status: 503 });
+  }
+  if (!config.expectedUsername) {
+    throw Object.assign(new Error('Expected X username not configured'), { status: 503 });
+  }
+
+  pruneXOAuthPending();
+  const state = createState();
+  const { verifier, challenge } = createPkcePair();
+  xOAuthPending.set(state, {
+    verifier,
+    expiresAt: Date.now() + X_OAUTH_STATE_TTL_MS,
+  });
+
+  return buildAuthorizationUrl({
+    clientId: config.clientId,
+    redirectUri: config.redirectUri,
+    state,
+    challenge,
+    scopes: config.scopes,
+  });
+}
+
+async function completeXOAuth(url) {
+  const config = xOAuthConfig();
+  if (!config.setupEnabled) {
+    throw Object.assign(new Error('X OAuth setup disabled'), { status: 403 });
+  }
+
+  const denied = url.searchParams.get('error');
+  if (denied) {
+    throw Object.assign(new Error('X OAuth authorization denied'), { status: 400 });
+  }
+
+  const state = url.searchParams.get('state') || '';
+  const code = url.searchParams.get('code') || '';
+  pruneXOAuthPending();
+  const pending = xOAuthPending.get(state);
+
+  if (!state || !code || !pending || pending.expiresAt <= Date.now()) {
+    throw Object.assign(new Error('X OAuth state invalid or expired'), { status: 400 });
+  }
+  xOAuthPending.delete(state);
+
+  const token = await exchangeCode({
+    clientId: config.clientId,
+    clientSecret: config.clientSecret,
+    redirectUri: config.redirectUri,
+    code,
+    verifier: pending.verifier,
+  });
+
+  const profile = await getAuthenticatedUser({
+    accessToken: token?.access_token,
+  });
+  const user = profile?.data || {};
+  const username = String(user?.username || '');
+
+  if (
+    !username ||
+    !safeEqualText(username.toLowerCase(), config.expectedUsername.toLowerCase())
+  ) {
+    throw Object.assign(
+      new Error('Authorized X account does not match expected username'),
+      { status: 403 }
+    );
+  }
+
+  // Do not persist or return access_token / refresh_token in Stage 2.
+  return {
+    status: 'X_OAUTH_VERIFIED',
+    stage: 2,
+    account: {
+      id: user?.id ? String(user.id) : null,
+      username,
+      name: user?.name ? String(user.name) : null,
+    },
+    granted_scope: token?.scope ? String(token.scope) : null,
+    refresh_token_received: Boolean(token?.refresh_token),
+    token_persistence_enabled: false,
+    posting_enabled: false,
+    next:
+      'Configure an approved durable token store before enabling any long-lived X capability.',
+  };
+}
+
 function runXDraft() {
   if (xDraftPromise) return xDraftPromise;
 
@@ -317,8 +447,9 @@ const server = http.createServer(async (req, res) => {
         service: 'gcc-opportunity-herald',
         configured: Boolean(API_KEY),
         bootstrap_enabled: Boolean(BOOTSTRAP_TOKEN && !BOOTSTRAP_DISABLED && !API_KEY),
-        x_stage: 1,
+        x_stage: 2,
         x_posting_enabled: false,
+        x_oauth: publicOAuthStatus(),
       });
     }
 
@@ -337,6 +468,24 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' && url.pathname === '/x/draft') {
       const result = await runXDraft();
+      return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'GET' && url.pathname === '/x/auth/status') {
+      return sendJson(res, 200, publicOAuthStatus());
+    }
+
+    if (req.method === 'GET' && url.pathname === '/x/auth/start') {
+      const authorizationUrl = startXOAuth();
+      res.writeHead(302, {
+        Location: authorizationUrl,
+        'Cache-Control': 'no-store, max-age=0',
+      });
+      return res.end();
+    }
+
+    if (req.method === 'GET' && url.pathname === '/x/callback') {
+      const result = await completeXOAuth(url);
       return sendJson(res, 200, result);
     }
 
