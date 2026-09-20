@@ -319,6 +319,7 @@ async function completeXOAuth(url) {
     throw Object.assign(new Error('X account id missing'), { status: 502 });
   }
 
+  // Stage 2.5 must durably persist and reload the verified identity before success.
   const persisted = await persistTokenBundle({
     token,
     account,
