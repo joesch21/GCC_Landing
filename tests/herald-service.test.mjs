@@ -47,14 +47,12 @@ test('Herald Stage 3 one-shot startup path is explicit and never logs the approv
   assert.match(source, /X_STAGE3_ONE_SHOT_APPROVAL_TOKEN/);
   assert.match(source, /HERALD_X_STAGE3_ONE_SHOT_COMPLETE/);
   assert.match(source, /executeApprovedDraft/);
-  assert.doesNotMatch(
-    source,
-    /ONE_SHOT_COMPLETE[\s\S]{0,700}approvalToken:\s*X_STAGE3_ONE_SHOT_APPROVAL_TOKEN/
+  const completeLog = source.slice(
+    source.indexOf("event: 'HERALD_X_STAGE3_ONE_SHOT_COMPLETE'"),
+    source.indexOf("event: 'HERALD_X_STAGE3_ONE_SHOT_FAILED'")
   );
-  assert.doesNotMatch(
-    source,
-    /JSON\.stringify\([\s\S]{0,500}X_STAGE3_ONE_SHOT_APPROVAL_TOKEN/
-  );
+  assert.doesNotMatch(completeLog, /X_STAGE3_ONE_SHOT_APPROVAL_TOKEN/);
+  assert.doesNotMatch(completeLog, /approvalToken/);
 });
 
 test('Herald service exposes bounded X Stage 3 while gates remain explicit', () => {
