@@ -16,6 +16,13 @@ import {
   tokenStoreConfig,
   tokenStoreStatus,
 } from './herald-x-token-store.mjs';
+import {
+  assertApprovalOperator,
+  canonicalDraft,
+  createApprovalToken,
+  executeApprovedDraft,
+  stage3Config,
+} from './herald-x-stage3.mjs';
 
 const PORT = Number(process.env.PORT || 10000);
 const MOLTBOOK_API_BASE =
@@ -66,6 +73,25 @@ function sendJson(res, status, body) {
     'Cache-Control': 'no-store, max-age=0',
   });
   res.end(payload);
+}
+
+async function readBoundedJsonBody(req, maxBytes = 8192) {
+  const chunks = [];
+  let total = 0;
+  for await (const chunk of req) {
+    const buffer = typeof chunk === 'string' ? Buffer.from(chunk) : chunk;
+    total += buffer.length;
+    if (total > maxBytes) {
+      throw Object.assign(new Error('Request body too large'), { status: 413 });
+    }
+    chunks.push(buffer);
+  }
+  if (chunks.length === 0) return {};
+  try {
+    return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+  } catch {
+    throw Object.assign(new Error('Invalid JSON body'), { status: 400 });
+  }
 }
 
 async function fetchJson(url, options = {}) {
@@ -487,10 +513,11 @@ const server = http.createServer(async (req, res) => {
         service: 'gcc-opportunity-herald',
         configured: Boolean(API_KEY),
         bootstrap_enabled: Boolean(BOOTSTRAP_TOKEN && !BOOTSTRAP_DISABLED && !API_KEY),
-        x_stage: 2.5,
-        x_posting_enabled: false,
+        x_stage: 3,
+        x_posting_enabled: stage3Config().posting_enabled,
         x_oauth: publicOAuthStatus(),
         x_token_store: tokenStoreConfig(),
+        x_stage3: stage3Config(),
       });
     }
 
@@ -526,6 +553,50 @@ const server = http.createServer(async (req, res) => {
         };
       }
       return sendJson(res, 200, { ...base, token_store: store });
+    }
+
+    if (req.method === 'GET' && url.pathname === '/x/stage3/status') {
+      const draft = canonicalDraft();
+      return sendJson(res, 200, {
+        ...stage3Config(),
+        draft_hash: draft.draft_hash,
+        campaign: draft.campaign,
+        post_count: draft.posts.length,
+      });
+    }
+
+    if (req.method === 'POST' && url.pathname === '/x/approval') {
+      assertApprovalOperator(req.headers.authorization || '');
+      const body = await readBoundedJsonBody(req, 1024);
+      const draft = canonicalDraft();
+      const approval = createApprovalToken({
+        draftHash: draft.draft_hash,
+        ttlSec: Number(body?.ttl_sec || 300),
+      });
+      return sendJson(res, 201, {
+        status: 'X_STAGE3_APPROVAL_ISSUED',
+        stage: 3,
+        approval_token: approval.token,
+        approval_id: approval.approval_id,
+        operation_id: approval.operation_id,
+        draft_hash: approval.draft_hash,
+        expires_at: new Date(approval.exp * 1000).toISOString(),
+        posting_enabled: stage3Config().posting_enabled,
+      });
+    }
+
+    if (req.method === 'POST' && url.pathname === '/x/post') {
+      const body = await readBoundedJsonBody(req, 8192);
+      const approvalToken = String(body?.approval_token || '');
+      if (!approvalToken) {
+        throw Object.assign(new Error('X approval token missing'), {
+          status: 400,
+        });
+      }
+      const result = await executeApprovedDraft({
+        approvalToken,
+      });
+      return sendJson(res, 200, result);
     }
 
     if (req.method === 'GET' && url.pathname === '/x/auth/start') {
