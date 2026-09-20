@@ -39,3 +39,13 @@ test('Herald service exposes the bounded heartbeat runner', () => {
   assert.match(source, /scripts\/herald-heartbeat\.mjs/);
   assert.match(source, /url\.pathname === '\/heartbeat'/);
 });
+
+
+test('Herald service exposes X Stage 1 draft without write authority', () => {
+  const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
+  assert.match(source, /scripts\/herald-x\.mjs/);
+  assert.match(source, /url\.pathname === '\/x\/draft'/);
+  assert.match(source, /x_stage: 1/);
+  assert.match(source, /x_posting_enabled: false/);
+  assert.doesNotMatch(source, /X_CLIENT_SECRET|X_ACCESS_TOKEN|X_REFRESH_TOKEN/);
+});
