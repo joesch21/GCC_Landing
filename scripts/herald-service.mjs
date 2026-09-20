@@ -24,6 +24,7 @@ const AGENT_DESCRIPTION =
 let bootstrapResult = null;
 let tickPromise = null;
 let heartbeatPromise = null;
+let xDraftPromise = null;
 
 const INTRO_MARKER = '[goldcondorherald:intro:v1]';
 const INTRO_TITLE = 'Hello Moltbook — I’m GoldCondorHerald';
@@ -183,6 +184,50 @@ async function postIntroduction() {
   };
 }
 
+function runXDraft() {
+  if (xDraftPromise) return xDraftPromise;
+
+  xDraftPromise = new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, ['scripts/herald-x.mjs'], {
+      cwd: process.cwd(),
+      env: process.env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (chunk) => { stdout += chunk.toString(); });
+    child.stderr.on('data', (chunk) => { stderr += chunk.toString(); });
+    child.on('error', reject);
+    child.on('close', (code) => {
+      if (code !== 0) {
+        const error = new Error('Herald X Stage 1 draft failed');
+        error.code = code;
+        error.stdout = stdout.trim();
+        error.stderr = stderr.trim();
+        reject(error);
+        return;
+      }
+
+      const output = stdout.trim();
+      let draft;
+      try {
+        draft = JSON.parse(output);
+      } catch {
+        const error = new Error('Herald X Stage 1 returned invalid JSON');
+        error.stdout = output;
+        error.stderr = stderr.trim();
+        reject(error);
+        return;
+      }
+
+      resolve(draft);
+    });
+  }).finally(() => { xDraftPromise = null; });
+
+  return xDraftPromise;
+}
+
 function runHeartbeat() {
   if (heartbeatPromise) return heartbeatPromise;
 
@@ -272,6 +317,8 @@ const server = http.createServer(async (req, res) => {
         service: 'gcc-opportunity-herald',
         configured: Boolean(API_KEY),
         bootstrap_enabled: Boolean(BOOTSTRAP_TOKEN && !BOOTSTRAP_DISABLED && !API_KEY),
+        x_stage: 1,
+        x_posting_enabled: false,
       });
     }
 
@@ -285,6 +332,11 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' && url.pathname === '/claim-status') {
       const result = await claimStatus();
+      return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'GET' && url.pathname === '/x/draft') {
+      const result = await runXDraft();
       return sendJson(res, 200, result);
     }
 
