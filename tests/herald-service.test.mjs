@@ -41,21 +41,24 @@ test('Herald service exposes the bounded heartbeat runner', () => {
 });
 
 
-test('Herald service exposes X Stage 2.5 persistence while keeping posting disabled', () => {
+test('Herald service exposes bounded X Stage 3 while gates remain explicit', () => {
   const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
   assert.match(source, /scripts\/herald-x\.mjs/);
   assert.match(source, /herald-x-oauth\.mjs/);
   assert.match(source, /herald-x-token-store\.mjs/);
+  assert.match(source, /herald-x-stage3\.mjs/);
   assert.match(source, /url\.pathname === '\/x\/draft'/);
   assert.match(source, /url\.pathname === '\/x\/auth\/status'/);
+  assert.match(source, /url\.pathname === '\/x\/stage3\/status'/);
+  assert.match(source, /url\.pathname === '\/x\/approval'/);
+  assert.match(source, /url\.pathname === '\/x\/post'/);
   assert.match(source, /url\.pathname === '\/x\/auth\/start'/);
   assert.match(source, /url\.pathname === '\/x\/callback'/);
-  assert.match(source, /x_stage: 2\.5/);
-  assert.match(source, /x_posting_enabled: false/);
-  assert.match(source, /persistTokenBundle/);
-  assert.match(source, /loadTokenBundle/);
+  assert.match(source, /x_stage: 3/);
+  assert.match(source, /stage3Config\(\)\.posting_enabled/);
+  assert.match(source, /assertApprovalOperator/);
+  assert.match(source, /executeApprovedDraft/);
   assert.match(source, /X_EXPECTED_USERNAME/);
   assert.match(source, /X_OAUTH_SETUP_ENABLED/);
-  assert.doesNotMatch(source, /\/2\/tweets/);
   assert.doesNotMatch(source, /X_ACCESS_TOKEN|X_REFRESH_TOKEN/);
 });
