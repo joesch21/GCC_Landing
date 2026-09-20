@@ -122,13 +122,21 @@ export async function getAuthenticatedUser({
   return readJson(response);
 }
 
-// Stage 2 deliberately stops after identity verification. Token persistence and
-// any X write capability are excluded until a durable secret store is approved.
+// Stage 2.5 adds encrypted durable token persistence, while deliberately
+// retaining the Stage 2 rule that no X post-creation path exists.
 export function publicOAuthStatus(env = process.env) {
   const scopes = normalizeScopes(env.X_OAUTH_SCOPES || '');
+  const tokenStoreEnabled = /^(1|true|yes)$/i.test(
+    env.X_TOKEN_STORE_ENABLED || ''
+  );
+  const tokenStoreConfigured = Boolean(
+    env.X_TOKEN_VAULT_URL &&
+      env.X_TOKEN_VAULT_SECRET &&
+      env.X_TOKEN_ENCRYPTION_KEY
+  );
   return {
-    status: 'X_STAGE2_OAUTH',
-    stage: 2,
+    status: 'X_STAGE2_5_TOKEN_STORE',
+    stage: 2.5,
     client_configured: Boolean(env.X_CLIENT_ID && env.X_CLIENT_SECRET),
     callback_url:
       env.X_OAUTH_CALLBACK_URL ||
@@ -136,9 +144,11 @@ export function publicOAuthStatus(env = process.env) {
     scopes,
     expected_username_configured: Boolean(env.X_EXPECTED_USERNAME),
     setup_enabled: /^(1|true|yes)$/i.test(env.X_OAUTH_SETUP_ENABLED || ''),
-    token_persistence_enabled: false,
+    token_store_enabled: tokenStoreEnabled,
+    token_store_configured: tokenStoreConfigured,
+    token_persistence_enabled: tokenStoreEnabled && tokenStoreConfigured,
     posting_enabled: false,
     note:
-      'Stage 2 can authorize and verify the expected X account, but deliberately does not persist OAuth tokens and contains no post-creation path.',
+      'Stage 2.5 can authorize, verify and persist encrypted OAuth tokens, but contains no X post-creation path.',
   };
 }
