@@ -1,4 +1,3 @@
-const X_ME_URL = 'https://api.x.com/2/users/me?user.fields=id,name,username';
 export const X_BOTS_URL = 'https://api.x.com/2/bots';
 
 function flag(value) {
@@ -10,17 +9,21 @@ function normalizeUsername(value) {
 }
 
 export function chatBotConfig(env = process.env) {
-  const tokenConfigured = Boolean(String(env.X_CHAT_BOT_TOKEN || '').trim());
+  const botTokenConfigured = Boolean(
+    String(env.X_CHAT_BOT_TOKEN || '').trim()
+  );
   const appBearerConfigured = Boolean(
     String(env.X_CHAT_APP_BEARER_TOKEN || '').trim()
   );
   const expectedId = String(env.X_CHAT_BOT_EXPECTED_ID || '').trim();
-  const expectedUsername = normalizeUsername(env.X_CHAT_BOT_EXPECTED_USERNAME);
+  const expectedUsername = normalizeUsername(
+    env.X_CHAT_BOT_EXPECTED_USERNAME
+  );
 
   return {
-    stage: 'X_CHAT_STAGE_1A',
+    stage: 'X_CHAT_STAGE_1B',
     enabled: flag(env.X_CHAT_BOT_ENABLED),
-    token_configured: tokenConfigured,
+    bot_token_configured: botTokenConfigured,
     app_bearer_configured: appBearerConfigured,
     expected_id_configured: Boolean(expectedId),
     expected_username_configured: Boolean(expectedUsername),
@@ -116,13 +119,16 @@ export async function discoverChatBots({
 
 export function selectExpectedChatBot(bots, env = process.env) {
   const expectedId = String(env.X_CHAT_BOT_EXPECTED_ID || '').trim();
-  const expectedUsername = normalizeUsername(env.X_CHAT_BOT_EXPECTED_USERNAME);
+  const expectedUsername = normalizeUsername(
+    env.X_CHAT_BOT_EXPECTED_USERNAME
+  );
 
   if (expectedId) {
     const found = bots.find((bot) => bot.id === expectedId);
     if (!found) throw new Error('X_CHAT_EXPECTED_BOT_NOT_FOUND');
     return found;
   }
+
   if (expectedUsername) {
     const found = bots.find(
       (bot) => bot.username.toLowerCase() === expectedUsername.toLowerCase()
@@ -130,74 +136,14 @@ export function selectExpectedChatBot(bots, env = process.env) {
     if (!found) throw new Error('X_CHAT_EXPECTED_BOT_NOT_FOUND');
     return found;
   }
+
   if (bots.length !== 1) {
     throw Object.assign(new Error('X_CHAT_BOT_DISCOVERY_AMBIGUOUS'), {
       status: 409,
     });
   }
+
   return bots[0];
-}
-
-export async function getChatBotIdentity({
-  env = process.env,
-  fetchImpl = fetch,
-} = {}) {
-  const config = assertChatBotSafeGates(env);
-  if (!config.enabled) {
-    throw Object.assign(new Error('X_CHAT_BOT_DISABLED'), { status: 403 });
-  }
-
-  const token = String(env.X_CHAT_BOT_TOKEN || '').trim();
-  if (!token) {
-    throw Object.assign(new Error('X_CHAT_BOT_TOKEN_MISSING'), { status: 503 });
-  }
-
-  const response = await fetchImpl(X_ME_URL, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-      'User-Agent': 'goldcondorherald-x-chat/1.0',
-    },
-    signal: AbortSignal.timeout(10000),
-  });
-
-  const body = await response.json().catch(() => null);
-  if (!response.ok) {
-    const error = Object.assign(new Error('X_CHAT_IDENTITY_UPSTREAM_ERROR'), {
-      status: response.status,
-      upstream: body,
-    });
-    throw error;
-  }
-
-  const account = {
-    id: String(body?.data?.id || ''),
-    username: String(body?.data?.username || ''),
-    name: String(body?.data?.name || ''),
-  };
-
-  if (!/^\d{1,32}$/.test(account.id)) {
-    throw new Error('X_CHAT_IDENTITY_ID_INVALID');
-  }
-  if (!/^[A-Za-z0-9_]{1,15}$/.test(account.username)) {
-    throw new Error('X_CHAT_IDENTITY_USERNAME_INVALID');
-  }
-
-  const expectedId = String(env.X_CHAT_BOT_EXPECTED_ID || '').trim();
-  const expectedUsername = normalizeUsername(env.X_CHAT_BOT_EXPECTED_USERNAME);
-
-  if (expectedId && account.id !== expectedId) {
-    throw Object.assign(new Error('X_CHAT_IDENTITY_MISMATCH'), { status: 403 });
-  }
-  if (
-    expectedUsername &&
-    account.username.toLowerCase() !== expectedUsername.toLowerCase()
-  ) {
-    throw Object.assign(new Error('X_CHAT_IDENTITY_MISMATCH'), { status: 403 });
-  }
-
-  return account;
 }
 
 export function publicChatBotStatus(env = process.env) {
@@ -210,5 +156,3 @@ export function publicChatBotStatus(env = process.env) {
       'Stage 1B discovers and pins the dedicated X Chat bot identity using the app bearer. Inbox reads, decryption and replies remain separately gated.',
   };
 }
-
-export { X_ME_URL };
