@@ -25,8 +25,9 @@ import {
 } from './herald-x-stage3.mjs';
 import {
   chatBotConfig,
-  getChatBotIdentity,
+  discoverChatBots,
   publicChatBotStatus,
+  selectExpectedChatBot,
 } from './herald-x-chat.mjs';
 
 const PORT = Number(process.env.PORT || 10000);
@@ -578,22 +579,24 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' && url.pathname === '/x/chat/status') {
       const base = publicChatBotStatus();
-      if (!base.enabled) {
+      if (!base.setup_enabled) {
         return sendJson(res, 200, base);
       }
       try {
-        const account = await getChatBotIdentity();
+        const bots = await discoverChatBots();
+        const account = selectExpectedChatBot(bots);
         return sendJson(res, 200, {
           ...base,
           identity_verified: true,
           account,
+          discovered_bot_count: bots.length,
         });
       } catch (error) {
         return sendJson(res, Number(error?.status) || 502, {
           ...base,
           identity_verified: false,
           account: null,
-          error: error?.message || 'X_CHAT_IDENTITY_PROBE_FAILED',
+          error: error?.message || 'X_CHAT_BOT_DISCOVERY_FAILED',
         });
       }
     }
@@ -693,13 +696,15 @@ server.listen(PORT, '0.0.0.0', async () => {
     })
   );
 
-  if (chatBotConfig().enabled) {
+  if (chatBotConfig().setup_enabled) {
     try {
-      const account = await getChatBotIdentity();
+      const bots = await discoverChatBots();
+      const account = selectExpectedChatBot(bots);
       console.log(
         JSON.stringify({
-          event: 'HERALD_X_CHAT_IDENTITY_VERIFIED',
+          event: 'HERALD_X_CHAT_BOT_DISCOVERED',
           account,
+          discovered_bot_count: bots.length,
           read_enabled: chatBotConfig().read_enabled,
           reply_enabled: chatBotConfig().reply_enabled,
         })
@@ -707,7 +712,7 @@ server.listen(PORT, '0.0.0.0', async () => {
     } catch (error) {
       console.error(
         JSON.stringify({
-          event: 'HERALD_X_CHAT_IDENTITY_FAILED',
+          event: 'HERALD_X_CHAT_BOT_DISCOVERY_FAILED',
           message: error?.message || String(error),
           upstream_status: error?.status || null,
         })
