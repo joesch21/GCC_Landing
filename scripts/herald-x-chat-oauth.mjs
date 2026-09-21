@@ -63,6 +63,6 @@ export function publicChatOAuthStatus(env = process.env) {
     inbox_read_enabled: false,
     reply_enabled: false,
     note:
-      'Stage 1C authorizes and durably stores the dedicated GCCGoldCondor user-context token. It does not read or send X Chat messages.',
+      'Stage 1C authorizes and durably stores the dedicated X Chat user-context token. It does not read or send X Chat messages.',
   };
 }
