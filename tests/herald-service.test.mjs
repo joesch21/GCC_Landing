@@ -55,6 +55,17 @@ test('Herald Stage 3 one-shot startup path is explicit and never logs the approv
   assert.doesNotMatch(completeLog, /approvalToken/);
 });
 
+test('Herald service exposes X Chat Stage 1A identity only', () => {
+  const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
+  assert.match(source, /herald-x-chat\.mjs/);
+  assert.match(source, /url\.pathname === '\/x\/chat\/status'/);
+  assert.match(source, /HERALD_X_CHAT_IDENTITY_VERIFIED/);
+  assert.match(source, /getChatBotIdentity/);
+  assert.match(source, /publicChatBotStatus/);
+  assert.doesNotMatch(source, /sendChatMessage/);
+  assert.doesNotMatch(source, /createDmMessage/);
+});
+
 test('Herald service exposes bounded X Stage 3 while gates remain explicit', () => {
   const source = fs.readFileSync(new URL('../scripts/herald-service.mjs', import.meta.url), 'utf8');
   assert.match(source, /scripts\/herald-x\.mjs/);

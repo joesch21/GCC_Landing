@@ -23,6 +23,11 @@ import {
   executeApprovedDraft,
   stage3Config,
 } from './herald-x-stage3.mjs';
+import {
+  chatBotConfig,
+  getChatBotIdentity,
+  publicChatBotStatus,
+} from './herald-x-chat.mjs';
 
 const PORT = Number(process.env.PORT || 10000);
 const MOLTBOOK_API_BASE =
@@ -523,6 +528,7 @@ const server = http.createServer(async (req, res) => {
         x_oauth: publicOAuthStatus(),
         x_token_store: tokenStoreConfig(),
         x_stage3: stage3Config(),
+        x_chat: publicChatBotStatus(),
       });
     }
 
@@ -568,6 +574,28 @@ const server = http.createServer(async (req, res) => {
         campaign: draft.campaign,
         post_count: draft.posts.length,
       });
+    }
+
+    if (req.method === 'GET' && url.pathname === '/x/chat/status') {
+      const base = publicChatBotStatus();
+      if (!base.enabled) {
+        return sendJson(res, 200, base);
+      }
+      try {
+        const account = await getChatBotIdentity();
+        return sendJson(res, 200, {
+          ...base,
+          identity_verified: true,
+          account,
+        });
+      } catch (error) {
+        return sendJson(res, Number(error?.status) || 502, {
+          ...base,
+          identity_verified: false,
+          account: null,
+          error: error?.message || 'X_CHAT_IDENTITY_PROBE_FAILED',
+        });
+      }
     }
 
     if (req.method === 'POST' && url.pathname === '/x/approval') {
@@ -664,6 +692,28 @@ server.listen(PORT, '0.0.0.0', async () => {
       agent_name: AGENT_NAME,
     })
   );
+
+  if (chatBotConfig().enabled) {
+    try {
+      const account = await getChatBotIdentity();
+      console.log(
+        JSON.stringify({
+          event: 'HERALD_X_CHAT_IDENTITY_VERIFIED',
+          account,
+          read_enabled: chatBotConfig().read_enabled,
+          reply_enabled: chatBotConfig().reply_enabled,
+        })
+      );
+    } catch (error) {
+      console.error(
+        JSON.stringify({
+          event: 'HERALD_X_CHAT_IDENTITY_FAILED',
+          message: error?.message || String(error),
+          upstream_status: error?.status || null,
+        })
+      );
+    }
+  }
 
   if (X_STAGE3_ONE_SHOT_ENABLED && X_STAGE3_ONE_SHOT_APPROVAL_TOKEN) {
     try {

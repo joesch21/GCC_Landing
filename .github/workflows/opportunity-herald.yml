@@ -18,6 +18,7 @@ on:
       - "scripts/herald-x-oauth.mjs"
       - "scripts/herald-x-token-store.mjs"
       - "scripts/herald-x-stage3.mjs"
+      - "scripts/herald-x-chat.mjs"
       - "tests/opportunities-open.test.mjs"
       - "tests/herald-service.test.mjs"
       - "tests/herald-heartbeat.test.mjs"
@@ -25,6 +26,7 @@ on:
       - "tests/herald-x-oauth.test.mjs"
       - "tests/herald-x-token-store.test.mjs"
       - "tests/herald-x-stage3.test.mjs"
+      - "tests/herald-x-chat.test.mjs"
       - ".github/workflows/opportunity-herald.yml"
   workflow_dispatch:
     inputs:
@@ -67,6 +69,7 @@ jobs:
       - run: node --check scripts/herald-x-oauth.mjs
       - run: node --check scripts/herald-x-token-store.mjs
       - run: node --check scripts/herald-x-stage3.mjs
+      - run: node --check scripts/herald-x-chat.mjs
 
   herald:
     if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
