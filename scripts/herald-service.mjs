@@ -17,6 +17,16 @@ import {
   tokenStoreStatus,
 } from './herald-x-token-store.mjs';
 import {
+  chatOAuthConfig,
+  publicChatOAuthStatus,
+} from './herald-x-chat-oauth.mjs';
+import {
+  chatTokenStoreConfig,
+  chatTokenStoreStatus,
+  loadChatTokenBundle,
+  persistChatTokenBundle,
+} from './herald-x-chat-token-store.mjs';
+import {
   assertApprovalOperator,
   canonicalDraft,
   createApprovalToken,
@@ -60,6 +70,7 @@ let tickPromise = null;
 let heartbeatPromise = null;
 let xDraftPromise = null;
 const xOAuthPending = new Map();
+const xChatOAuthPending = new Map();
 const X_OAUTH_STATE_TTL_MS = 10 * 60 * 1000;
 
 const INTRO_MARKER = '[goldcondorherald:intro:v1]';
@@ -391,6 +402,167 @@ async function completeXOAuth(url) {
   };
 }
 
+
+function pruneXChatOAuthPending() {
+  const now = Date.now();
+  for (const [state, pending] of xChatOAuthPending.entries()) {
+    if (!pending || pending.expiresAt <= now) {
+      xChatOAuthPending.delete(state);
+    }
+  }
+}
+
+function isPendingXChatOAuthState(url) {
+  const state = url.searchParams.get('state') || '';
+  pruneXChatOAuthPending();
+  return Boolean(state && xChatOAuthPending.has(state));
+}
+
+function startXChatOAuth() {
+  const config = chatOAuthConfig();
+  if (!config.setupEnabled) {
+    throw Object.assign(new Error('X Chat OAuth setup disabled'), {
+      status: 403,
+    });
+  }
+  if (!config.clientId || !config.clientSecret) {
+    throw Object.assign(new Error('X Chat OAuth client not configured'), {
+      status: 503,
+    });
+  }
+  if (!config.expectedUsername) {
+    throw Object.assign(new Error('Expected X Chat username not configured'), {
+      status: 503,
+    });
+  }
+  const storeConfig = chatTokenStoreConfig();
+  if (!storeConfig.enabled || !storeConfig.configured) {
+    throw Object.assign(new Error('X Chat token store not ready'), {
+      status: 503,
+    });
+  }
+
+  pruneXChatOAuthPending();
+  const state = createState();
+  const { verifier, challenge } = createPkcePair();
+  xChatOAuthPending.set(state, {
+    verifier,
+    expiresAt: Date.now() + X_OAUTH_STATE_TTL_MS,
+  });
+
+  return buildAuthorizationUrl({
+    clientId: config.clientId,
+    redirectUri: config.redirectUri,
+    state,
+    challenge,
+    scopes: config.scopes,
+  });
+}
+
+async function completeXChatOAuth(url) {
+  const config = chatOAuthConfig();
+  if (!config.setupEnabled) {
+    throw Object.assign(new Error('X Chat OAuth setup disabled'), {
+      status: 403,
+    });
+  }
+
+  const denied = url.searchParams.get('error');
+  if (denied) {
+    throw Object.assign(new Error('X Chat OAuth authorization denied'), {
+      status: 400,
+    });
+  }
+
+  const state = url.searchParams.get('state') || '';
+  const code = url.searchParams.get('code') || '';
+  pruneXChatOAuthPending();
+  const pending = xChatOAuthPending.get(state);
+
+  if (!state || !code || !pending || pending.expiresAt <= Date.now()) {
+    throw Object.assign(new Error('X Chat OAuth state invalid or expired'), {
+      status: 400,
+    });
+  }
+  xChatOAuthPending.delete(state);
+
+  const token = await exchangeCode({
+    clientId: config.clientId,
+    clientSecret: config.clientSecret,
+    redirectUri: config.redirectUri,
+    code,
+    verifier: pending.verifier,
+  });
+
+  const profile = await getAuthenticatedUser({
+    accessToken: token?.access_token,
+  });
+  const user = profile?.data || {};
+  const username = String(user?.username || '');
+
+  if (
+    !username ||
+    !safeEqualText(
+      username.toLowerCase(),
+      config.expectedUsername.toLowerCase()
+    )
+  ) {
+    throw Object.assign(
+      new Error('Authorized X Chat account does not match expected username'),
+      { status: 403 }
+    );
+  }
+
+  if (!token?.refresh_token) {
+    throw Object.assign(new Error('X Chat OAuth refresh token missing'), {
+      status: 502,
+    });
+  }
+
+  const account = {
+    id: user?.id ? String(user.id) : '',
+    username,
+    name: user?.name ? String(user.name) : null,
+  };
+  if (!account.id) {
+    throw Object.assign(new Error('X Chat account id missing'), {
+      status: 502,
+    });
+  }
+
+  const persisted = await persistChatTokenBundle({ token, account });
+  const verified = await loadChatTokenBundle();
+
+  if (
+    !safeEqualText(
+      String(verified.bundle.account.username).toLowerCase(),
+      config.expectedUsername.toLowerCase()
+    ) ||
+    String(verified.bundle.account.id) !== account.id
+  ) {
+    throw Object.assign(new Error('Persisted X Chat token identity mismatch'), {
+      status: 502,
+    });
+  }
+
+  return {
+    status: 'X_CHAT_OAUTH_PERSISTED',
+    stage: '1C',
+    identity_mode: 'oauth2-user-context',
+    account,
+    granted_scope: token?.scope ? String(token.scope) : null,
+    refresh_token_received: true,
+    token_persistence_enabled: true,
+    token_store_verified: true,
+    persistence: persisted.persistence,
+    persisted_at: persisted.updated_at,
+    inbox_read_enabled: false,
+    reply_enabled: false,
+    next:
+      'Keep X Chat read and reply gates closed; register and validate the encryption identity next.',
+  };
+}
+
 function runXDraft() {
   if (xDraftPromise) return xDraftPromise;
 
@@ -530,6 +702,8 @@ const server = http.createServer(async (req, res) => {
         x_token_store: tokenStoreConfig(),
         x_stage3: stage3Config(),
         x_chat: publicChatBotStatus(),
+        x_chat_oauth: publicChatOAuthStatus(),
+        x_chat_token_store: chatTokenStoreConfig(),
       });
     }
 
@@ -575,6 +749,23 @@ const server = http.createServer(async (req, res) => {
         campaign: draft.campaign,
         post_count: draft.posts.length,
       });
+    }
+
+
+    if (req.method === 'GET' && url.pathname === '/x/chat/auth/status') {
+      const base = publicChatOAuthStatus();
+      let store = null;
+      try {
+        store = await chatTokenStoreStatus();
+      } catch (error) {
+        store = {
+          ...chatTokenStoreConfig(),
+          reachable: false,
+          token_present: false,
+          error: error?.message || 'chat_token_store_status_failed',
+        };
+      }
+      return sendJson(res, 200, { ...base, token_store: store });
     }
 
     if (req.method === 'GET' && url.pathname === '/x/chat/status') {
@@ -644,8 +835,19 @@ const server = http.createServer(async (req, res) => {
       return res.end();
     }
 
+    if (req.method === 'GET' && url.pathname === '/x/chat/auth/start') {
+      const authorizationUrl = startXChatOAuth();
+      res.writeHead(302, {
+        Location: authorizationUrl,
+        'Cache-Control': 'no-store, max-age=0',
+      });
+      return res.end();
+    }
+
     if (req.method === 'GET' && url.pathname === '/x/callback') {
-      const result = await completeXOAuth(url);
+      const result = isPendingXChatOAuthState(url)
+        ? await completeXChatOAuth(url)
+        : await completeXOAuth(url);
       return sendJson(res, 200, result);
     }
 
