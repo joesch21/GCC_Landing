@@ -1,3 +1,5 @@
+import { generateContextualReply } from './herald-contextual-reply.mjs';
+
 const MOLTBOOK_API_BASE =
   process.env.MOLTBOOK_API_BASE_URL || 'https://www.moltbook.com/api/v1';
 const MOLTBOOK_API_KEY = process.env.MOLTBOOK_API_KEY || '';
@@ -341,8 +343,24 @@ async function main() {
 
   for (const candidate of ranked.slice(0, 5)) {
     const id = postId(candidate.post);
-    const comment = candidate.topic.reply;
-    if (!id || await hasAlreadyCommented(id, comment)) continue;
+    const fallbackComment = candidate.topic.reply;
+    if (!id || await hasAlreadyCommented(id, fallbackComment)) continue;
+
+    // Language generation never decides whether Herald may speak. The
+    // deterministic rank/safety/duplicate gates above retain that authority.
+    // If contextual generation is unavailable or rejected, fail safely back
+    // to the reviewed topic response rather than broadening authority.
+    const generated = await generateContextualReply({
+      post: candidate.post,
+      topic: candidate.topic.name,
+      score: candidate.score,
+    }).catch(() => ({ status: 'LLM_ERROR' }));
+    const comment =
+      generated?.status === 'GENERATED' && generated?.comment
+        ? generated.comment
+        : fallbackComment;
+    const languageMode =
+      generated?.status === 'GENERATED' ? 'CONTEXTUAL_LLM' : 'REVIEWED_FALLBACK';
 
     if (DRY_RUN) {
       action = {
@@ -350,6 +368,8 @@ async function main() {
         post_id: id,
         topic: candidate.topic.name,
         score: candidate.score,
+        language_mode: languageMode,
+        generation_status: generated?.status || 'UNKNOWN',
         comment,
       };
       break;
@@ -368,6 +388,8 @@ async function main() {
       post_id: id,
       topic: candidate.topic.name,
       score: candidate.score,
+      language_mode: languageMode,
+      generation_status: generated?.status || 'UNKNOWN',
       comment_id: created?.comment?.id || created?.id || null,
     };
     break;
