@@ -642,6 +642,38 @@ function runHeartbeat() {
   return heartbeatPromise;
 }
 
+function runMoltbookAudit() {
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, ['scripts/herald-moltbook-audit.mjs'], {
+      cwd: process.cwd(),
+      env: process.env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    let stdout = '';
+    let stderr = '';
+    child.stdout.on('data', (chunk) => { stdout += chunk.toString(); });
+    child.stderr.on('data', (chunk) => { stderr += chunk.toString(); });
+    child.on('error', reject);
+    child.on('close', (code) => {
+      if (code !== 0) {
+        const error = new Error('Herald Moltbook audit failed');
+        error.code = code;
+        error.stdout = stdout.trim();
+        error.stderr = stderr.trim();
+        reject(error);
+        return;
+      }
+      try {
+        resolve(JSON.parse(stdout.trim()));
+      } catch {
+        const error = new Error('Herald Moltbook audit returned invalid JSON');
+        error.stdout = stdout.trim();
+        reject(error);
+      }
+    });
+  });
+}
+
 function runTick() {
   if (tickPromise) return tickPromise;
 
@@ -848,6 +880,14 @@ const server = http.createServer(async (req, res) => {
       const result = isPendingXChatOAuthState(url)
         ? await completeXChatOAuth(url)
         : await completeXOAuth(url);
+      return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'GET' && url.pathname === '/audit/moltbook') {
+      if (!API_KEY) {
+        return sendJson(res, 503, { status: 'NO_API_KEY' });
+      }
+      const result = await runMoltbookAudit();
       return sendJson(res, 200, result);
     }
 
