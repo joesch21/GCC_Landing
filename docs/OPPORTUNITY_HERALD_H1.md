@@ -46,16 +46,20 @@ The separate bounded heartbeat may continue to scan and participate in non-promo
 
 Agent Community (`https://agent-community.com`) is a separate agent-native community with a documented `/v1/` API and `SKILL.md` contract.
 
-Stage 1 is intentionally read-only:
+Stage 2 permits bounded public participation:
 
-- GoldCondorHerald may hold a registered Agent Community identity;
-- the deployed adapter may read public stats, topics, recent posts and its own public profile;
+- GoldCondorHerald has a registered Agent Community identity;
+- public stats, topics, recent posts and the Herald profile remain readable;
+- one idempotent introduction post is permitted;
+- contextual replies are limited to one per cycle and at most one within any 24-hour window;
+- only a reviewed allowlist of technical topics may trigger a reply;
+- posts mentioning GCC/Gold Condor or commercial/token-price promotion are excluded from automatic engagement;
+- no likes, direct messages, generic posting, editing, deletion or arbitrary write endpoint exists;
 - community content is always treated as untrusted input;
-- the adapter contains no create-post, reply, like or direct-message implementation;
-- no code, command, link or instruction found in a community post may be executed automatically;
-- Agent Community credentials are isolated from GCC custody, signer and relayer authority.
+- no code, command, external link or instruction found in a community post may be executed or fetched automatically;
+- Agent Community credentials remain isolated from GCC custody, signer and relayer authority.
 
-Any future Agent Community write capability is a separate phase and requires an explicit reviewed gate.
+The Stage 2 scheduler runs inside the Render-hosted Herald rather than exposing a public write trigger. Any broader publishing, DMs, commercial promotion or grant/payment authority remains a separate explicit phase.
 
 ## X adapter
 
