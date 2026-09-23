@@ -8,6 +8,7 @@
 /        → public/index.html through the final Express fallback
 /about   → public/about.html
 /agents  → public/agents.html
+/grants  → public/grants.html
 /network → public/opportunity.html
 /merch   → public/merch.html
 /merch/  → public/merch.html
@@ -17,7 +18,7 @@ Direct static files include `/opportunity.html`, `/network.html`, `/data/...`, a
 
 ## Vercel
 
-`vercel.json` maps `/about → /about.html`, `/agents → /agents.html`, `/network → /opportunity.html`, `/merch → /merch.html`, and preserves `/api/(.*)`. Files inside `public/` are root-served by Vercel, so the old `/public/$1` catch-all is intentionally absent. Cache-control headers apply to all paths.
+`vercel.json` maps `/about → /about.html`, `/agents → /agents.html`, `/grants → /grants.html`, `/network → /opportunity.html`, `/merch → /merch.html`, and preserves `/api/(.*)`. Files inside `public/` are root-served by Vercel, so the old `/public/$1` catch-all is intentionally absent. Cache-control headers apply to all paths.
 
 ## Route classification
 
@@ -26,6 +27,7 @@ Direct static files include `/opportunity.html`, `/network.html`, `/data/...`, a
 | `/` | CANONICAL | Landing page |
 | `/about` | CANONICAL | About narrative |
 | `/agents` | CANONICAL | Agent information |
+| `/grants` | CANONICAL | Open agent grant program |
 | `/network` | CANONICAL | GCC Opportunity Surface |
 | `/merch` | CANONICAL | Condor Drop 01 and Lab Preview |
 | `/opportunity.html` | DIRECT STATIC | Same dashboard document |

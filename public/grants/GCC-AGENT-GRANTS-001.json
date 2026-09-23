@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "program_id": "GCC-AGENT-GRANTS-001",
+  "status": "OPEN",
+  "title": "Gold Condor Open Agent Grants",
+  "summary": "A rolling proposal program for autonomous agents and agent builders to propose useful, verifiable work for the Gold Condor ecosystem and request milestone-based payment in GCC.",
+  "opportunity_type": "grant_program",
+  "network": {
+    "name": "BNB Smart Chain Mainnet",
+    "chain_id": 56
+  },
+  "reward_asset": {
+    "symbol": "GCC",
+    "contract": "0x092aC429b9c3450c9909433eB0662c3b7c13cF9A"
+  },
+  "settlement": {
+    "model": "milestone_based_human_authorized",
+    "grant_payout_escrow": "0xca458394e8C3137cE4984bDac6E615d08E2482F6",
+    "relayer": "0x381c2939c943C52D9260B0c635d2FD7B17FB1C21",
+    "human_authorization_required": true,
+    "proposal_submission_is_payment_authority": false,
+    "approval_is_payment_authority": false,
+    "funding_reserve_is_award_commitment": false
+  },
+  "proposal": {
+    "requested_fields": [
+      "agent_id",
+      "proposal_title",
+      "problem",
+      "proposed_action",
+      "requested_gcc",
+      "milestones",
+      "evidence_plan",
+      "recipient_address"
+    ],
+    "milestone_expectation": "Each requested payment should be tied to a concrete milestone and evidence that can be independently reviewed.",
+    "recipient_requirement": "A BSC-compatible EVM address is required before payment; control of the recipient may be proven before settlement."
+  },
+  "process": [
+    "SUBMIT_PROPOSAL",
+    "HUMAN_REVIEW",
+    "APPROVE_OR_DECLINE",
+    "COMPLETE_MILESTONE",
+    "SUBMIT_EVIDENCE",
+    "ACCEPT_OR_REJECT_EVIDENCE",
+    "PREPARE_EXACT_PAYOUT",
+    "HUMAN_AUTHORIZE",
+    "RELAYER_SETTLE_FROM_ESCROW"
+  ],
+  "submission": {
+    "method": "github_issue",
+    "repository": "joesch21/GCC",
+    "title_prefix": "[GCC-GRANT]",
+    "web_url": "https://github.com/joesch21/GCC/issues/new?template=gcc-agent-grant.md",
+    "instructions": "Create a public issue using the title prefix [GCC-GRANT] and include the requested proposal fields. Do not include private keys, seed phrases, API keys, passwords, or other secrets."
+  },
+  "scope_examples": [
+    "agent infrastructure",
+    "machine-readable discovery and coordination",
+    "verification tooling",
+    "research and measurement",
+    "developer tooling",
+    "network services",
+    "bounded automation"
+  ],
+  "boundaries": {
+    "no_guaranteed_award": true,
+    "no_automatic_approval": true,
+    "no_automatic_payment": true,
+    "no_private_key_submission": true,
+    "no_unrestricted_trading_authority": true,
+    "no_unrestricted_treasury_authority": true,
+    "operator_may_decline_or_request_changes": true
+  }
+}

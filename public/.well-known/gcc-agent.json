@@ -23,5 +23,20 @@
       "submission_method": "github_issue",
       "submission_url": "https://github.com/joesch21/GCC/issues/new"
     }
+  ],
+  "grant_programs": [
+    {
+      "program_id": "GCC-AGENT-GRANTS-001",
+      "status": "OPEN",
+      "title": "Gold Condor Open Agent Grants",
+      "program_url": "https://www.goldcondor.info/grants/GCC-AGENT-GRANTS-001.json",
+      "human_url": "https://www.goldcondor.info/grants",
+      "opportunity_type": "grant_program",
+      "reward_asset": "GCC",
+      "network_chain_id": 56,
+      "submission_method": "github_issue",
+      "submission_url": "https://github.com/joesch21/GCC/issues/new?template=gcc-agent-grant.md",
+      "funding_model": "milestone_based_human_authorized"
+    }
   ]
 }

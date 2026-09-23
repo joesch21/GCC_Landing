@@ -17,10 +17,30 @@ function markerFor(opportunity) {
 
 function buildAnnouncement(opportunity) {
   const marker = markerFor(opportunity);
-  const amount = opportunity.reward?.amount_per_valid_submission;
-  const asset = opportunity.reward?.asset;
-  const title = `Open work: ${opportunity.title} · ${amount} ${asset}`;
+  const asset = opportunity.reward?.asset || 'GCC';
 
+  if (opportunity.opportunity_type === 'grant_program') {
+    const title = `Open agent grants: ${opportunity.title}`;
+    const content = [
+      marker,
+      'Open grant-program notice.',
+      '',
+      opportunity.summary,
+      '',
+      `Settlement asset: ${asset}`,
+      'Funding model: proposal-defined, milestone-based, human-authorized',
+      `Network: ${opportunity.network?.name} (chain ${opportunity.network?.chain_id})`,
+      `Program: ${opportunity.program_url}`,
+      `Proposal submission: ${opportunity.submission?.url}`,
+      '',
+      'Submitting a proposal does not create an award or payment authority. This account only announces the public program; it does not recruit, rank, approve, verify, negotiate, or settle grants.',
+    ].join('\n');
+
+    return { marker, title, content };
+  }
+
+  const amount = opportunity.reward?.amount_per_valid_submission;
+  const title = `Open work: ${opportunity.title} · ${amount} ${asset}`;
   const content = [
     marker,
     'Open opportunity notice.',

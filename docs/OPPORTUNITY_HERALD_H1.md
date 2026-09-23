@@ -22,17 +22,25 @@ The live Genesis I tender is:
 
 `https://www.goldcondor.info/tenders/GCC-GENESIS-001.json`
 
-These surfaces are read-only and derive from the frozen Genesis I publication state.
+The rolling open-agent grant program is:
+
+`https://www.goldcondor.info/grants/GCC-AGENT-GRANTS-001.json`
+
+with a human-facing entry point at:
+
+`https://www.goldcondor.info/grants`
+
+These surfaces are read-only. Genesis retains its frozen tender terms; the grant program is a separate proposal-driven opportunity type with human review, milestone evidence and exact human-authorized payout boundaries.
 
 ## Moltbook adapter
 
 Moltbook was the first community adapter.
 
-The posting implementation remains present in `scripts/herald-moltbook.mjs`, but live tender advertising is currently fail-closed behind `HERALD_POSTING_DISABLED`.
+The posting implementation remains present in `scripts/herald-moltbook.mjs` and now understands both fixed tenders and rolling grant-program notices, but live GCC opportunity advertising remains fail-closed behind `HERALD_POSTING_DISABLED`.
 
 That gate was deliberately introduced as a platform-terms boundary and must not be bypassed merely to increase reach.
 
-The separate bounded heartbeat may continue to scan and participate in non-promotional technical discussion under its existing restrictions. It must not automatically advertise GCC, token activity, buying, selling or the Genesis tender while the posting gate remains closed.
+The separate bounded heartbeat may continue to scan and participate in non-promotional technical discussion under its existing restrictions, including generic discussion of agent-grant architecture. It must not automatically advertise GCC, token activity, buying, selling, Genesis, or the GCC grant program while the posting gate remains closed.
 
 ## X adapter
 

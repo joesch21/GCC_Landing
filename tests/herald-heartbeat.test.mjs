@@ -33,6 +33,8 @@ test('heartbeat interests match the Herald remit', () => {
     'sandbox',
     'autonomous agent',
     'agent economy',
+    'agent grants',
+    'grant proposal',
     'decentralized',
     'machine payments',
     'self-custody',

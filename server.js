@@ -55,11 +55,12 @@ app.post('/api/winning-nft', (req, res) => {
 // Serve named pages before the homepage fallback. Both merch URL forms are
 // supported locally because Express does not automatically normalize a
 // trailing slash the way the deployed site does.
-app.get(['/about', '/agents', '/network', '/merch', '/merch/'], (req, res) => {
+app.get(['/about', '/agents', '/grants', '/network', '/merch', '/merch/'], (req, res) => {
   const route = req.path === '/merch/' ? '/merch' : req.path;
   const page = {
     '/about': 'about.html',
     '/agents': 'agents.html',
+    '/grants': 'grants.html',
     '/network': 'opportunity.html',
     '/merch': 'merch.html'
   }[route];
