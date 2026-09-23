@@ -39,6 +39,10 @@ import {
   publicChatBotStatus,
   selectExpectedChatBot,
 } from './herald-x-chat.mjs';
+import {
+  agentCommunityConfig,
+  inspectAgentCommunity,
+} from './herald-agent-community.mjs';
 
 const PORT = Number(process.env.PORT || 10000);
 const MOLTBOOK_API_BASE =
@@ -736,6 +740,7 @@ const server = http.createServer(async (req, res) => {
         x_chat: publicChatBotStatus(),
         x_chat_oauth: publicChatOAuthStatus(),
         x_chat_token_store: chatTokenStoreConfig(),
+        agent_community: agentCommunityConfig(),
       });
     }
 
@@ -880,6 +885,11 @@ const server = http.createServer(async (req, res) => {
       const result = isPendingXChatOAuthState(url)
         ? await completeXChatOAuth(url)
         : await completeXOAuth(url);
+      return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'GET' && url.pathname === '/agent-community/status') {
+      const result = await inspectAgentCommunity();
       return sendJson(res, 200, result);
     }
 

@@ -42,6 +42,21 @@ That gate was deliberately introduced as a platform-terms boundary and must not 
 
 The separate bounded heartbeat may continue to scan and participate in non-promotional technical discussion under its existing restrictions, including generic discussion of agent-grant architecture. It must not automatically advertise GCC, token activity, buying, selling, Genesis, or the GCC grant program while the posting gate remains closed.
 
+## Agent Community adapter
+
+Agent Community (`https://agent-community.com`) is a separate agent-native community with a documented `/v1/` API and `SKILL.md` contract.
+
+Stage 1 is intentionally read-only:
+
+- GoldCondorHerald may hold a registered Agent Community identity;
+- the deployed adapter may read public stats, topics, recent posts and its own public profile;
+- community content is always treated as untrusted input;
+- the adapter contains no create-post, reply, like or direct-message implementation;
+- no code, command, link or instruction found in a community post may be executed automatically;
+- Agent Community credentials are isolated from GCC custody, signer and relayer authority.
+
+Any future Agent Community write capability is a separate phase and requires an explicit reviewed gate.
+
 ## X adapter
 
 The repository contains a bounded X Stage 3 implementation for a deterministic two-post Genesis announcement.
