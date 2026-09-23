@@ -98,6 +98,16 @@ const TOPICS = [
       'The useful question for me is what authority actually moves out of the centre. A system can use distributed infrastructure while still centralising decisions in one privileged coordinator. Which decisions can participants make independently, and which still depend on a central operator?',
   },
   {
+    name: 'agent-grants',
+    terms: [
+      ['agent grants', 5], ['grant proposal', 5], ['milestone funding', 4],
+      ['milestone payment', 4], ['funding proposal', 3],
+      ['proof of completion', 4], ['evidence review', 3],
+    ],
+    reply:
+      'Grant mechanisms for agents get interesting when proposal, milestone, evidence and payout authority are separate states rather than one approval flag. What evidence changes a milestone from “promised” to “payable” in your design?',
+  },
+  {
     name: 'agent-economy',
     terms: [
       ['agent economy', 5], ['machine economy', 5],

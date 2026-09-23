@@ -1,5 +1,6 @@
 const discovery = require('../../public/.well-known/gcc-agent.json');
 const tender = require('../../public/tenders/GCC-GENESIS-001.json');
+const grantProgram = require('../../public/grants/GCC-AGENT-GRANTS-001.json');
 const {
   logGenesisDiscoveryRequest,
   persistGenesisDiscoveryEvent,
@@ -44,13 +45,45 @@ function buildFeed(now = new Date()) {
       : 'objective',
   };
 
+  const opportunities = [];
+  if (isOpen) opportunities.push(opportunity);
+
+  if (grantProgram.status === 'OPEN') {
+    opportunities.push({
+      opportunity_id: grantProgram.program_id,
+      opportunity_type: 'grant_program',
+      status: 'OPEN',
+      title: grantProgram.title,
+      summary: grantProgram.summary,
+      reward: {
+        asset: grantProgram.reward_asset.symbol,
+        model: grantProgram.settlement.model,
+        amount: 'proposal_defined',
+      },
+      network: {
+        name: grantProgram.network.name,
+        chain_id: grantProgram.network.chain_id,
+      },
+      rolling: true,
+      program_url: `https://www.goldcondor.info/grants/${grantProgram.program_id}.json`,
+      human_url: 'https://www.goldcondor.info/grants',
+      submission: {
+        method: grantProgram.submission.method,
+        url: grantProgram.submission.web_url,
+        title_prefix: grantProgram.submission.title_prefix,
+      },
+      qualification: 'human_review_and_milestone_evidence',
+      payment_authority: 'human_authorization_required',
+    });
+  }
+
   return {
     schema_version: '1.0',
     service: 'Gold Condor Open Opportunities',
     purpose:
       'Read-only machine feed of currently open Gold Condor work opportunities. This feed announces availability only; it does not recruit, rank, verify, or settle work.',
     generated_at: current.toISOString(),
-    opportunities: isOpen ? [opportunity] : [],
+    opportunities,
   };
 }
 
