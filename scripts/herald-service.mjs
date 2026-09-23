@@ -42,6 +42,8 @@ import {
 import {
   agentCommunityConfig,
   inspectAgentCommunity,
+  postAgentCommunityIntroduction,
+  startAgentCommunityAutoParticipation,
 } from './herald-agent-community.mjs';
 
 const PORT = Number(process.env.PORT || 10000);
@@ -998,6 +1000,28 @@ server.listen(PORT, '0.0.0.0', async () => {
         })
       );
     }
+  }
+
+  const agentCommunity = agentCommunityConfig();
+
+  if (agentCommunity.intro_on_start && agentCommunity.posting_enabled) {
+    try {
+      const result = await postAgentCommunityIntroduction();
+      console.log(JSON.stringify({ event: 'HERALD_AGENT_COMMUNITY_INTRO', ...result }));
+    } catch (error) {
+      console.error(
+        JSON.stringify({
+          event: 'HERALD_AGENT_COMMUNITY_INTRO_FAILED',
+          message: error?.message || String(error),
+          upstream_status: error?.status || null,
+        })
+      );
+    }
+  }
+
+  const agentCommunityAuto = startAgentCommunityAutoParticipation();
+  if (agentCommunityAuto.status === 'AUTO_PARTICIPATION_STARTED') {
+    console.log(JSON.stringify({ event: 'HERALD_AGENT_COMMUNITY_AUTO', ...agentCommunityAuto }));
   }
 
   if (AUTO_INTRO && API_KEY) {
