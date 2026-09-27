@@ -63,13 +63,66 @@ function collectActivity(profile) {
       if (normalized?.id || normalized?.text) ledger.push(normalized);
     }
   }
+  return dedupe(ledger);
+}
+
+function dedupe(items) {
   const seen = new Set();
-  return ledger.filter((item) => {
+  return items.filter((item) => {
     const key = String(item.id || `${item.post_id || ''}:${item.created_at || ''}:${item.text || ''}`);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+}
+
+function flattenComments(comments, postId, out = []) {
+  if (!Array.isArray(comments)) return out;
+  for (const comment of comments) {
+    const author = first(comment?.agent, ['name']) || first(comment?.author, ['name']) ||
+      first(comment, ['agent_name', 'author_name']);
+    if (author === AGENT_NAME) {
+      out.push({
+        id: first(comment, ['id', 'comment_id']),
+        created_at: first(comment, ['created_at', 'createdAt', 'timestamp']),
+        post_id: postId,
+        text: first(comment, ['content', 'body', 'text']),
+      });
+    }
+    flattenComments(comment?.replies, postId, out);
+  }
+  return out;
+}
+
+async function reconstructFromRecentPosts(targetCount) {
+  const found = [];
+  let cursor = null;
+  let postsScanned = 0;
+  for (let page = 0; page < 10; page += 1) {
+    const query = new URLSearchParams({ sort: 'new', limit: '100' });
+    if (cursor) query.set('cursor', cursor);
+    const body = await getJson(`/posts?${query.toString()}`).catch(() => null);
+    const posts = Array.isArray(body?.posts) ? body.posts : Array.isArray(body) ? body : [];
+    if (!posts.length) break;
+    for (const post of posts) {
+      const postId = first(post, ['id', 'post_id']);
+      if (!postId) continue;
+      postsScanned += 1;
+      const commentsBody = await getJson(
+        `/posts/${encodeURIComponent(postId)}/comments?sort=new&limit=100`
+      ).catch(() => null);
+      const comments = Array.isArray(commentsBody?.comments)
+        ? commentsBody.comments
+        : Array.isArray(commentsBody) ? commentsBody : [];
+      flattenComments(comments, postId, found);
+      if (targetCount !== null && dedupe(found).length >= Number(targetCount)) {
+        return { comments: dedupe(found), posts_scanned: postsScanned, target_reached: true };
+      }
+    }
+    if (!body?.has_more || !body?.next_cursor) break;
+    cursor = String(body.next_cursor);
+  }
+  return { comments: dedupe(found), posts_scanned: postsScanned, target_reached: false };
 }
 
 async function main() {
@@ -82,21 +135,18 @@ async function main() {
   ]);
 
   const agent = me?.agent || me || {};
-  const ledger = [...collectActivity(me), ...collectActivity(publicProfile)];
-  const deduped = [];
-  const seen = new Set();
-  for (const item of ledger) {
-    const key = String(item.id || `${item.post_id || ''}:${item.created_at || ''}:${item.text || ''}`);
-    if (seen.has(key)) continue;
-    seen.add(key);
-    deduped.push(item);
-  }
-
   const declaredCount = first(agent, [
     'comment_count', 'commentCount', 'comments_count', 'commentsCount',
   ]) ?? first(publicProfile?.agent, [
     'comment_count', 'commentCount', 'comments_count', 'commentsCount',
   ]);
+
+  const profileLedger = dedupe([...collectActivity(me), ...collectActivity(publicProfile)]);
+  const reconstruction = declaredCount !== null && profileLedger.length < Number(declaredCount)
+    ? await reconstructFromRecentPosts(declaredCount)
+    : { comments: [], posts_scanned: 0, target_reached: true };
+  const deduped = dedupe([...profileLedger, ...reconstruction.comments]);
+  const complete = declaredCount !== null && Number(declaredCount) === deduped.length;
 
   console.log(JSON.stringify({
     audit: 'MOLTBOOK_ACTIVITY_READ_ONLY',
@@ -104,11 +154,18 @@ async function main() {
     agent_id: first(agent, ['id']),
     declared_comment_count: declaredCount === null ? null : Number(declaredCount),
     ledger_count: deduped.length,
-    ledger_complete: declaredCount !== null && Number(declaredCount) === deduped.length,
+    ledger_complete: complete,
     comments: deduped,
+    reconstruction: {
+      attempted: reconstruction.posts_scanned > 0,
+      posts_scanned: reconstruction.posts_scanned,
+      target_reached: reconstruction.target_reached,
+      bounded_max_posts: 1000,
+    },
     source: {
       agents_me: true,
       public_profile: !publicProfile?.unavailable,
+      recent_post_comment_scan: reconstruction.posts_scanned > 0,
       methods_used: ['GET'],
     },
   }));
