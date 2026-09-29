@@ -1,4 +1,6 @@
 import http from 'node:http';
+import { timingSafeEqual } from 'node:crypto';
+import { answerHeraldQuestion, parseAskHeraldQuestion } from './herald-ask.mjs';
 import { spawn } from 'node:child_process';
 import {
   buildAuthorizationUrl,
@@ -47,6 +49,7 @@ import {
 } from './herald-agent-community.mjs';
 
 const PORT = Number(process.env.PORT || 10000);
+const OPERATOR_READ_TOKEN = process.env.HERALD_OPERATOR_READ_TOKEN || '';
 const MOLTBOOK_API_BASE =
   process.env.MOLTBOOK_API_BASE_URL || 'https://www.moltbook.com/api/v1';
 const API_KEY = process.env.MOLTBOOK_API_KEY || '';
@@ -888,6 +891,21 @@ const server = http.createServer(async (req, res) => {
         ? await completeXChatOAuth(url)
         : await completeXOAuth(url);
       return sendJson(res, 200, result);
+    }
+
+    if (req.method === 'POST' && url.pathname === '/operator/ask') {
+      const header = String(req.headers.authorization || '');
+      const expected = Buffer.from('Bearer ' + OPERATOR_READ_TOKEN);
+      const actual = Buffer.from(header);
+      if (!OPERATOR_READ_TOKEN || actual.length !== expected.length ||
+          !timingSafeEqual(actual, expected)) {
+        return sendJson(res, 404, { error: 'Not found' });
+      }
+      const body = await readBoundedJsonBody(req, 1024);
+      if (!parseAskHeraldQuestion(body?.question)) {
+        return sendJson(res, 400, { status: 'UNSUPPORTED_QUESTION' });
+      }
+      return sendJson(res, 200, await answerHeraldQuestion(body.question));
     }
 
     if (req.method === 'GET' && url.pathname === '/agent-community/status') {
