@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { timingSafeEqual } from 'node:crypto';
 import { answerHeraldQuestion, parseAskHeraldQuestion } from './herald-ask.mjs';
+import { collectHeraldDispatch } from './herald-dispatch.mjs';
 import { spawn } from 'node:child_process';
 import {
   buildAuthorizationUrl,
@@ -906,6 +907,19 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 400, { status: 'UNSUPPORTED_QUESTION' });
       }
       return sendJson(res, 200, await answerHeraldQuestion(body.question));
+    }
+
+    if (req.method === 'POST' && url.pathname === '/operator/dispatch') {
+      const header = String(req.headers.authorization || '');
+      const expected = Buffer.from('Bearer ' + OPERATOR_READ_TOKEN);
+      const actual = Buffer.from(header);
+      if (!OPERATOR_READ_TOKEN || actual.length !== expected.length ||
+          !timingSafeEqual(actual, expected)) {
+        return sendJson(res, 404, { error: 'Not found' });
+      }
+      const body = await readBoundedJsonBody(req, 1024);
+      const report = await collectHeraldDispatch(body?.threadId);
+      return sendJson(res, report.status === 'INVALID_THREAD' ? 400 : 200, report);
     }
 
     if (req.method === 'GET' && url.pathname === '/agent-community/status') {
