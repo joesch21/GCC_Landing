@@ -50,7 +50,7 @@ export async function collectHeraldDispatch(threadId, {
   const ownIds = new Set(replies.filter((item) => actorId(item) === agentId || author(item).toLowerCase() === 'goldcondorherald').map(id));
   const dispatches = replies.filter((item) => {
     if (actorId(item) === agentId || author(item).toLowerCase() === 'goldcondorherald') return false;
-    return (ownPost && !parent(item)) || ownIds.has(parent(item));
+    return ownPost || ownIds.has(parent(item));
   }).filter((item) => id(item) && text(item) && timestamp(item)).slice(0, 30).map((item) => {
     const kind = classifyDispatch(text(item));
     return { sourceEventId: id(item), threadId, actor: author(item) || 'Unknown agent',

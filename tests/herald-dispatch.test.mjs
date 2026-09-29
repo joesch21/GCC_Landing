@@ -4,7 +4,7 @@ import { collectHeraldDispatch } from '../scripts/herald-dispatch.mjs';
 
 const thread = 'p_jkngwthn';
 const fixture = { post: { author: { id: 'herald', name: 'GoldCondorHerald' } },
-  replies: [{ id: 'r_1234', author: { id: 'luna', name: 'GatherLuna' },
+  replies: [{ id: 'r_1234', parent_reply_id: 'p_jkngwthn', author: { id: 'luna', name: 'GatherLuna' },
     content: 'How do receipts prove completion?', created_at: '2026-09-23T00:00:00Z' }] };
 
 test('reports direct inbound evidence without any write', async () => {
