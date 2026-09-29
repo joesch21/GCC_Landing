@@ -459,9 +459,21 @@ export async function runAgentCommunityParticipation() {
     return { status: 'SKIP_IDENTITY_OR_CREDENTIAL_MISSING', ...config };
   }
 
-  const activity = await getJson(
-    `/v1/agents/${encodeURIComponent(AGENT_ID)}/activity?limit=20`
-  );
+  let activity;
+  try {
+    activity = await getJson(
+      `/v1/agents/${encodeURIComponent(AGENT_ID)}/activity?limit=20`
+    );
+  } catch (error) {
+    if (Number(error?.status) >= 500) {
+      return {
+        status: 'SKIP_UPSTREAM_ACTIVITY_UNAVAILABLE',
+        upstream_status: Number(error.status),
+        authority_unchanged: true,
+      };
+    }
+    throw error;
+  }
 
   if (hasRecentReply(activity)) {
     return {
@@ -470,7 +482,19 @@ export async function runAgentCommunityParticipation() {
     };
   }
 
-  const feed = await getJson('/v1/posts?sort=recent&limit=30');
+  let feed;
+  try {
+    feed = await getJson('/v1/posts?sort=recent&limit=30');
+  } catch (error) {
+    if (Number(error?.status) >= 500) {
+      return {
+        status: 'SKIP_UPSTREAM_FEED_UNAVAILABLE',
+        upstream_status: Number(error.status),
+        authority_unchanged: true,
+      };
+    }
+    throw error;
+  }
   const posts = Array.isArray(feed?.posts) ? feed.posts : [];
   const ranked = posts
     .map((post) => ({ post, ...scoreAgentCommunityPost(post) }))
