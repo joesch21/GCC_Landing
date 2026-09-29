@@ -1,3 +1,15 @@
+import { useTowerSuggestion } from './herald-suggestion.mjs';
+
+let participationBusy = false;
+let lastLocalReplyAttempt = 0;
+async function withParticipationLock(operation) {
+  if (participationBusy) return { status: 'HELD', reason: 'PARTICIPATION_BUSY' };
+  if (Date.now() - lastLocalReplyAttempt < 24 * 60 * 60 * 1000)
+    return { status: 'HELD', reason: 'REPLY_COOLDOWN' };
+  participationBusy = true;
+  try { return await operation(); } finally { participationBusy = false; }
+}
+
 const API_BASE =
   process.env.AGENT_COMMUNITY_API_BASE_URL || 'https://agent-community.com';
 const SKILL_VERSION = '0.4.0';
@@ -234,6 +246,7 @@ async function boundedWrite(path, body, capability) {
     });
   }
 
+  if (isReply) lastLocalReplyAttempt = Date.now();
   const response = await fetch(`${API_BASE}${path}`, {
     method: 'POST',
     headers: {
@@ -448,6 +461,18 @@ export async function inspectAgentCommunity() {
 }
 
 export async function runAgentCommunityParticipation() {
+  return withParticipationLock(runAgentCommunityParticipationUnlocked);
+}
+
+export async function useAgentCommunityTowerSuggestion(input) {
+  return withParticipationLock(() => useTowerSuggestion(input, {
+    read: (path) => getJson(path === 'ACTIVITY' ? `/v1/agents/${encodeURIComponent(AGENT_ID)}/activity?limit=20` : path),
+    write: boundedWrite, score: scoreAgentCommunityPost, ownReply: replyBelongsToHerald,
+    cooldown: hasRecentReply, enabled: READ_ENABLED && REPLY_ENABLED && Boolean(AGENT_ID && API_KEY),
+  }));
+}
+
+async function runAgentCommunityParticipationUnlocked() {
   const config = agentCommunityConfig();
   if (!config.read_enabled) {
     return { status: 'SKIP_READ_DISABLED', ...config };

@@ -47,6 +47,7 @@ import {
   inspectAgentCommunity,
   postAgentCommunityIntroduction,
   startAgentCommunityAutoParticipation,
+  useAgentCommunityTowerSuggestion,
 } from './herald-agent-community.mjs';
 
 const PORT = Number(process.env.PORT || 10000);
@@ -920,6 +921,18 @@ const server = http.createServer(async (req, res) => {
       const body = await readBoundedJsonBody(req, 1024);
       const report = await collectHeraldDispatch(body?.threadId);
       return sendJson(res, report.status === 'INVALID_THREAD' ? 400 : 200, report);
+    }
+
+    if (req.method === 'POST' && url.pathname === '/operator/use-suggestion') {
+      const token = process.env.HERALD_OPERATOR_SUGGESTION_TOKEN || '';
+      const actual = Buffer.from(String(req.headers.authorization || ''));
+      const expected = Buffer.from('Bearer ' + token);
+      if (!token || actual.length !== expected.length || !timingSafeEqual(actual, expected))
+        return sendJson(res, 404, { error: 'Not found' });
+      const input = await readBoundedJsonBody(req, 16384);
+      const result = await useAgentCommunityTowerSuggestion(input);
+      console.log(JSON.stringify({ event: 'HERALD_TOWER_SUGGESTION', requestId: input?.requestId, ...result }));
+      return sendJson(res, 200, result);
     }
 
     if (req.method === 'GET' && url.pathname === '/agent-community/status') {
